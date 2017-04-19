@@ -1,0 +1,137 @@
+table {
+  /*border: 1px solid #2C2C2C;*/
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+  text-align: center;
+}
+
+tr {
+  height: 30px;
+  border: 1px solid #808080;
+}
+
+th {
+  border: 1px solid #808080;
+  text-align: center;
+  font-size: .9em;
+
+}
+
+.th-label {
+  width: 15%;
+}
+
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #808080;
+  width: 60px;
+}
+
+h4 {
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+h5 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.months {
+  font-weight: 100;
+  font-size: 13px;
+}
+
+.before {
+  background: #CCFFFF;
+}
+
+.after {
+  background: #EEE8AA;
+}
+
+.has-text-centered {
+  text-align: center;
+}
+
+.graph {
+  /*background-color: white;*/
+  border-radius: 3px;
+}
+
+
+.graph-link {
+  display: block;
+  margin-top: 5px;
+  padding: 2px 3px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.graph-link:hover {
+  outline: none;
+  text-decoration: underline;
+}
+
+.columns {
+  text-align: center;
+  margin: 10px auto;
+}
+
+.stage {
+  margin-top: 5px;
+  font-size: 13px;
+  border: 1px solid #CECECE;
+  width: auto;
+}
+
+.stage:focus {
+  outline: none;
+}
+
+.forecast-details {
+  background-color: #FFFFCC;
+  border: 1px solid #FFA500;
+  font-size: 11px;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 5px;
+  padding: 3px 5px;
+  text-decoration: none;
+  color: #36362B;
+  border-radius: 3px;
+
+}
+
+.forecast-details:hover {
+  background-color: #FFFF66;
+}
+
+.forecast-details:focus {
+  outline: none;
+}
+
+a.more-info {
+  display: inline-block;
+  color: #544C45;
+  text-decoration: none;
+  margin-top: 5px;
+}
+a.more-info:hover {
+  color: #544C45;
+  text-decoration: underline;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80%;
+}
