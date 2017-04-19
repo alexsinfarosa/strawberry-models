@@ -1,20 +1,19 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-// import { toJS } from "mobx";
+import { Select } from "antd";
+const Option = Select.Option;
 
-// styled-components
-import { Select, Selector } from "./styles";
+// Utilities
+import { states } from "../states";
 
 @inject("store")
 @observer
-class Station extends Component {
-  handleChange = e => {
-    this.props.store.app.setSelectStation(true);
-    this.props.store.app.setStation(e.target.value);
+class State extends Component {
+  handleChange = value => {
+    this.props.store.app.setDisease(value);
+    console.log(`selected: ${value}`);
   };
-
   render() {
-    // console.log(toJS(this.props.store.app.station));
     const {
       getCurrentStateStations,
       station,
@@ -24,26 +23,22 @@ class Station extends Component {
     const stationList = getCurrentStateStations.map(station => (
       <option key={`${station.id} ${station.network}`}>{station.name}</option>
     ));
+    
     return (
-      <Selector>
-        <label>
-          Weather station:
-          <small style={{ paddingLeft: "5px" }}>
-            {getCurrentStateStations.length}
-          </small>
-        </label>
-
+      <div>
         <Select
           name="station"
-          value={station.name}
+          size="large"
+          // defaultValue="Select State"
+          placeholder={`Select Station ${getCurrentStateStations.length}`}
+          style={{ width: 200 }}
           onChange={this.handleChange}
         >
-          {selectStation ? null : <option>Select Station</option>}
           {stationList}
         </Select>
-      </Selector>
+      </div>
     );
   }
 }
 
-export default Station;
+export default State;

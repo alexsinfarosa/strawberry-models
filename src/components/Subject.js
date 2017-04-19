@@ -3,35 +3,30 @@ import { inject, observer } from "mobx-react";
 import { Select } from "antd";
 const Option = Select.Option;
 
-// Utilities
-import { states } from "../states";
-
 @inject("store")
 @observer
-class State extends Component {
+class Subject extends Component {
   handleChange = value => {
     this.props.store.app.setDisease(value);
     console.log(`selected: ${value}`);
   };
   render() {
-    const stateList = states.map(state => (
-      <Option key={state.postalCode} value={state.name}>{state.name}</Option>
-    ));
     return (
       <div>
         <Select
-          name="state"
+          name="berry-disease"
           size="large"
-          // defaultValue="Select State"
-          placeholder="Select State"
+          autoFocus
+          // defaultValue="Select Berry"
+          placeholder="Select Disease"
           style={{ width: 200 }}
           onChange={this.handleChange}
         >
-          {stateList}
+          <Option value="Strawberries">Strawberries</Option>
         </Select>
       </div>
     );
   }
 }
 
-export default State;
+export default Subject;

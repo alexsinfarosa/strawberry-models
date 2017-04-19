@@ -9,6 +9,10 @@ import { Page, MRow } from "./styles";
 
 // components
 import Nav from "./components/Layout/Nav";
+import Subject from "./components/Subject";
+import State from "./components/State";
+import Station from "./components/Station";
+
 @inject("store")
 @observer
 class App extends Component {
@@ -32,7 +36,11 @@ class App extends Component {
             lg={6}
             xl={6}
           >
-            Col
+            <Subject />
+            <br />
+            <State />
+            <br />
+            <Station />
           </Col>
           <Col
             style={{ padding: "20px" }}
@@ -42,7 +50,7 @@ class App extends Component {
             lg={18}
             xl={18}
           >
-            Col
+            Content
           </Col>
         </MRow>
       </Page>
