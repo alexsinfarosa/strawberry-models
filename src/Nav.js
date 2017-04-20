@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { NavLink } from "react-router-dom";
 
-// import "./nav.styl";
-
 // styled-components
 import { Container, Header, NavMenu } from "./styles";
 
@@ -20,13 +18,29 @@ class Nav extends Component {
         <NavMenu>
           <ul>
             <li>
-              <NavLink exact activeClassName="active" to="/"> Home</NavLink>
+              <NavLink
+                exact
+                activeStyle={{ color: "red", borderBottom: "1px solid red" }}
+                to="/"
+              >
+                {" "}Home
+              </NavLink>
             </li>
             <li>
-              <NavLink activeClassName="active" to="/berry"> Berry</NavLink>
+              <NavLink
+                activeStyle={{ color: "red", borderBottom: "1px solid red" }}
+                to="/berry"
+              >
+                {" "}Berry
+              </NavLink>
             </li>
             <li>
-              <NavLink activeClassName="active" to="/onion"> Onion</NavLink>
+              <NavLink
+                activeStyle={{ color: "red", borderBottom: "1px solid red" }}
+                to="/onion"
+              >
+                {" "}Onion
+              </NavLink>
             </li>
           </ul>
         </NavMenu>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { when } from "mobx";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // antd-components
 // import { Row, Col } from "antd";
@@ -15,6 +15,7 @@ import Nav from "./Nav";
 
 // Models
 import Berry from "./Berry";
+import Onion from "./Onion";
 
 // import Subject from "./components/Subject";
 // import State from "./components/State";
@@ -49,8 +50,12 @@ class App extends Component {
           <Page>
             <Nav />
             <Main>
-              <Route exact path="/" component={Home} />
-              <Route path="/berry" component={Berry} />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/berry" component={Berry} />
+                <Route path="/onion" component={Onion} />
+                <Route render={() => <h1>Not Found</h1>} />
+              </Switch>
             </Main>
           </Page>
         </Router>

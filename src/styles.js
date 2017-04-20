@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color } from "polished";
+// import { color } from "polished";
 
 export const Page = styled.div`
   display: flex;

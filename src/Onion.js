@@ -6,11 +6,11 @@ import { inject, observer } from "mobx-react";
 
 @inject("store")
 @observer
-export default class Berry extends Component {
+export default class Onion extends Component {
   render() {
     return (
       <div>
-        <h1>Berry</h1>
+        <h1>Onion</h1>
       </div>
     );
   }
