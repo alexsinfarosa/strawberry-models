@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { when } from "mobx";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 // antd-components
-import { Row, Col, Icon } from "antd";
+// import { Row, Col } from "antd";
 
 // styled-components
-import { Page, MRow, LeftMenu, Main } from "./styles";
+import { Page, Main } from "./styles";
 
 // components
-import Nav from "./components/Layout/Nav";
-import Subject from "./components/Subject";
-import State from "./components/State";
-import Station from "./components/Station";
-import DatePicker from "./components/DatePicker";
-import Button from "./components/Button";
+import Home from "./Home";
+import Nav from "./Nav";
+
+// Models
+import Berry from "./Berry";
+
+// import Subject from "./components/Subject";
+// import State from "./components/State";
+// import Station from "./components/Station";
+// import DatePicker from "./components/DatePicker";
+// import Button from "./components/Button";
 
 // api
-import { fetchAllStations } from "./fetchData";
+import { fetchAllStations } from "./api";
 
 @inject("store")
 @observer
@@ -37,34 +44,17 @@ class App extends Component {
 
   render() {
     return (
-      <Page>
-        <Row type="flex" style={{ padding: "20px" }}>
-          <Col xs={24} sm={6} md={6} lg={6} xl={6}>
-            <Icon type="menu-unfold" style={{ fontSize: "20px" }} />
-          </Col>
-          <Col xs={24} sm={18} md={18} lg={18} xl={18}>
+      <div>
+        <Router>
+          <Page>
             <Nav />
-          </Col>
-        </Row>
-
-        <MRow>
-          <LeftMenu>
-            <Subject />
-            <br />
-            <State />
-            <br />
-            <Station />
-            <br />
-            <DatePicker />
-            <br />
-            <Button />
-          </LeftMenu>
-
-          <Main>
-            Content
-          </Main>
-        </MRow>
-      </Page>
+            <Main>
+              <Route exact path="/" component={Home} />
+              <Route path="/berry" component={Berry} />
+            </Main>
+          </Page>
+        </Router>
+      </div>
     );
   }
 }

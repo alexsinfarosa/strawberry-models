@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import App from "./App.js";
 
 // Style
+import "normalize.css";
 import "./index.styl";
 
 //mobx
