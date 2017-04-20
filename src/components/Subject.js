@@ -8,7 +8,7 @@ const Option = Select.Option;
 class Subject extends Component {
   handleChange = value => {
     this.props.store.app.setDisease(value);
-    console.log(`selected: ${value}`);
+    console.log(`disease: ${value}`);
   };
   render() {
     return (

@@ -4,33 +4,29 @@ import { Select } from "antd";
 const Option = Select.Option;
 
 // Utilities
-import { states } from "../states";
+// import { states } from "../states";
 
 @inject("store")
 @observer
 class State extends Component {
   handleChange = value => {
-    this.props.store.app.setDisease(value);
-    console.log(`selected: ${value}`);
+    this.props.store.app.setStation(value);
+    console.log(`station: ${value}`);
   };
   render() {
-    const {
-      getCurrentStateStations,
-      station,
-      selectStation
-    } = this.props.store.app;
+    const { getCurrentStateStations } = this.props.store.app;
 
     const stationList = getCurrentStateStations.map(station => (
-      <option key={`${station.id} ${station.network}`}>{station.name}</option>
+      <Option key={`${station.id} ${station.network}`}>{station.name}</Option>
     ));
-    
+
     return (
       <div>
         <Select
           name="station"
           size="large"
           // defaultValue="Select State"
-          placeholder={`Select Station ${getCurrentStateStations.length}`}
+          placeholder={`Select Station (${getCurrentStateStations.length})`}
           style={{ width: 200 }}
           onChange={this.handleChange}
         >

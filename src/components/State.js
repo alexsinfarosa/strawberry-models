@@ -10,8 +10,8 @@ import { states } from "../states";
 @observer
 class State extends Component {
   handleChange = value => {
-    this.props.store.app.setDisease(value);
-    console.log(`selected: ${value}`);
+    this.props.store.app.setState(value);
+    console.log(`state: ${value}`);
   };
   render() {
     const stateList = states.map(state => (

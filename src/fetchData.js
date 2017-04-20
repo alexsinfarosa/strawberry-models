@@ -7,6 +7,21 @@ import {
   networkHumidityAdjustment
 } from "./utils";
 
+// Fetch all stations -----------------------------------------------------------------------
+export const fetchAllStations = protocol => {
+  return axios
+    .get(`${protocol}//newa2.nrcc.cornell.edu/newaUtil/stateStationList/eslw`)
+    .then(res => {
+      if (!res.data.hasOwnProperty("error")) {
+        return res.data.stations;
+      }
+      console.log(res.data.error);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 // Fetch acis data -------------------------------------------------------------------------
 export const fetchACISData = (protocol, station, startDate, endDate) => {
   const params = {
