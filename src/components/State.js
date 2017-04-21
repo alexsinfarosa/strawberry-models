@@ -14,15 +14,17 @@ class State extends Component {
     console.log(`state: ${value}`);
   };
   render() {
+    const { state } = this.props.store.app;
     const stateList = states.map(state => (
       <Option key={state.postalCode} value={state.name}>{state.name}</Option>
     ));
     return (
-      <div>
+      <div style={{ marginBottom: "2rem" }}>
+        <p>State: </p>
         <Select
           name="state"
           size="large"
-          // defaultValue="Select State"
+          value={state.name}
           placeholder="Select State"
           style={{ width: 200 }}
           onChange={this.handleChange}

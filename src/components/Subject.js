@@ -11,18 +11,22 @@ class Subject extends Component {
     console.log(`disease: ${value}`);
   };
   render() {
+    const { disease } = this.props.store.app;
+    console.log(disease);
     return (
-      <div>
+      <div style={{ marginBottom: "2rem" }}>
+        <p>Disease:</p>
         <Select
           name="berry-disease"
           size="large"
           autoFocus
-          // defaultValue="Select Berry"
+          value={disease ? disease : undefined}
           placeholder="Select Disease"
           style={{ width: 200 }}
           onChange={this.handleChange}
         >
           <Option value="Strawberries">Strawberries</Option>
+          <Option value="Blue berries">Blue berries</Option>
         </Select>
       </div>
     );

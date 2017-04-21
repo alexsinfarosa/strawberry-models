@@ -3,9 +3,6 @@ import { inject, observer } from "mobx-react";
 import { when } from "mobx";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-// antd-components
-// import { Row, Col } from "antd";
-
 // styled-components
 import { Page, Main } from "./styles";
 
@@ -16,12 +13,6 @@ import Nav from "./Nav";
 // Models
 import Berry from "./Berry";
 import Onion from "./Onion";
-
-// import Subject from "./components/Subject";
-// import State from "./components/State";
-// import Station from "./components/Station";
-// import DatePicker from "./components/DatePicker";
-// import Button from "./components/Button";
 
 // api
 import { fetchAllStations } from "./api";

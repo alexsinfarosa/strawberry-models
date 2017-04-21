@@ -1,5 +1,5 @@
 import styled from "styled-components";
-// import { color } from "polished";
+// import { opacify } from "polished";
 
 export const Page = styled.div`
   display: flex;
@@ -9,16 +9,48 @@ export const Page = styled.div`
 
 export const Main = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
   ${/* background-color: aqua; */ ""}
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  height: 100%;
+  width: 100%;
+`;
+
+export const SideBar = styled.div`
+  display: flex;
+  padding: 20px;
+  flex: 1, 1, calc(240px - padding);
+  height: 100%;
+  flex-direction: column;
+  ${/* background-color: orange; */ ""}
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 3;
+  width: 100%;
+  padding: 20px;
+`;
+
+export const Block = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 50%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  ${/* background-color: lightgreen; */ ""}
 `;
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 7rem;
+  margin-bottom: 2rem;
   ${/* background: lightgreen; */ ""}
 `;
 

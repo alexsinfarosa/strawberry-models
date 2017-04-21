@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import { toJS } from "mobx";
 import { Select } from "antd";
 const Option = Select.Option;
+import isEmpty from "lodash/isEmpty";
 
 // Utilities
 // import { states } from "../states";
@@ -14,18 +16,21 @@ class State extends Component {
     console.log(`station: ${value}`);
   };
   render() {
-    const { getCurrentStateStations } = this.props.store.app;
+    const { getCurrentStateStations, getStation } = this.props.store.app;
 
     const stationList = getCurrentStateStations.map(station => (
-      <Option key={`${station.id} ${station.network}`}>{station.name}</Option>
+      <Option key={`${station.id} ${station.network}`} value={station.name}>
+        {station.name}
+      </Option>
     ));
 
     return (
-      <div>
+      <div style={{ marginBottom: "2rem" }}>
+        <p>Station: </p>
         <Select
           name="station"
           size="large"
-          // defaultValue="Select State"
+          value={getStation.name}
           placeholder={`Select Station (${getCurrentStateStations.length})`}
           style={{ width: 200 }}
           onChange={this.handleChange}

@@ -23,7 +23,7 @@ import { StyledTooltip } from "./styles";
 
 @inject("store")
 @observer
-export default class ResultsTable extends Component {
+export default class Graph extends Component {
   render() {
     const { graphData, barColor } = this.props.store.app;
 
