@@ -2,7 +2,6 @@ import { observable, action, computed } from "mobx";
 import { matchIconsToStations } from "../utils";
 import { states } from "../states";
 import format from "date-fns/format";
-import isEmpty from "lodash/isEmpty";
 
 export default class AppStore {
   // logic--------------------------------------------------------------------------------
@@ -42,7 +41,6 @@ export default class AppStore {
   }
   @observable station = JSON.parse(localStorage.getItem("station")) || {};
   @computed get getStation() {
-    console.log("getStation changed");
     return this.station;
   }
   @action setStation = stationName => {

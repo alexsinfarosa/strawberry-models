@@ -41,7 +41,8 @@ export const fetchACISData = (protocol, station, startDate, endDate) => {
     ]
   };
 
-  // console.log(params);
+  console.log(params);
+
   return axios
     .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
     .then(res => {

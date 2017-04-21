@@ -12,7 +12,6 @@ class Subject extends Component {
   };
   render() {
     const { disease } = this.props.store.app;
-    console.log(disease);
     return (
       <div style={{ marginBottom: "2rem" }}>
         <p>Disease:</p>
