@@ -12,9 +12,15 @@ import "./index.styl";
 import store from "./stores";
 import { Provider } from "mobx-react";
 
+// antd
+import { LocaleProvider } from "antd";
+import enUS from "antd/lib/locale-provider/en_US";
+
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <LocaleProvider locale={enUS}>
+      <App />
+    </LocaleProvider>
   </Provider>,
   document.getElementById("root")
 );

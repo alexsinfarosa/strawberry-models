@@ -1,47 +1,61 @@
-import React from "react";
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
 import { NavLink } from "react-router-dom";
 
-// styled-components
-import { Container, Header, NavMenu } from "./styles";
+import { Button } from "antd";
 
-const Nav = () => {
-  return (
-    <Container>
-      <Header>
-        <div>NEWA</div>
-        <div>Cornell</div>
-      </Header>
+// styled-components
+import { NavMenu } from "./styles";
+
+@inject("store")
+@observer
+class Nav extends Component {
+  render() {
+    const { isVisible } = this.props.store.app;
+    return (
       <NavMenu location={location}>
         <ul>
           <li>
             <NavLink
               exact
-              activeStyle={{ color: "red", borderBottom: "1px solid red" }}
+              activeStyle={{
+                color: "black",
+                textDecoration: "underline",
+                textUnderlinePosition: "under"
+              }}
               to="/"
             >
-              {" "}Home
+              Home
             </NavLink>
           </li>
           <li>
             <NavLink
-              activeStyle={{ color: "red", borderBottom: "1px solid red" }}
+              activeStyle={{
+                color: "black",
+                textDecoration: "underline",
+                textUnderlinePosition: "under"
+              }}
               to="/berry"
             >
-              {" "}Berry
+              Berry
             </NavLink>
           </li>
           <li>
             <NavLink
-              activeStyle={{ color: "red", borderBottom: "1px solid red" }}
-              to="/onion"
+              activeStyle={{
+                color: "black",
+                textDecoration: "underline",
+                textUnderlinePosition: "under"
+              }}
+              to="/example"
             >
-              {" "}Onion
+              Example
             </NavLink>
           </li>
         </ul>
       </NavMenu>
-    </Container>
-  );
-};
+    );
+  }
+}
 
 export default Nav;

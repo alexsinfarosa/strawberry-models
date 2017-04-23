@@ -65,9 +65,7 @@ export default class TheMap extends Component {
         zoom={Object.keys(state).length === 0 ? 6 : state.zoom}
       >
         <TileLayer
-          url={
-            `${protocol}//server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}`
-          }
+          url={`${protocol}//server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}`}
         />
         {MarkerList}
       </MapContainer>

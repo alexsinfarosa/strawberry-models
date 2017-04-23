@@ -1,0 +1,19 @@
+.before {
+  background: #CCFFFF;
+}
+
+.after {
+  background: #EEE8AA;
+}
+
+.low {
+  background: #C6F2A8;
+}
+
+.caution {
+  background: #FCE3B5;
+}
+
+.high {
+  background: #FAC0BE;
+}

@@ -2,16 +2,26 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
 //styled-components
-// import { Centered } from "./styles";
+import { NavContainer, Header, Main } from "./styles";
+
+// components
+import Nav from "./Nav";
 
 @inject("store")
 @observer
 export default class Onion extends Component {
   render() {
     return (
-      <div>
-        <h1>Onion</h1>
-      </div>
+      <NavContainer>
+        <Header>
+          <div>NEWA</div>
+          <div>Cornell</div>
+        </Header>
+        <Nav />
+        <Main>
+          <h1>Example...</h1>
+        </Main>
+      </NavContainer>
     );
   }
 }

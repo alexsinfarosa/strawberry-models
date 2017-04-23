@@ -1,4 +1,7 @@
 import flatten from "lodash/flatten";
+import format from "date-fns/format";
+import isPast from "date-fns/is_past";
+import isFuture from "date-fns/is_future";
 
 // Returns an array of objects. Each object is a station with the following
 export const matchIconsToStations = (protocol, stations, state) => {
@@ -54,7 +57,8 @@ export const networkTemperatureAdjustment = network => {
   if (network === "newa" || network === "icao" || network === "njwx") {
     return "23";
   } else if (
-    network === "miwx" || (network === "cu_log" || network === "culog")
+    network === "miwx" ||
+    (network === "cu_log" || network === "culog")
   ) {
     return "126";
   }
@@ -62,7 +66,7 @@ export const networkTemperatureAdjustment = network => {
 
 // Handling Relative Humidity Adjustment
 export const networkHumidityAdjustment = network =>
-  network === "miwx" ? "143" : "24";
+  (network === "miwx" ? "143" : "24");
 
 // Handling Michigan state network adjustment
 export const michiganIdAdjustment = station => {
@@ -89,7 +93,9 @@ export const replaceNonConsecutiveMissingValues = data => {
           } else if (i === param.length - 1 && e === "M") {
             return param[i - 1];
           } else if (
-            e === "M" && param[i - 1] !== "M" && param[i + 1] !== "M"
+            e === "M" &&
+            param[i - 1] !== "M" &&
+            param[i + 1] !== "M"
           ) {
             return avgTwoStringNumbers(param[i - 1], param[i + 1]);
           } else {
@@ -157,7 +163,7 @@ export const RHAdjustment = data => {
 // Returns an array with cumulative Daily Infection Critical Values
 export const cumulativeDICV = dicv => {
   const arr = [];
-  dicv.reduce((prev, curr, i) => arr[i] = prev + curr, 0);
+  dicv.reduce((prev, curr, i) => (arr[i] = prev + curr), 0);
   return arr;
 };
 
@@ -234,7 +240,7 @@ export const leafWetnessAndTemps = data => {
   const transpose = m => m[0].map((x, i) => m.map(x => x[i]));
   // Returns a true values if there is at least one true value in the array
   const transposed = transpose(params).map(e => e.find(e => e === true));
-  let indices = transposed.map((e, i) => e === true ? i : e);
+  let indices = transposed.map((e, i) => (e === true ? i : e));
   indices = indices.filter(e => typeof e === "number");
 
   let pairs = [];
@@ -297,7 +303,8 @@ export const indexAnthracnose = data => {
   return data.map(day => {
     const T = fahrenheitToCelcius(day[1]);
     const W = day[2];
-    const i = -3.70 +
+    const i =
+      -3.70 +
       0.33 * W -
       0.069 * W * T +
       0.0050 * W * T ** 2 -
@@ -323,14 +330,47 @@ export const currentModel = (station, data) => {
   // Build an array of objects with what you need...!
   let arr = [];
   for (const [i, day] of results.entries()) {
+    // setup botrytis risk level
+    let botrytisIR = "";
+    if (botrytis[i] < 0.50) {
+      botrytisIR = "Low";
+    } else if (botrytis[i] >= 0.50 && botrytis[i] < 0.70) {
+      botrytisIR = "Moderate";
+    } else {
+      botrytisIR = "High";
+    }
+
+    // setup anthracnose risk level
+    let anthracnoseIR = "";
+    if (anthracnose[i] < 0.50) {
+      anthracnoseIR = "Low";
+    } else if (anthracnose[i] >= 0.50 && anthracnose[i] < 0.70) {
+      anthracnoseIR = "Moderate";
+    } else {
+      anthracnoseIR = "High";
+    }
+
+    // setup Past, Current or Forecast text
+    let dateTextDisplay = "Current";
+    if (isPast(day[0])) {
+      dateTextDisplay = "Past";
+    }
+    if (isFuture(day[0])) {
+      dateTextDisplay = "Forecast";
+    }
+
     arr.push({
-      date: day[0],
+      key: i,
+      date: format(day[0], "MMM D"),
+      dateTextDisplay: dateTextDisplay,
       temp: day[1],
       rh: day[2],
       lw: day[3],
       pt: day[4],
       botrytis: botrytis[i],
-      anthracnose: anthracnose[i]
+      botrytisIR: botrytisIR,
+      anthracnose: anthracnose[i],
+      anthracnoseIR: anthracnoseIR
     });
   }
   return arr;

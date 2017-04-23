@@ -7,9 +7,11 @@ export default class AppStore {
   // logic--------------------------------------------------------------------------------
   @observable protocol = window.location.protocol;
   @observable isSubmitted = false;
-  @action setIsSubmitted = d => this.isSubmitted = d;
+  @action setIsSubmitted = d => (this.isSubmitted = d);
   @observable isLoading = true;
-  @action setIsLoading = d => this.isLoading = d;
+  @action setIsLoading = d => (this.isLoading = d);
+  @observable isVisible = true;
+  @action setIsVisible = () => this.isVisible = !this.isVisible;
 
   // Berry disease------------------------------------------------------------------------
   @observable disease = JSON.parse(localStorage.getItem("beet-disease")) ||
@@ -30,7 +32,7 @@ export default class AppStore {
 
   // Station-------------------------------------------------------------------------------
   @observable stations = [];
-  @action setStations = d => this.stations = d;
+  @action setStations = d => (this.stations = d);
   @computed get stationsWithMatchedIcons() {
     return matchIconsToStations(this.protocol, this.stations, this.state);
   }
@@ -67,7 +69,7 @@ export default class AppStore {
 
   // ACISData -------------------------------------------------------------------------------
   @observable ACISData = [];
-  @action setACISData = d => this.ACISData = d;
+  @action setACISData = d => (this.ACISData = d);
   @computed get dates() {
     return this.ACISData.map(e => e.date);
   }

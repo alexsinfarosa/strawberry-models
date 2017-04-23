@@ -4,11 +4,11 @@ import { when } from "mobx";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // styled-components
-import { Page, Main } from "./styles";
+import { Centered } from "./styles";
 
 // components
 import Home from "./Home";
-import Nav from "./Nav";
+// import Nav from "./Nav";
 
 // Models
 import Berry from "./Berry";
@@ -36,21 +36,14 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <Router>
-          <Page>
-            <Nav />
-            <Main>
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/berry" component={Berry} />
-                <Route path="/onion" component={Onion} />
-                <Route render={() => <h1>Not Found</h1>} />
-              </Switch>
-            </Main>
-          </Page>
-        </Router>
-      </div>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/berry" component={Berry} />
+          <Route path="/example" component={Onion} />
+          <Route render={() => <Centered><h1>Not Found!</h1></Centered>} />
+        </Switch>
+      </Router>
     );
   }
 }
