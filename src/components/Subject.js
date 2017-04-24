@@ -14,7 +14,9 @@ class Subject extends Component {
     const { disease } = this.props.store.app;
     return (
       <div style={{ marginBottom: "2rem" }}>
-        <p>Disease:</p>
+        <p style={{ lineHeight: 2, margin: 0, width: 200 }}>
+          Disease:
+        </p>
         <Select
           name="berry-disease"
           size="large"

@@ -20,8 +20,12 @@ class Subject extends Component {
 
     return (
       <div style={{ marginBottom: "2rem" }}>
-        <p>Date: </p>
-        <p><small>Start Date: January 1st</small></p>
+        <p style={{ lineHeight: 2, margin: 0, width: 200 }}>
+          Date:{" "}
+        </p>
+        <p style={{ lineHeight: 1, margin: 0, width: 200 }}>
+          <small>Start Date: January 1st</small>
+        </p>
         {/* <LocaleProvider locale={enUS}> */}
         <DatePicker
           style={{ width: 200 }}

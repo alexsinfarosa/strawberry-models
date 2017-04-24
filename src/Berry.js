@@ -104,9 +104,6 @@ export default class Berry extends Component {
     return;
   };
 
-  state = {
-    collapsed: false
-  };
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed
@@ -114,17 +111,21 @@ export default class Berry extends Component {
   };
 
   render() {
-    const { isVisible } = this.props.store.app;
+    const { isVisible, isCollapsed } = this.props.store.app;
+    console.log(isCollapsed);
     return (
       <Layout>
         <Sider
           breakpoint="lg"
-          collapsedWidth="0"
+          collapsedWidth={0}
           onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
+            this.props.store.app.setIsCollapsed(collapsed);
           }}
-          style={{ background: "white", padding: 24 }}
-          width={300}
+          style={{
+            background: "white",
+            padding: isCollapsed ? 0 : 24
+          }}
+          width={274}
         >
 
           <Menu defaultSelectedKeys={["1"]}>
@@ -144,21 +145,20 @@ export default class Berry extends Component {
               style={{ lineHeight: "64px" }}
             >
               <Menu.Item key="1">
-                <Link exact to='/'>Home</Link>
+                <Link to="/">Home</Link>
               </Menu.Item>
-              {/* <Menu.Item key="2">Tena</Menu.Item> */}
             </Menu>
           </Header>
           <Content
-            overflow="initial"
+            // overflow="initial"
             style={{
-              margin: "24px 0px 0px 0px",
-              padding: 24,
+              margin: "48px 0px 0px 0px",
+              padding: 48,
               background: "#fff",
               minHeight: 280
             }}
           >
-            Content
+            <Results />
           </Content>
         </Layout>
       </Layout>

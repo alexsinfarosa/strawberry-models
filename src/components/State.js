@@ -20,7 +20,7 @@ class State extends Component {
     ));
     return (
       <div style={{ marginBottom: "2rem" }}>
-        <p>State: </p>
+        <p style={{ lineHeight: 2, margin: 0, width: 200 }}>State: </p>
         <Select
           name="state"
           size="large"
