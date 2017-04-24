@@ -19,7 +19,7 @@ export default class Home extends Component {
         </Header>
         <Nav />
         <Main>
-          <h1>Home</h1>
+          <h1>Home Page...</h1>
         </Main>
       </NavContainer>
     );

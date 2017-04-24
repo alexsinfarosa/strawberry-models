@@ -19,7 +19,7 @@ export default class Onion extends Component {
         </Header>
         <Nav />
         <Main>
-          <h1>Example...</h1>
+          <h1>Example Page...</h1>
         </Main>
       </NavContainer>
     );

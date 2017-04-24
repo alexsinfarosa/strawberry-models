@@ -1,18 +1,12 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import { Link } from "react-router-dom";
-
 // import { toJS } from "mobx";
-
-//styled-components
-import { SideBar, Vertical, Horizontal } from "./styles";
 
 // styles
 import "./styles";
 
 // antd
-// import { Icon } from "antd";
 import { Layout, Menu, Icon } from "antd";
 const { Header, Sider, Content } = Layout;
 
@@ -21,10 +15,11 @@ import Subject from "./components/Subject";
 import State from "./components/State";
 import Station from "./components/Station";
 import DatePicker from "./components/DatePicker";
-// import Button from "./components/Button";
+
 import TheMap from "./components/TheMap";
-import Results from "./components/Results";
-// import Graph from "./components/Graph/Graph";
+import RTable from "./components/RTable";
+import Graph from "./components/Graph";
+import Stage from "./components/Stage";
 
 // api
 import {
@@ -104,15 +99,8 @@ export default class Berry extends Component {
     return;
   };
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
-
   render() {
-    const { isVisible, isCollapsed } = this.props.store.app;
-    console.log(isCollapsed);
+    const { isCollapsed } = this.props.store.app;
     return (
       <Layout>
         <Sider
@@ -123,9 +111,9 @@ export default class Berry extends Component {
           }}
           style={{
             background: "white",
-            padding: isCollapsed ? 0 : 24
+            padding: true ? 0 : 24
           }}
-          width={274}
+          width={248}
         >
 
           <Menu defaultSelectedKeys={["1"]}>
@@ -137,28 +125,43 @@ export default class Berry extends Component {
         </Sider>
         <Layout>
           <Header
-            style={{ position: "fixed", width: "100%", background: "#fff" }}
+            style={{
+              position: "fixed",
+              width: "100%",
+              background: "#fff"
+            }}
           >
             <Menu
               mode="horizontal"
               defaultSelectedKeys={["2"]}
-              style={{ lineHeight: "64px" }}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                lineHeight: "62px"
+              }}
             >
-              <Menu.Item key="1">
-                <Link to="/">Home</Link>
+              <Menu.Item key="1" style={{ fontSize: ".8rem" }}>
+                <Link to="/"><Icon type="home" />Home</Link>
               </Menu.Item>
+              <Menu.Item disabled key="2" style={{ fontSize: ".8rem" }}>
+                Berry Model
+              </Menu.Item>
+
             </Menu>
           </Header>
           <Content
             // overflow="initial"
             style={{
-              margin: "48px 0px 0px 0px",
-              padding: 48,
+              margin: "62px 0px 0px 0px",
+              padding: 24,
               background: "#fff",
               minHeight: 280
             }}
           >
-            <Results />
+            <TheMap />
+            <RTable />
+            <Stage />
+            <Graph />
           </Content>
         </Layout>
       </Layout>

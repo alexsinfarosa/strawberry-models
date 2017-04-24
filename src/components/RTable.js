@@ -9,7 +9,10 @@ import isBefore from "date-fns/is_before";
 import subDays from "date-fns/sub_days";
 
 // style
-import "./results.css";
+import "./rTable.styl";
+
+// styled-components
+// import { Column } from "./styles";
 
 // antd
 import { Table } from "antd";
@@ -17,18 +20,7 @@ const { Column } = Table;
 
 @inject("store")
 @observer
-class Results extends Component {
-  ciccio = (value, row, index) => {
-    const obj = {
-      children: value,
-      props: {}
-    };
-    if (index === 4) {
-      obj.props.colSpan = 0;
-    }
-    console.log(obj);
-    return obj;
-  };
+class rTable extends Component {
   render() {
     const { ACISData, disease, station, endDate } = this.props.store.app;
     // ACISData.map(day => console.log(toJS(day)));
@@ -36,21 +28,11 @@ class Results extends Component {
     const months = ACISData => {
       if (isBefore(subDays(ACISData.date, 1), endDate)) {
         return (
-          <Column
-            className="table-mobile"
-            title="Date"
-            dataIndex="date"
-            key="date"
-          />
+          <Column className="table" title="Date" dataIndex="date" key="date" />
         );
       } else {
         return (
-          <Column
-            className="table-mobile"
-            title="Date"
-            dataIndex="date"
-            key="date"
-          />
+          <Column className="table" title="Date" dataIndex="date" key="date" />
         );
       }
     };
@@ -59,7 +41,7 @@ class Results extends Component {
       if (ACISData.botrytis < 0.50) {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Botrytis"
             dataIndex="botrytis"
             key="botrytis"
@@ -68,7 +50,7 @@ class Results extends Component {
       } else if (ACISData.botrytis >= 0.50 && ACISData.botrytis < 0.70) {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Botrytis"
             dataIndex="botrytis"
             key="botrytis"
@@ -77,7 +59,7 @@ class Results extends Component {
       }
       return (
         <Column
-          className="table-mobile"
+          className="table"
           title="Botrytis"
           dataIndex="botrytis"
           key="botrytis"
@@ -89,7 +71,7 @@ class Results extends Component {
       if (ACISData.botrytis === "low") {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Risk Level"
             dataIndex="botrytisIR"
             key="botrytisIR"
@@ -98,7 +80,7 @@ class Results extends Component {
       } else if (ACISData.botrytis === "caution") {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Risk Level"
             dataIndex="botrytisIR"
             key="botrytisIR"
@@ -107,7 +89,7 @@ class Results extends Component {
       }
       return (
         <Column
-          className="table-mobile"
+          className="table"
           title="Risk Level"
           dataIndex="botrytisIR"
           key="botrytisIR"
@@ -119,7 +101,7 @@ class Results extends Component {
       if (ACISData.anthracnose < 0.50) {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Anthracnose"
             dataIndex="anthracnose"
             key="anthracnose"
@@ -128,7 +110,7 @@ class Results extends Component {
       } else if (ACISData.anthracnose >= 0.50 && ACISData.anthracnose < 0.70) {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Anthracnose"
             dataIndex="anthracnose"
             key="anthracnose"
@@ -137,7 +119,7 @@ class Results extends Component {
       }
       return (
         <Column
-          className="table-mobile"
+          className="table"
           title="Anthracnose"
           dataIndex="anthracnose"
           key="anthracnose"
@@ -149,7 +131,7 @@ class Results extends Component {
       if (ACISData.anthracnoseIR === "low") {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Risk Level"
             dataIndex="anthracnoseIR"
             key="anthracnoseIR"
@@ -158,7 +140,7 @@ class Results extends Component {
       } else if (ACISData.anthracnoseIR === "caution") {
         return (
           <Column
-            className="table-mobile"
+            className="table"
             title="Risk Level"
             dataIndex="anthracnoseIR"
             key="anthracnoseIR"
@@ -167,7 +149,7 @@ class Results extends Component {
       }
       return (
         <Column
-          className="table-mobile"
+          className="table"
           title="Risk Level"
           dataIndex="anthracnoseIR"
           key="anthracnoseIR"
@@ -176,19 +158,19 @@ class Results extends Component {
     };
 
     return (
-      <div className="table-mobile">
+      <div className="table">
         <h1>Results</h1>
         <h3>{disease} Prediction for {station.name}</h3>
         <br />
 
         <Table
-          // size="small"
           pagination={false}
           dataSource={takeRight(ACISData, 8)}
+          // size="small"
           // title={() => `${disease} Prediction for ${station.name}`}
         >
           <Column
-            className="table-mobile"
+            className="table"
             title=""
             dataIndex="dateTextDisplay"
             key="dateTextDisplay"
@@ -200,9 +182,10 @@ class Results extends Component {
           {displayAnthracnose(ACISData)}
           {anthracnoseInfectionRisk(ACISData)}
         </Table>
+
       </div>
     );
   }
 }
 
-export default Results;
+export default rTable;

@@ -86,7 +86,8 @@ export const NavMenu = styled.div`
     ${/* background-color: orange; */ ""}
 
     & > li {
-      margin-right: 2rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
       ${/* background-color: pink */ ""}
 
       & > a {
@@ -99,7 +100,7 @@ export const NavMenu = styled.div`
         display: inline-block;
         width: 100%;
         text-align: center;
-        transition: all 0.5s;
+        transition: all 0.4s;
 
         &:hover {
           color: black;
@@ -114,7 +115,9 @@ export const NavMenu = styled.div`
 
   }
   @media (max-width: 992px) {
-
+    ul > li > a {
+      font-size: 1.3rem;
+    }
   }
   @media (max-width: 768px) {
     ul > li > a {

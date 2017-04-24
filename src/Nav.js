@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { NavLink } from "react-router-dom";
 
-import { Button } from "antd";
-
 // styled-components
 import { NavMenu } from "./styles";
 
@@ -11,7 +9,6 @@ import { NavMenu } from "./styles";
 @observer
 class Nav extends Component {
   render() {
-    const { isVisible } = this.props.store.app;
     return (
       <NavMenu location={location}>
         <ul>
