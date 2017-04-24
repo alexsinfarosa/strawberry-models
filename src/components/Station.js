@@ -41,7 +41,7 @@ class State extends Component {
           size="large"
           value={getStation.name}
           placeholder={`Select Station (${getCurrentStateStations.length})`}
-          style={{ width: 200 }}
+          style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
           {stationList}

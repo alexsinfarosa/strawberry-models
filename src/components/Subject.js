@@ -31,7 +31,7 @@ class Subject extends Component {
           autoFocus
           value={disease ? disease : undefined}
           placeholder="Select Disease"
-          style={{ width: 200 }}
+          style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
           <Option value="Strawberries">Strawberries</Option>

@@ -44,7 +44,7 @@ class Subject extends Component {
         </p>
         {/* <LocaleProvider locale={enUS}> */}
         <DatePicker
-          style={{ width: 200 }}
+          style={{ width: 200, textAlign: "left" }}
           size="large"
           value={moment(endDate)}
           format="MMM DD YYYY"

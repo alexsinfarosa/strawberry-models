@@ -36,7 +36,7 @@ class State extends Component {
           size="large"
           value={state.name}
           placeholder="Select State"
-          style={{ width: 200 }}
+          style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
           {stateList}
