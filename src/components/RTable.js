@@ -105,8 +105,7 @@ class rTable extends Component {
       ACISData,
       disease,
       station,
-      areRequiredFieldsSet,
-      isLoading
+      areRequiredFieldsSet
     } = this.props.store.app;
 
     const dateTextDisplay = ACISData => {

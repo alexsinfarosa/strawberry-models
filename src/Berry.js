@@ -52,8 +52,7 @@ export default class Berry extends Component {
   }
 
   getData = async () => {
-    console.log("this.getData fired!");
-    this.props.store.app.setACISData([]);
+    // console.log("this.getData fired!");
     const {
       protocol,
       station,
@@ -62,6 +61,8 @@ export default class Berry extends Component {
       currentYear,
       startDateYear
     } = this.props.store.app;
+
+    this.props.store.app.setACISData([]);
     let acis = [];
 
     // Fetch ACIS data

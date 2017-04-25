@@ -13,6 +13,7 @@ import Home from "./Home";
 // Models
 import Berry from "./Berry";
 import Onion from "./Onion";
+import Test from "./Test";
 
 // api
 import { fetchAllStations } from "./api";
@@ -41,6 +42,7 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route path="/berry" component={Berry} />
           <Route path="/example" component={Onion} />
+          <Route path="/test" component={Test} />
           <Route render={() => <Centered><h1>Not Found!</h1></Centered>} />
         </Switch>
       </Router>
