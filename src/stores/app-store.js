@@ -6,10 +6,13 @@ import format from "date-fns/format";
 export default class AppStore {
   // logic--------------------------------------------------------------------------------
   @observable protocol = window.location.protocol;
-  @observable isSubmitted = false;
-  @action setIsSubmitted = d => this.isSubmitted = d;
-  @observable isLoading = true;
-  @action setIsLoading = d => this.isLoading = d;
+  @computed get areRequiredFieldsSet() {
+    return (
+      this.disease !== null &&
+      Object.keys(this.state && this.station).length !== 0 &&
+      this.endDate !== null
+    );
+  }
   @observable isVisible = null;
   @action setIsVisible = () => this.isVisible = !this.isVisible;
   @observable isCollapsed = window.innerWidth < 400 ? false : true;
@@ -56,8 +59,7 @@ export default class AppStore {
 
   // Dates----------------------------------------------------------------------------------
   @observable currentYear = new Date().getFullYear().toString();
-  @observable endDate = JSON.parse(localStorage.getItem("endDate")) ||
-    format(new Date(), "YYYY-MM-DD");
+  @observable endDate = JSON.parse(localStorage.getItem("endDate")) || null;
   @action setEndDate = d => {
     this.endDate = format(d, "YYYY-MM-DD");
     localStorage.setItem("endDate", JSON.stringify(this.endDate));

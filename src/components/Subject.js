@@ -7,6 +7,7 @@ const Option = Select.Option;
 @observer
 class Subject extends Component {
   handleChange = value => {
+    this.props.store.app.setDisease(null);
     this.props.store.app.setDisease(value);
     console.log(`disease: ${value}`);
   };

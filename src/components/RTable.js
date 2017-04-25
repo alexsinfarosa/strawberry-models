@@ -22,7 +22,13 @@ const { Column } = Table;
 @observer
 class rTable extends Component {
   render() {
-    const { ACISData, disease, station, endDate } = this.props.store.app;
+    const {
+      ACISData,
+      disease,
+      station,
+      endDate,
+      areRequiredFieldsSet
+    } = this.props.store.app;
     // ACISData.map(day => console.log(toJS(day)));
 
     const months = ACISData => {
@@ -164,8 +170,9 @@ class rTable extends Component {
         <br />
 
         <Table
+          loading={ACISData.length === 0}
           pagination={false}
-          dataSource={takeRight(ACISData, 8)}
+          dataSource={areRequiredFieldsSet ? takeRight(ACISData, 8) : null}
           // size="small"
           // title={() => `${disease} Prediction for ${station.name}`}
         >

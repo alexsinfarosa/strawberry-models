@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { Link } from "react-router-dom";
-// import { toJS } from "mobx";
+import { autorun } from "mobx";
 
 // styles
 import "./styles";
@@ -16,10 +16,10 @@ import State from "./components/State";
 import Station from "./components/Station";
 import DatePicker from "./components/DatePicker";
 
-import TheMap from "./components/TheMap";
+// import TheMap from "./components/TheMap";
 import RTable from "./components/RTable";
-import Graph from "./components/Graph";
-import Stage from "./components/Stage";
+// import Graph from "./components/Graph";
+// import Stage from "./components/Stage";
 
 // api
 import {
@@ -43,10 +43,16 @@ import {
 export default class Berry extends Component {
   constructor(props) {
     super(props);
-    this.getData();
+
+    autorun(() => {
+      if (this.props.store.app.areRequiredFieldsSet) {
+        return this.getData();
+      }
+    });
   }
 
   getData = async () => {
+    console.log("this.getData fired!");
     const {
       protocol,
       station,
@@ -100,7 +106,6 @@ export default class Berry extends Component {
   };
 
   render() {
-    const { isCollapsed } = this.props.store.app;
     return (
       <Layout>
         <Sider
@@ -158,10 +163,10 @@ export default class Berry extends Component {
               minHeight: 280
             }}
           >
-            <TheMap />
+            {/* <TheMap /> */}
             <RTable />
-            <Stage />
-            <Graph />
+            {/* <Stage /> */}
+            {/* <Graph /> */}
           </Content>
         </Layout>
       </Layout>
