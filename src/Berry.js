@@ -53,6 +53,7 @@ export default class Berry extends Component {
 
   getData = async () => {
     console.log("this.getData fired!");
+    this.props.store.app.setACISData([]);
     const {
       protocol,
       station,
@@ -68,7 +69,7 @@ export default class Berry extends Component {
     acis = replaceNonConsecutiveMissingValues(acis);
 
     if (!containsMissingValues(acis)) {
-      acis = currentModel(station, acis);
+      acis = currentModel(station, acis, endDate);
       this.props.store.app.setACISData(acis);
       return;
     }
@@ -86,7 +87,7 @@ export default class Berry extends Component {
     );
     acis = replaceConsecutiveMissingValues(sisterStationData, acis);
     if (currentYear !== startDateYear) {
-      acis = currentModel(station, acis);
+      acis = currentModel(station, acis, endDate);
       this.props.store.app.setACISData(acis);
       return;
     }
@@ -100,7 +101,7 @@ export default class Berry extends Component {
     // Forcast data needs to have relative humidity array adjusted
     forecastData = RHAdjustment(forecastData);
     acis = replaceConsecutiveMissingValues(forecastData, acis);
-    acis = currentModel(station, acis);
+    acis = currentModel(station, acis, endDate);
     this.props.store.app.setACISData(acis);
     return;
   };

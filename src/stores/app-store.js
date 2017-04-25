@@ -17,6 +17,8 @@ export default class AppStore {
   @action setIsVisible = () => this.isVisible = !this.isVisible;
   @observable isCollapsed = window.innerWidth < 400 ? false : true;
   @action setIsCollapsed = d => this.isCollapsed = d;
+  @observable isLoading = false;
+  @action setIsLoading = d => this.isLoading = d;
 
   // Berry disease------------------------------------------------------------------------
   @observable disease = JSON.parse(localStorage.getItem("beet-disease")) ||

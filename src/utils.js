@@ -1,7 +1,7 @@
 import flatten from "lodash/flatten";
-import format from "date-fns/format";
-import isPast from "date-fns/is_past";
-import isFuture from "date-fns/is_future";
+import isBefore from "date-fns/is_before";
+import isAfter from "date-fns/is_after";
+import isToday from "date-fns/is_today";
 
 // Returns an array of objects. Each object is a station with the following
 export const matchIconsToStations = (protocol, stations, state) => {
@@ -57,8 +57,7 @@ export const networkTemperatureAdjustment = network => {
   if (network === "newa" || network === "icao" || network === "njwx") {
     return "23";
   } else if (
-    network === "miwx" ||
-    (network === "cu_log" || network === "culog")
+    network === "miwx" || (network === "cu_log" || network === "culog")
   ) {
     return "126";
   }
@@ -93,9 +92,7 @@ export const replaceNonConsecutiveMissingValues = data => {
           } else if (i === param.length - 1 && e === "M") {
             return param[i - 1];
           } else if (
-            e === "M" &&
-            param[i - 1] !== "M" &&
-            param[i + 1] !== "M"
+            e === "M" && param[i - 1] !== "M" && param[i + 1] !== "M"
           ) {
             return avgTwoStringNumbers(param[i - 1], param[i + 1]);
           } else {
@@ -163,7 +160,7 @@ export const RHAdjustment = data => {
 // Returns an array with cumulative Daily Infection Critical Values
 export const cumulativeDICV = dicv => {
   const arr = [];
-  dicv.reduce((prev, curr, i) => (arr[i] = prev + curr), 0);
+  dicv.reduce((prev, curr, i) => arr[i] = prev + curr, 0);
   return arr;
 };
 
@@ -314,7 +311,7 @@ export const indexAnthracnose = data => {
 };
 
 // Returns an array of objects. Current application model
-export const currentModel = (station, data) => {
+export const currentModel = (station, data, endDate) => {
   // shift the data to (1,24)
   let results = noonToNoon(data);
   results = results.slice(0, -1);
@@ -351,17 +348,21 @@ export const currentModel = (station, data) => {
     }
 
     // setup Past, Current or Forecast text
-    let dateTextDisplay = "Current";
-    if (isPast(day[0])) {
+    let dateTextDisplay;
+    const today = new Date();
+    if (isBefore(day[0], today)) {
       dateTextDisplay = "Past";
     }
-    if (isFuture(day[0])) {
+    if (isToday(day[0], today)) {
+      dateTextDisplay = "Current";
+    }
+    if (isAfter(day[0], today)) {
       dateTextDisplay = "Forecast";
     }
 
     arr.push({
       key: i,
-      date: format(day[0], "MMM D"),
+      date: day[0],
       dateTextDisplay: dateTextDisplay,
       temp: day[1],
       rh: day[2],
@@ -372,7 +373,31 @@ export const currentModel = (station, data) => {
       anthracnose: anthracnose[i],
       anthracnoseIR: anthracnoseIR
     });
+
+    // arr.push({
+    //   botrytis: {
+    //     date: day[0],
+    //     dateTextDisplay: dateTextDisplay,
+    //     temp: day[1],
+    //     rh: day[2],
+    //     lw: day[3],
+    //     pt: day[4],
+    //     botrytis: botrytis[i],
+    //     botrytisIR: botrytisIR
+    //   },
+    //   anthracnose: {
+    //     date: day[0],
+    //     dateTextDisplay: dateTextDisplay,
+    //     temp: day[1],
+    //     rh: day[2],
+    //     lw: day[3],
+    //     pt: day[4],
+    //     anthracnose: anthracnose[i],
+    //     anthracnoseIR: anthracnoseIR
+    //   }
+    // });
   }
+  // arr.map(e => console.log(e));
   return arr;
 };
 

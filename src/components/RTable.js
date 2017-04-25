@@ -6,7 +6,10 @@ import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
 // import format from "date-fns/format";
 import isBefore from "date-fns/is_before";
-import subDays from "date-fns/sub_days";
+import isAfter from "date-fns/is_after";
+import format from "date-fns/format";
+
+// import subDays from "date-fns/sub_days";
 
 // style
 import "./rTable.styl";
@@ -21,148 +24,161 @@ const { Column } = Table;
 @inject("store")
 @observer
 class rTable extends Component {
+  dayColor = (day, record, index) => {
+    const { endDate } = this.props.store.app;
+    if (isBefore(day, endDate)) {
+      return {
+        props: {
+          className: "table"
+        },
+        children: format(day, "MMM D")
+      };
+    } else if (isAfter(day, endDate)) {
+      return {
+        props: {
+          className: "table"
+        },
+        children: `${format(day, "MMM D")}`
+      };
+    } else {
+      return {
+        props: {
+          className: "table"
+        },
+        children: format(day, "MMM D")
+      };
+    }
+  };
+
+  valueColor = (value, record, index) => {
+    if (value < 0.50) {
+      return {
+        props: {
+          className: "table low"
+        },
+        children: value
+      };
+    } else if (value >= 0.50 && value < 0.70) {
+      return {
+        props: {
+          className: "table moderate"
+        },
+        children: value
+      };
+    } else {
+      return {
+        props: {
+          className: "table high"
+        },
+        children: value
+      };
+    }
+  };
+
+  textColor = (text, record, index) => {
+    if (text === "Low") {
+      return {
+        props: {
+          className: "table low"
+        },
+        children: text
+      };
+    } else if (text === "Moderate") {
+      return {
+        props: {
+          className: "table moderate"
+        },
+        children: text
+      };
+    } else {
+      return {
+        props: {
+          className: "table high"
+        },
+        children: text
+      };
+    }
+  };
+
   render() {
     const {
       ACISData,
       disease,
       station,
-      endDate,
-      areRequiredFieldsSet
+      areRequiredFieldsSet,
+      isLoading
     } = this.props.store.app;
-    // ACISData.map(day => console.log(toJS(day)));
+
+    const dateTextDisplay = ACISData => {
+      return (
+        <Column
+          className="table"
+          title=""
+          dataIndex="dateTextDisplay"
+          key="dateTextDisplay"
+        />
+      );
+    };
 
     const months = ACISData => {
-      if (isBefore(subDays(ACISData.date, 1), endDate)) {
-        return (
-          <Column className="table" title="Date" dataIndex="date" key="date" />
-        );
-      } else {
-        return (
-          <Column className="table" title="Date" dataIndex="date" key="date" />
-        );
-      }
+      return (
+        <Column
+          className="table"
+          title="Date"
+          dataIndex="date"
+          key="date"
+          render={this.dayColor}
+        />
+      );
     };
 
     const displayBotrytis = ACISData => {
-      if (ACISData.botrytis < 0.50) {
-        return (
-          <Column
-            className="table"
-            title="Botrytis"
-            dataIndex="botrytis"
-            key="botrytis"
-          />
-        );
-      } else if (ACISData.botrytis >= 0.50 && ACISData.botrytis < 0.70) {
-        return (
-          <Column
-            className="table"
-            title="Botrytis"
-            dataIndex="botrytis"
-            key="botrytis"
-          />
-        );
-      }
       return (
         <Column
           className="table"
           title="Botrytis"
           dataIndex="botrytis"
           key="botrytis"
+          render={this.valueColor}
         />
       );
     };
 
     const botrytisInfectionRisk = ACISData => {
-      if (ACISData.botrytis === "low") {
-        return (
-          <Column
-            className="table"
-            title="Risk Level"
-            dataIndex="botrytisIR"
-            key="botrytisIR"
-          />
-        );
-      } else if (ACISData.botrytis === "caution") {
-        return (
-          <Column
-            className="table"
-            title="Risk Level"
-            dataIndex="botrytisIR"
-            key="botrytisIR"
-          />
-        );
-      }
       return (
         <Column
           className="table"
           title="Risk Level"
           dataIndex="botrytisIR"
           key="botrytisIR"
+          render={this.textColor}
         />
       );
     };
 
     const displayAnthracnose = ACISData => {
-      if (ACISData.anthracnose < 0.50) {
-        return (
-          <Column
-            className="table"
-            title="Anthracnose"
-            dataIndex="anthracnose"
-            key="anthracnose"
-          />
-        );
-      } else if (ACISData.anthracnose >= 0.50 && ACISData.anthracnose < 0.70) {
-        return (
-          <Column
-            className="table"
-            title="Anthracnose"
-            dataIndex="anthracnose"
-            key="anthracnose"
-          />
-        );
-      }
       return (
         <Column
           className="table"
           title="Anthracnose"
           dataIndex="anthracnose"
           key="anthracnose"
+          render={this.valueColor}
         />
       );
     };
 
     const anthracnoseInfectionRisk = ACISData => {
-      if (ACISData.anthracnoseIR === "low") {
-        return (
-          <Column
-            className="table"
-            title="Risk Level"
-            dataIndex="anthracnoseIR"
-            key="anthracnoseIR"
-          />
-        );
-      } else if (ACISData.anthracnoseIR === "caution") {
-        return (
-          <Column
-            className="table"
-            title="Risk Level"
-            dataIndex="anthracnoseIR"
-            key="anthracnoseIR"
-          />
-        );
-      }
       return (
         <Column
           className="table"
           title="Risk Level"
           dataIndex="anthracnoseIR"
           key="anthracnoseIR"
+          render={this.textColor}
         />
       );
     };
-
     return (
       <div className="table">
         <h1>Results</h1>
@@ -173,15 +189,8 @@ class rTable extends Component {
           loading={ACISData.length === 0}
           pagination={false}
           dataSource={areRequiredFieldsSet ? takeRight(ACISData, 8) : null}
-          // size="small"
-          // title={() => `${disease} Prediction for ${station.name}`}
         >
-          <Column
-            className="table"
-            title=""
-            dataIndex="dateTextDisplay"
-            key="dateTextDisplay"
-          />
+          {dateTextDisplay(ACISData)}
           {months(ACISData)}
           {displayBotrytis(ACISData)}
           {botrytisInfectionRisk(ACISData)}

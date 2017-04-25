@@ -1,5 +1,6 @@
 .table {
   font-size: 12px;
+  // text-align: center;
 
   @media (max-width: 992px) {
     font-size: 12px;
@@ -8,9 +9,13 @@
     font-size: 10px;
   }
   @media (max-width: 400px) {
-    font-size: 6px
+    font-size: 9px
   }
 }
+
+// .table, .ant-table-thead {
+//   text-align: center !important;
+// }
 .ant-layout-sider-zero-width-trigger {
   position: absolute;
   top: 12px !important;
@@ -33,11 +38,16 @@
 //   background-color: green !important;
 // }
 
-.before {
+
+.past {
   background: #CCFFFF;
 }
 
-.after {
+.current {
+  background: pink;
+}
+
+.forecast {
   background: #EEE8AA;
 }
 
@@ -45,7 +55,7 @@
   background: #C6F2A8;
 }
 
-.caution {
+.moderate {
   background: #FCE3B5;
 }
 
