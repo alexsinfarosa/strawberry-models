@@ -12,7 +12,7 @@ import format from "date-fns/format";
 import "./rTable.styl";
 
 // styled-components
-// import { Column } from "./styles";
+import { Section, Row, Col } from "./styles";
 
 // antd
 import { Table } from "antd";
@@ -155,53 +155,56 @@ class rTable extends Component {
       );
     };
     return (
-      <div className="table" style={{ maxWidth: 400, margin: "0 auto" }}>
-        <h1>Results</h1>
-        <br /><br />
-        <h3>
-          <strong>Botrytis - </strong>{disease} Prediction for {station.name}
-        </h3>
-        <br />
-        <Table
-          rowKey={record => record.date}
-          rowClassName={this.rowColor}
-          loading={ACISData.length === 0}
-          pagination={false}
-          dataSource={
-            areRequiredFieldsSet
-              ? takeRight(ACISData, 8).map(day => day.botrytis)
-              : null
-          }
-        >
-          {column(80, "table", "", "time", "time")}
-          {column(120, "table", "Date", "date", "date", this.cellColorDay)}
-          {column(120, "table", "Botrytis", "value", "value")}
-          {column(120, "table", "Risk Level", "riskLevel", "riskLevel")}
-        </Table>
+      <Section>
+        <div>
+          <h1>Results</h1>
+          <h2>{disease} Prediction for {station.name}</h2>
+        </div>
+        <Row className="table">
+          <Col>
+            <h3>Botrytis</h3>
+            <br />
+            <Table
+              rowKey={record => record.date}
+              rowClassName={this.rowColor}
+              loading={ACISData.length === 0}
+              pagination={false}
+              dataSource={
+                areRequiredFieldsSet
+                  ? takeRight(ACISData, 8).map(day => day.botrytis)
+                  : null
+              }
+            >
+              {/* {column(80, "table", "", "time", "time")} */}
+              {column(200, "table", "Date", "date", "date", this.cellColorDay)}
+              {column(200, "table", "Botrytis", "value", "value")}
+              {column(200, "table", "Risk Level", "riskLevel", "riskLevel")}
+            </Table>
+          </Col>
 
-        <br /><br />
-        <h3>
-          <strong>Anthracnose - </strong>{disease} Prediction for {station.name}
-        </h3>
-        <br />
-        <Table
-          rowKey={record => record.date}
-          rowClassName={this.rowColor}
-          loading={ACISData.length === 0}
-          pagination={false}
-          dataSource={
-            areRequiredFieldsSet
-              ? takeRight(ACISData, 8).map(day => day.anthracnose)
-              : null
-          }
-        >
-          {column(80, "table", "", "time", "time")}
-          {column(120, "table", "Date", "date", "date", this.cellColorDay)}
-          {column(120, "table", "Botrytis", "value", "value")}
-          {column(120, "table", "Risk Level", "riskLevel", "riskLevel")}
-        </Table>
+          <Col>
+            <h3>Anthracnose</h3>
+            <br />
+            <Table
+              rowKey={record => record.date}
+              rowClassName={this.rowColor}
+              loading={ACISData.length === 0}
+              pagination={false}
+              dataSource={
+                areRequiredFieldsSet
+                  ? takeRight(ACISData, 8).map(day => day.anthracnose)
+                  : null
+              }
+            >
+              {/* {column(80, "table", "", "time", "time")} */}
+              {column(200, "table", "Date", "date", "date", this.cellColorDay)}
+              {column(200, "table", "Anthracnose", "value", "value")}
+              {column(200, "table", "Risk Level", "riskLevel", "riskLevel")}
+            </Table>
+          </Col>
 
-      </div>
+        </Row>
+      </Section>
     );
   }
 }
