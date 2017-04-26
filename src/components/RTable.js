@@ -4,12 +4,9 @@ import { inject, observer } from "mobx-react";
 
 // utility functions
 import takeRight from "lodash/takeRight";
-// import format from "date-fns/format";
 import isBefore from "date-fns/is_before";
 import isAfter from "date-fns/is_after";
 import format from "date-fns/format";
-
-// import subDays from "date-fns/sub_days";
 
 // style
 import "./rTable.styl";
@@ -24,7 +21,7 @@ const { Column } = Table;
 @inject("store")
 @observer
 class rTable extends Component {
-  dayColor = (day, record, index) => {
+  cellColorTime = (day, record, index) => {
     const { endDate } = this.props.store.app;
     if (isBefore(day, endDate)) {
       return {
@@ -50,7 +47,33 @@ class rTable extends Component {
     }
   };
 
-  valueColor = (value, record, index) => {
+  cellColorDay = (day, record, index) => {
+    const { endDate } = this.props.store.app;
+    if (isBefore(day, endDate)) {
+      return {
+        props: {
+          className: "table"
+        },
+        children: format(day, "MMM D")
+      };
+    } else if (isAfter(day, endDate)) {
+      return {
+        props: {
+          className: "table"
+        },
+        children: `${format(day, "MMM D")}`
+      };
+    } else {
+      return {
+        props: {
+          className: "table"
+        },
+        children: format(day, "MMM D")
+      };
+    }
+  };
+
+  cellColorValue = (value, record, index) => {
     if (value < 0.50) {
       return {
         props: {
@@ -75,7 +98,7 @@ class rTable extends Component {
     }
   };
 
-  textColor = (text, record, index) => {
+  cellColorRiskLevel = (text, record, index) => {
     if (text === "Low") {
       return {
         props: {
@@ -100,6 +123,17 @@ class rTable extends Component {
     }
   };
 
+  rowColor = (record, index) => {
+    const { value } = record;
+    if (value < 0.50) {
+      return "low";
+    } else if (value >= 0.50 && value < 0.70) {
+      return "moderate";
+    } else {
+      return "high";
+    }
+  };
+
   render() {
     const {
       ACISData,
@@ -108,94 +142,63 @@ class rTable extends Component {
       areRequiredFieldsSet
     } = this.props.store.app;
 
-    const dateTextDisplay = ACISData => {
+    const column = (width, className, title, dataIndex, key, render) => {
       return (
         <Column
-          className="table"
-          title=""
-          dataIndex="dateTextDisplay"
-          key="dateTextDisplay"
-        />
-      );
-    };
-
-    const months = ACISData => {
-      return (
-        <Column
-          className="table"
-          title="Date"
-          dataIndex="date"
-          key="date"
-          render={this.dayColor}
-        />
-      );
-    };
-
-    const displayBotrytis = ACISData => {
-      return (
-        <Column
-          className="table"
-          title="Botrytis"
-          dataIndex="botrytis"
-          key="botrytis"
-          render={this.valueColor}
-        />
-      );
-    };
-
-    const botrytisInfectionRisk = ACISData => {
-      return (
-        <Column
-          className="table"
-          title="Risk Level"
-          dataIndex="botrytisIR"
-          key="botrytisIR"
-          render={this.textColor}
-        />
-      );
-    };
-
-    const displayAnthracnose = ACISData => {
-      return (
-        <Column
-          className="table"
-          title="Anthracnose"
-          dataIndex="anthracnose"
-          key="anthracnose"
-          render={this.valueColor}
-        />
-      );
-    };
-
-    const anthracnoseInfectionRisk = ACISData => {
-      return (
-        <Column
-          className="table"
-          title="Risk Level"
-          dataIndex="anthracnoseIR"
-          key="anthracnoseIR"
-          render={this.textColor}
+          width={width}
+          className={className}
+          title={title}
+          dataIndex={dataIndex}
+          key={key}
+          render={render}
         />
       );
     };
     return (
-      <div className="table">
+      <div className="table" style={{ maxWidth: 400, margin: "0 auto" }}>
         <h1>Results</h1>
-        <h3>{disease} Prediction for {station.name}</h3>
+        <br /><br />
+        <h3>
+          <strong>Botrytis - </strong>{disease} Prediction for {station.name}
+        </h3>
         <br />
-
         <Table
+          rowKey={record => record.date}
+          rowClassName={this.rowColor}
           loading={ACISData.length === 0}
           pagination={false}
-          dataSource={areRequiredFieldsSet ? takeRight(ACISData, 8) : null}
+          dataSource={
+            areRequiredFieldsSet
+              ? takeRight(ACISData, 8).map(day => day.botrytis)
+              : null
+          }
         >
-          {dateTextDisplay(ACISData)}
-          {months(ACISData)}
-          {displayBotrytis(ACISData)}
-          {botrytisInfectionRisk(ACISData)}
+          {column(80, "table", "", "time", "time")}
+          {column(120, "table", "Date", "date", "date", this.cellColorDay)}
+          {column(120, "table", "Botrytis", "value", "value")}
+          {column(120, "table", "Risk Level", "riskLevel", "riskLevel")}
+        </Table>
 
-          {displayAnthracnose(ACISData)}
-          {anthracnoseInfectionRisk(ACISData)}
+        <br /><br />
+        <h3>
+          <strong>Anthracnose - </strong>{disease} Prediction for {station.name}
+        </h3>
+        <br />
+        <Table
+          rowKey={record => record.date}
+          rowClassName={this.rowColor}
+          loading={ACISData.length === 0}
+          pagination={false}
+          dataSource={
+            areRequiredFieldsSet
+              ? takeRight(ACISData, 8).map(day => day.anthracnose)
+              : null
+          }
+        >
+          {column(80, "table", "", "time", "time")}
+          {column(120, "table", "Date", "date", "date", this.cellColorDay)}
+          {column(120, "table", "Botrytis", "value", "value")}
+          {column(120, "table", "Risk Level", "riskLevel", "riskLevel")}
         </Table>
 
       </div>
