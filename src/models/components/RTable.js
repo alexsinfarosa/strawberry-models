@@ -12,7 +12,7 @@ import format from "date-fns/format";
 import "./rTable.styl";
 
 // styled-components
-import { Section, Row, Col } from "./styles";
+import { Section, Row, Col } from "../../appStyles";
 
 // antd
 import { Table } from "antd";

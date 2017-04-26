@@ -4,7 +4,7 @@ import { Select } from "antd";
 const Option = Select.Option;
 
 // Utilities
-import { states } from "../states";
+import { states } from "../../states";
 
 @inject("store")
 @observer

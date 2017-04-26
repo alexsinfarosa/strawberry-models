@@ -19,11 +19,13 @@
     "polished": "^1.0.3",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.5.2",
+    "react-animations": "^0.1.0",
     "react-dom": "^15.4.2",
     "react-leaflet": "^1.1.0",
     "react-responsive-sidebar": "^0.1.16",
     "react-router-dom": "^4.1.1",
     "recharts": "^0.21.2",
+    "reflexbox": "^2.2.3",
     "styled-components": "^1.4.4"
   },
   "scripts": {

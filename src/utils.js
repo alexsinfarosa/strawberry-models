@@ -360,20 +360,6 @@ export const currentModel = (station, data, endDate) => {
       dateTextDisplay = "Forecast";
     }
 
-    // arr.push({
-    //   key: i,
-    //   date: day[0],
-    //   dateTextDisplay: dateTextDisplay,
-    //   temp: day[1],
-    //   rh: day[2],
-    //   lw: day[3],
-    //   pt: day[4],
-    //   botrytis: botrytis[i],
-    //   botrytisIR: botrytisIR,
-    //   anthracnose: anthracnose[i],
-    //   anthracnoseIR: anthracnoseIR
-    // });
-
     arr.push({
       botrytis: {
         date: day[0],

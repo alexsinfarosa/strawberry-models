@@ -4,15 +4,15 @@ import { when } from "mobx";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // styled-components
-import { Centered } from "./styles";
+import { Centered } from "./site/styles";
 
 // components
-import Home from "./Home";
+import Home from "./site/Home";
 // import Nav from "./Nav";
 
 // Models
-import Berry from "./Berry";
-import Onion from "./Onion";
+import Berry from "./models/Berry";
+import Beet from "./models/Beet";
 import Test from "./Test";
 
 // api
@@ -41,7 +41,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/berry" component={Berry} />
-          <Route path="/example" component={Onion} />
+          <Route path="/beet" component={Beet} />
           <Route path="/test" component={Test} />
           <Route render={() => <Centered><h1>Not Found!</h1></Centered>} />
         </Switch>

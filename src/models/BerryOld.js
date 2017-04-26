@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { autorun } from "mobx";
 
 // styles
-import "./styles";
+// import "./styles";
 
 // antd
 import { Layout, Menu, Icon } from "antd";
@@ -27,7 +27,7 @@ import {
   getSisterStationIdAndNetwork,
   fetchSisterStationData,
   fetchForecastData
-} from "./api";
+} from "../api";
 
 // utility functions
 import {
@@ -36,7 +36,7 @@ import {
   containsMissingValues,
   replaceConsecutiveMissingValues,
   RHAdjustment
-} from "./utils";
+} from "../utils";
 
 @inject("store")
 @observer

@@ -13,7 +13,7 @@ export default class AppStore {
       this.endDate !== null
     );
   }
-  @observable isVisible = null;
+  @observable isVisible = true;
   @action setIsVisible = () => this.isVisible = !this.isVisible;
   @observable isCollapsed = window.innerWidth < 400 ? false : true;
   @action setIsCollapsed = d => this.isCollapsed = d;
