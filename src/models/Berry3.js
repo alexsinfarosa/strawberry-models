@@ -2,13 +2,18 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { Link } from "react-router-dom";
 import { autorun } from "mobx";
+import Drawer from "react-motion-drawer";
 
 // styles
-// import "./styles";
+import { Flex, Box } from "reflexbox";
+
+//styled-components
+import { Main } from "../appStyles";
+import { Header, Sidebar, Content } from "./styles";
 
 // antd
-import { Layout, Menu, Icon } from "antd";
-const { Header, Sider, Content } = Layout;
+import { Icon } from "antd";
+// const { Header, Sider, Content } = Layout;
 
 //  components
 import Subject from "./components/Subject";
@@ -37,6 +42,11 @@ import {
   replaceConsecutiveMissingValues,
   RHAdjustment
 } from "../utils";
+
+const style = {
+  background: "#F9F9F9",
+  boxShadow: "rgba(0, 0, 0, 0.188235) 0px 10px 20px, rgba(0, 0, 0, 0.227451) 0px 6px 6px"
+};
 
 @inject("store")
 @observer
@@ -107,71 +117,58 @@ export default class Berry extends Component {
     return;
   };
 
+  state = {
+    open: true,
+    width: 300
+  };
+
   render() {
+    const { open } = this.state;
+    const { isMobile } = this.props.store.app;
+    const drawerProps = {
+      overlayColor: "rgba(255,255,255,0.6)",
+      drawerStyle: style
+    };
+
+    console.log(isMobile);
+
     return (
-      <Layout>
-        <Sider
-          breakpoint="lg"
-          collapsedWidth={0}
-          onCollapse={(collapsed, type) => {
-            this.props.store.app.setIsCollapsed(collapsed);
-          }}
-          style={{
-            background: "white",
-            padding: true ? 0 : 24
-          }}
-          width={248}
-        >
+      <Flex column>
+        <Header lg={12} md={12} sm={12} col={12}>
+          {open
+            ? <a onClick={() => this.setState({ open: false })}>
+                <Icon type="menu-fold" />
+              </a>
+            : <a onClick={() => this.setState({ open: true })}>
+                <Icon type="menu-unfold" />
+              </a>}
+          <Link to="/">Home</Link>
 
-          <Menu defaultSelectedKeys={["1"]}>
-            <Subject />
-            <State />
-            <Station />
-            <DatePicker />
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header
-            style={{
-              position: "fixed",
-              width: "100%",
-              background: "#fff"
-            }}
-          >
-            <Menu
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                lineHeight: "62px"
-              }}
-            >
-              <Menu.Item key="1" style={{ fontSize: ".8rem" }}>
-                <Link to="/"><Icon type="home" />Home</Link>
-              </Menu.Item>
-              <Menu.Item disabled key="2" style={{ fontSize: ".8rem" }}>
-                Berry Model
-              </Menu.Item>
+          <p>Berry Model</p>
+        </Header>
+        <Flex debug style={{ height: "100vh", background: "lightyellow" }}>
+        
+          <Sidebar p={2}>
+            Sidebar
+          </Sidebar>
 
-            </Menu>
-          </Header>
-          <Content
-            // overflow="initial"
-            style={{
-              margin: "62px 0px 0px 0px",
-              padding: 24,
-              background: "#fff",
-              minHeight: 280
-            }}
-          >
-            {/* <TheMap /> */}
-            <RTable />
-            {/* <Stage /> */}
-            {/* <Graph /> */}
+          {/* <Drawer
+                {...drawerProps}
+                width={this.state.width}
+                fadeOut={true}
+                open={open}
+                onChange={open => this.setState({ open: open })}
+              >
+                <div style={{ padding: "2em", background: "pink" }}>
+                  <h3>Navigation</h3>
+                </div>
+              </Drawer> */}
+
+          <Content p={2} auto>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio, doloremque voluptates, modi accusantium natus eos, temporibus tenetur vitae enim quam nostrum accusamus? Veritatis explicabo eius suscipit, enim, eaque illum.
           </Content>
-        </Layout>
-      </Layout>
+        </Flex>
+      </Flex>
     );
   }
 }

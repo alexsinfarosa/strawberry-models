@@ -3,13 +3,21 @@ import { inject, observer } from "mobx-react";
 import { Select } from "antd";
 const Option = Select.Option;
 
+const diseases = [
+  { name: "Strawberries", model: "strawberryModel" },
+  { name: "Blueberries", model: "blueberryModel" }
+];
+
 @inject("store")
 @observer
 class Subject extends Component {
   handleChange = value => {
-    this.props.store.app.setDisease(null);
-    this.props.store.app.setDisease(value);
-    console.log(`disease: ${value}`);
+    const disease = diseases.find(disease => disease.name === value);
+
+    // Fetch data on disease change;
+    this.props.store.app.setDisease({});
+    this.props.store.app.setDisease(disease);
+    console.log(`disease: ${disease.name}`);
   };
   render() {
     const { disease } = this.props.store.app;
@@ -30,13 +38,14 @@ class Subject extends Component {
           name="berry-disease"
           size="large"
           autoFocus
-          value={disease ? disease : undefined}
+          value={disease.name}
           placeholder="Select Disease"
           style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
-          <Option value="Strawberries">Strawberries</Option>
-          <Option value="Blue berries">Blue berries</Option>
+          {diseases.map((disease, i) => {
+            return <Option key={i} value={disease.name}>{disease.name}</Option>;
+          })}
         </Select>
       </div>
     );

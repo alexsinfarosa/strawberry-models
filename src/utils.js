@@ -2,6 +2,7 @@ import flatten from "lodash/flatten";
 import isBefore from "date-fns/is_before";
 import isAfter from "date-fns/is_after";
 import isToday from "date-fns/is_today";
+import format from "date-fns/format";
 
 // Returns an array of objects. Each object is a station with the following
 export const matchIconsToStations = (protocol, stations, state) => {
@@ -311,7 +312,7 @@ export const indexAnthracnose = data => {
 };
 
 // Returns an array of objects. Current application model
-export const currentModel = (station, data, endDate) => {
+export const berryModel = (station, data, endDate) => {
   // shift the data to (1,24)
   let results = noonToNoon(data);
   results = results.slice(0, -1);
@@ -324,8 +325,10 @@ export const currentModel = (station, data, endDate) => {
   const botrytis = indexBotrytis(leafWetnessAndTemps(results));
   const anthracnose = indexAnthracnose(leafWetnessAndTemps(results));
 
-  // Build an array of objects with what you need...!
+  // STRAWBERRY ------------------------------------------------------------------
+  // botrytisIR, anthracnoseIR, dateTextDisplay are needed because of antd tables
   let arr = [];
+  let cdd = 0;
   for (const [i, day] of results.entries()) {
     // setup botrytis risk level
     let botrytisIR = "";
@@ -360,6 +363,15 @@ export const currentModel = (station, data, endDate) => {
       dateTextDisplay = "Forecast";
     }
 
+    // BLUBERRY MAGGOT --------------------------------------------------------------
+    const base = 50;
+    const avg = average(day[1]);
+    const dd = avg - base > 0 ? avg - base : 0;
+    // console.log(cdd);
+    cdd = cdd + dd;
+    // console.log(cdd);
+
+    // Build an array of objects with what you need...!
     arr.push({
       botrytis: {
         date: day[0],
@@ -380,10 +392,21 @@ export const currentModel = (station, data, endDate) => {
         pt: day[4],
         value: anthracnose[i],
         riskLevel: anthracnoseIR
+      },
+      blueberryMaggot: {
+        date: format(day[0], "MMM D"),
+        temp: day[1],
+        time: dateTextDisplay,
+        base: base,
+        min: Math.min(...day[1]),
+        max: Math.max(...day[1]),
+        average: avg,
+        dd: dd,
+        cdd: cdd
       }
     });
   }
-  // arr.map(e => console.log(e));
+  arr.map(e => console.log(e.blueberryMaggot));
   return arr;
 };
 

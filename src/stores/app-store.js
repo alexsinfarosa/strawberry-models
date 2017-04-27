@@ -8,24 +8,23 @@ export default class AppStore {
   @observable protocol = window.location.protocol;
   @computed get areRequiredFieldsSet() {
     return (
-      this.disease !== null &&
-      Object.keys(this.state && this.station).length !== 0 &&
-      this.endDate !== null
+      Object.keys(this.disease).length !== 0 &&
+      Object.keys(this.state).length !== 0 &&
+      Object.keys(this.station).length !== 0
     );
   }
   @observable isVisible = true;
   @action setIsVisible = () => this.isVisible = !this.isVisible;
-  @observable isCollapsed = window.innerWidth < 400 ? false : true;
-  @action setIsCollapsed = d => this.isCollapsed = d;
-  // @observable isLoading = false;
-  // @action setIsLoading = d => this.isLoading = d;
+
+  @observable isCollapsed = false;
+  @action setIsCollapsed = d => this.isCollapsed = !this.isCollapsed;
 
   // Berry disease------------------------------------------------------------------------
-  @observable disease = JSON.parse(localStorage.getItem("beet-disease")) ||
-    null;
+  @observable disease = JSON.parse(localStorage.getItem("berry-diseases")) || {
+  };
   @action setDisease = d => {
     this.disease = d;
-    localStorage.setItem("beet-disease", JSON.stringify(this.disease));
+    localStorage.setItem("berry-diseases", JSON.stringify(this.disease));
   };
 
   // State--------------------------------------------------------------------------------

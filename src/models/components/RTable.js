@@ -12,7 +12,8 @@ import format from "date-fns/format";
 import "./rTable.styl";
 
 // styled-components
-import { Section, Row, Col } from "../../appStyles";
+// import { Section, Row, Col } from "../../appStyles";
+import { Flex, Box } from "reflexbox";
 
 // antd
 import { Table } from "antd";
@@ -20,7 +21,7 @@ const { Column } = Table;
 
 @inject("store")
 @observer
-class rTable extends Component {
+class RTable extends Component {
   cellColorTime = (day, record, index) => {
     const { endDate } = this.props.store.app;
     if (isBefore(day, endDate)) {
@@ -155,58 +156,101 @@ class rTable extends Component {
       );
     };
     return (
-      <Section>
-        <div>
+      <Flex column>
+        <Box>
           <h1>Results</h1>
-          <h2>{disease} Prediction for {station.name}</h2>
-        </div>
-        <Row className="table">
-          <Col>
-            <h3>Botrytis</h3>
-            <br />
-            <Table
-              rowKey={record => record.date}
-              rowClassName={this.rowColor}
-              loading={ACISData.length === 0}
-              pagination={false}
-              dataSource={
-                areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.botrytis)
-                  : null
-              }
-            >
-              {/* {column(80, "table", "", "time", "time")} */}
-              {column(200, "table", "Date", "date", "date", this.cellColorDay)}
-              {column(200, "table", "Botrytis", "value", "value")}
-              {column(200, "table", "Risk Level", "riskLevel", "riskLevel")}
-            </Table>
-          </Col>
+          <h2>{disease.name} Prediction for {station.name}</h2>
+        </Box>
 
-          <Col>
-            <h3>Anthracnose</h3>
-            <br />
-            <Table
-              rowKey={record => record.date}
-              rowClassName={this.rowColor}
-              loading={ACISData.length === 0}
-              pagination={false}
-              dataSource={
-                areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.anthracnose)
-                  : null
-              }
-            >
-              {/* {column(80, "table", "", "time", "time")} */}
-              {column(200, "table", "Date", "date", "date", this.cellColorDay)}
-              {column(200, "table", "Anthracnose", "value", "value")}
-              {column(200, "table", "Risk Level", "riskLevel", "riskLevel")}
-            </Table>
-          </Col>
+        {disease.name === "Strawberries"
+          ? <Flex className="table" justify="space-around" wrap>
 
-        </Row>
-      </Section>
+              <Box mt={2} col={12} lg={5} md={5} sm={12}>
+                <h3>Botrytis</h3>
+                <br />
+                <Table
+                  rowKey={record => record.date}
+                  rowClassName={this.rowColor}
+                  loading={ACISData.length === 0}
+                  pagination={false}
+                  dataSource={
+                    areRequiredFieldsSet
+                      ? takeRight(ACISData, 8).map(day => day.botrytis)
+                      : null
+                  }
+                >
+                  {/* {column(80, "table", "", "time", "time")} */}
+                  {column(
+                    200,
+                    "table",
+                    "Date",
+                    "date",
+                    "date",
+                    this.cellColorDay
+                  )}
+                  {column(200, "table", "Index", "value", "value")}
+                  {column(200, "table", "Risk Level", "riskLevel", "riskLevel")}
+                </Table>
+              </Box>
+
+              <Box mt={2} col={12} lg={5} md={5} sm={12}>
+                <h3>Anthracnose</h3>
+                <br />
+                <Table
+                  rowKey={record => record.date}
+                  rowClassName={this.rowColor}
+                  loading={ACISData.length === 0}
+                  pagination={false}
+                  dataSource={
+                    areRequiredFieldsSet
+                      ? takeRight(ACISData, 8).map(day => day.anthracnose)
+                      : null
+                  }
+                >
+                  {/* {column(80, "table", "", "time", "time")} */}
+                  {column(
+                    200,
+                    "table",
+                    "Date",
+                    "date",
+                    "date",
+                    this.cellColorDay
+                  )}
+                  {column(200, "table", "Index", "value", "value")}
+                  {column(200, "table", "Risk Level", "riskLevel", "riskLevel")}
+                </Table>
+              </Box>
+            </Flex>
+          : <Flex className="table" justify="space-around" wrap>
+
+              <Box mt={2} col={12} lg={8} md={8} sm={12}>
+                <h3>Blueberries Maggot</h3>
+                <br />
+                <Table
+                  rowKey={record => record.date}
+                  // rowClassName={this.rowColor}
+                  loading={ACISData.length === 0}
+                  pagination={false}
+                  dataSource={
+                    areRequiredFieldsSet
+                      ? takeRight(ACISData, 8).map(day => day.blueberryMaggot)
+                      : null
+                  }
+                >
+                  {/* {column(80, "table", "", "time", "time")} */}
+                  {column(100, "table", "Date", "date", "date")}
+                  {column(100, "table", "DDD", "dd", "dd")}
+                  {column(100, "table", "CDD", "cdd", "cdd")}
+                  {column(50, "table", "Min", "min", "min")}
+                  {column(50, "table", "Max", "max", "max")}
+                  {column(100, "table", "Avg", "average", "average")}
+                </Table>
+              </Box>
+
+            </Flex>}
+      </Flex>
     );
   }
 }
 
-export default rTable;
+export default RTable;
