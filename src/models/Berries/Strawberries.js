@@ -12,7 +12,7 @@ const columns = [
     dataIndex: "date",
     key: "date",
     fixed: "left",
-    width: 100
+    width: 120
   },
   {
     title: "Index",
