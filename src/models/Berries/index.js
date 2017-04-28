@@ -11,15 +11,14 @@ import { Layout, Menu, Icon } from "antd";
 const { Header, Sider, Content } = Layout;
 
 //  components
-import Subject from "./components/Subject";
-import State from "./components/State";
-import Station from "./components/Station";
-import DatePicker from "./components/DatePicker";
+import Subject from "../components/Subject";
+import State from "../components/State";
+import Station from "../components/Station";
+import DatePicker from "../components/DatePicker";
 
-// import TheMap from "./components/TheMap";
-import RTable from "./components/RTable";
-// import Graph from "./components/Graph";
-// import Stage from "./components/Stage";
+import TheMap from "../components/TheMap";
+import Strawberries from "./Strawberries";
+import BluberryMaggot from "./BluberryMaggot";
 
 // api
 import {
@@ -27,7 +26,7 @@ import {
   getSisterStationIdAndNetwork,
   fetchSisterStationData,
   fetchForecastData
-} from "../api";
+} from "../../api";
 
 // utility functions
 import {
@@ -36,7 +35,7 @@ import {
   containsMissingValues,
   replaceConsecutiveMissingValues,
   RHAdjustment
-} from "../utils";
+} from "../../utils";
 
 @inject("store")
 @observer
@@ -108,6 +107,7 @@ export default class Berry extends Component {
   };
 
   render() {
+    const { disease } = this.props.store.app;
     return (
       <Layout>
         <Sider
@@ -130,6 +130,7 @@ export default class Berry extends Component {
             <DatePicker />
           </Menu>
         </Sider>
+
         <Layout>
           <Header
             style={{
@@ -165,10 +166,10 @@ export default class Berry extends Component {
               minHeight: 280
             }}
           >
-            {/* <TheMap /> */}
-            <RTable />
-            {/* <Stage /> */}
-            {/* <Graph /> */}
+            <TheMap />
+            {disease.family === "Strawberries"
+              ? <Strawberries />
+              : <BluberryMaggot />}
           </Content>
         </Layout>
       </Layout>

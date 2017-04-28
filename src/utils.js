@@ -368,29 +368,29 @@ export const berryModel = (station, data, endDate) => {
     const avg = average(day[1]);
     const dd = avg - base > 0 ? avg - base : 0;
     // console.log(cdd);
-    cdd = cdd + dd;
+    cdd += dd;
     // console.log(cdd);
 
     // Build an array of objects with what you need...!
     arr.push({
       botrytis: {
-        date: day[0],
+        date: format(day[0], "MMM D"),
         time: dateTextDisplay,
         temp: day[1],
         rh: day[2],
         lw: day[3],
         pt: day[4],
-        value: botrytis[i],
+        index: botrytis[i],
         riskLevel: botrytisIR
       },
       anthracnose: {
-        date: day[0],
+        date: format(day[0], "MMM D"),
         time: dateTextDisplay,
         temp: day[1],
         rh: day[2],
         lw: day[3],
         pt: day[4],
-        value: anthracnose[i],
+        index: anthracnose[i],
         riskLevel: anthracnoseIR
       },
       blueberryMaggot: {
@@ -406,7 +406,7 @@ export const berryModel = (station, data, endDate) => {
       }
     });
   }
-  arr.map(e => console.log(e.blueberryMaggot));
+  // arr.map(e => console.log(e));
   return arr;
 };
 

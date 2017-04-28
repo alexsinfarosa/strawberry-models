@@ -11,8 +11,8 @@ import Home from "./site/Home";
 // import Nav from "./Nav";
 
 // Models
-import Berry from "./models/Berry";
-import Beet from "./models/Beet";
+import Berry from "./models/Berries";
+import Beet from "./models/Beets";
 import Test from "./Test";
 
 // api

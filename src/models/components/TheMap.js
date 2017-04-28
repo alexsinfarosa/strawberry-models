@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import { states } from "../states";
+import { states } from "../../states";
 import { TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 
@@ -33,10 +33,6 @@ export default class TheMap extends Component {
       alert(`Select ${state.name} from the State menu to access this station.`);
     }
   };
-
-  componentDidMount() {
-    this.props.store.app.setIsSubmitted(false);
-  }
 
   render() {
     // const position = [this.state.lat, this.state.lng];

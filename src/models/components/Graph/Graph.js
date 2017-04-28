@@ -1,123 +1,68 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import { format } from "date-fns";
-
 import {
-  ComposedChart,
-  Bar,
-  Area,
+  LineChart,
   XAxis,
   YAxis,
-  Text,
+  CartesianGrid,
   Tooltip,
-  Legend
+  Legend,
+  Line,
+  ResponsiveContainer
 } from "recharts";
 import CustomLabel from "./CustomLabel";
-import CustomBar from "./CustomBar";
 
-// styles
-import "./styles";
-
-// styled-components
-import { StyledTooltip } from "./styles";
+import { Flex, Box } from "reflexbox";
 
 @inject("store")
 @observer
 export default class Graph extends Component {
   render() {
-    const { graphData, barColor } = this.props.store.app;
+    const { ACISData } = this.props.store.app;
+    const data = ACISData.map(e => e.blueberryMaggot);
 
-    const renderTooltip = props => {
-      const { payload, label } = props;
-      if (payload.length > 0) {
-        return (
-          <StyledTooltip>
-            <h5>{format(label, "MMMM Do")}</h5>
-            <p style={{ color: payload[3].color }}>
-              {`${payload[3].name} Infection Values: ${payload[3].value}`}
-            </p>
-          </StyledTooltip>
-        );
-      }
-    };
-
+    // Change the aspect ratio when viewed on different devices
+    let aspect;
+    const w = window.innerWidth;
+    if (w >= 0 && w <= 401) {
+      aspect = 1;
+    } else if (w > 401 && w <= 768) {
+      aspect = 1.5;
+    } else {
+      aspect = 2;
+    }
     return (
-      <div>
-        <Text
-          style={{
-            display: "block",
-            marginTop: "20px",
-            fontSize: "16px",
-            marginBottom: "5px",
-            fontWeight: "700",
-            letterSpacing: "1px"
-          }}
+      <Flex mt={4} column>
+        <h2>Cumulative Degree Day Graph</h2>
+        <Box
+          mt={3}
+          col={12}
+          lg={10}
+          md={10}
+          sm={12}
+          style={{ margin: "0 auto" }}
         >
-          2-Day Infection Values
-        </Text>
-        <ComposedChart
-          width={610}
-          height={320}
-          data={graphData}
-          margin={{ top: 0, right: 20, left: -30, bottom: 5 }}
-        >
-          <XAxis dataKey="dates" tick={<CustomLabel />} />
-          <YAxis
-            dataKey="a2Day"
-            allowDecimals={false}
-            domain={["dataMin", "dataMax"]}
-          />
-          <Tooltip content={renderTooltip} offset={20} />
-          <Legend
-            wrapperStyle={{ paddingTop: "30px" }}
-            verticalAlign="bottom"
-            iconSize={16}
-            iconType="rect"
-            payload={[
-              { value: "Low", type: "rect", color: "#A3FDA1" },
-              { value: "Moderate", type: "rect", color: "#FDFAB0" },
-              { value: "High", type: "rect", color: "#FFA0A0" }
-            ]}
-          />
-          <Area
-            activeDot={false}
-            name="Favorable"
-            type="monotone"
-            stackId="1"
-            dataKey="high"
-            stroke="#FFA0A0"
-            fill="#FFA0A0"
-            opacity={0.7}
-          />
-          <Area
-            activeDot={false}
-            name="Marginal"
-            type="monotone"
-            stackId="2"
-            dataKey="moderate"
-            stroke="#FDFAB0"
-            fill="#FDFAB0"
-            opacity={0.7}
-          />
-          <Area
-            activeDot={false}
-            name="Unfavorable"
-            type="monotone"
-            stackId="3"
-            dataKey="low"
-            stroke="#A3FDA1"
-            fill="#A3FDA1"
-            opacity={0.7}
-          />
-          <Bar
-            name="2-Day"
-            dataKey="a2Day"
-            shape={<CustomBar />}
-            fill={barColor}
-          />
-
-        </ComposedChart>
-      </div>
+          <ResponsiveContainer width="100%" aspect={aspect}>
+            <LineChart
+              data={data}
+              margin={{ top: 20, right: 0, left: -30, bottom: 20 }}
+            >
+              <XAxis dataKey="date" tick={<CustomLabel />} />
+              <YAxis />
+              <CartesianGrid stroke="#E9E9E9" strokeDasharray="7 7" />
+              <Tooltip />
+              <Legend align="center" verticalAlign="top" height={48} />
+              <Line
+                dot={false}
+                activeDot={{ r: 7 }}
+                type="monotone"
+                dataKey="cdd"
+                stroke="#8884d8"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Box>
+      </Flex>
     );
   }
 }

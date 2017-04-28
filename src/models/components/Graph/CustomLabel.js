@@ -12,7 +12,7 @@ export default class CustomLabel extends Component {
           fontSize={10}
           textAnchor="end"
           fill="#666"
-          transform="rotate(-15)"
+          transform="rotate(-20)"
         >
           {payload.value}
         </text>

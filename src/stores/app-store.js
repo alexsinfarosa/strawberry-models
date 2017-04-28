@@ -20,10 +20,14 @@ export default class AppStore {
   @action setIsCollapsed = d => this.isCollapsed = !this.isCollapsed;
 
   // Berry disease------------------------------------------------------------------------
+  @observable diseases = [
+    { family: "Strawberries", name: ["botrytis", "anthracnose"] },
+    { family: "Blueberries", name: ["blueberry Maggot"] }
+  ];
   @observable disease = JSON.parse(localStorage.getItem("berry-diseases")) || {
   };
   @action setDisease = d => {
-    this.disease = d;
+    this.disease = this.diseases.find(disease => disease.family === d);
     localStorage.setItem("berry-diseases", JSON.stringify(this.disease));
   };
 
