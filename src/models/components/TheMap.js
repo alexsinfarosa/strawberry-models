@@ -54,7 +54,7 @@ export default class TheMap extends Component {
 
     return (
       <Flex justify="center">
-        <Box mb={3} col={12} lg={10} md={10} sm={12}>
+        <Box mb={4} col={12} lg={10} md={10} sm={12}>
           <MapContainer
             ref="map"
             center={
