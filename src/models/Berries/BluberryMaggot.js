@@ -1,58 +1,58 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import takeRight from "lodash/takeRight";
+import React, {Component} from 'react';
+import {inject, observer} from 'mobx-react';
+import takeRight from 'lodash/takeRight';
 
-import { Flex, Box } from "reflexbox";
-import { Table } from "antd";
+import {Flex, Box} from 'reflexbox';
+import {Table} from 'antd';
 
-import Graph from "../components/Graph/Graph";
+import Graph from '../components/Graph/Graph';
 
 const columns = [
   {
-    title: "Date",
-    dataIndex: "date",
-    key: "date",
-    fixed: "left",
-    width: 60
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+    fixed: 'left',
+    width: 60,
   },
   {
-    title: "Degree Days",
+    title: 'Degree Days',
     children: [
       {
-        title: "Daily",
-        dataIndex: "dd",
-        key: "dd"
+        title: 'Daily',
+        dataIndex: 'dd',
+        key: 'dd',
       },
       {
-        title: "Cumulative",
-        dataIndex: "cdd",
-        key: "cdd"
-      }
-    ]
+        title: 'Cumulative',
+        dataIndex: 'cdd',
+        key: 'cdd',
+      },
+    ],
   },
   {
-    title: "Temperature (˚F)",
+    title: 'Temperature (˚F)',
     children: [
       {
-        title: "Min",
-        dataIndex: "min",
-        key: "min"
+        title: 'Min',
+        dataIndex: 'min',
+        key: 'min',
       },
       {
-        title: "Max",
-        dataIndex: "max",
-        key: "max"
+        title: 'Max',
+        dataIndex: 'max',
+        key: 'max',
       },
       {
-        title: "Avg",
-        dataIndex: "average",
-        key: "average"
-      }
-    ]
-  }
+        title: 'Avg',
+        dataIndex: 'average',
+        key: 'average',
+      },
+    ],
+  },
 ];
 
-@inject("store")
+@inject('store')
 @observer
 export default class BluberryMaggot extends Component {
   render() {
@@ -60,7 +60,7 @@ export default class BluberryMaggot extends Component {
       ACISData,
       disease,
       station,
-      areRequiredFieldsSet
+      areRequiredFieldsSet,
     } = this.props.store.app;
     return (
       <Flex column>
@@ -88,8 +88,7 @@ export default class BluberryMaggot extends Component {
           </Box>
 
         </Flex>
-
-        <Graph />
+        {areRequiredFieldsSet && <Graph />}
       </Flex>
     );
   }
