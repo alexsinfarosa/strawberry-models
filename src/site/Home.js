@@ -1,31 +1,27 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
+import React, {Component} from 'react';
+import {inject, observer} from 'mobx-react';
 
 //styled-components
-import { Main } from "../appStyles";
+import {Main} from '../appStyles';
 
 // styles
-import { Flex } from "reflexbox";
+import {Flex, Box} from 'reflexbox';
 
 // components
-import Nav from "./Nav";
+import Nav from './Nav';
 
-@inject("store")
+@inject('store')
 @observer
 export default class Home extends Component {
   render() {
     return (
       <Flex column>
         <Nav />
-        <Flex
-          align="center"
-          debug
-          justify="center"
-          style={{ height: "100vh" }}
-          column
-        >
-          <Main p={2} m={2} lg={12} md={12} sm={12} col={12}>
-            Home Page
+        <Flex column>
+          <Main mt={4} lg={12} md={12} sm={12} col={12}>
+            <Box lg={4} md={4} sm={4} col={12}>One</Box>
+            <Box lg={4} md={4} sm={4} col={12}>Two</Box>
+            <Box lg={4} md={4} sm={4} col={12}>Three</Box>
           </Main>
         </Flex>
       </Flex>

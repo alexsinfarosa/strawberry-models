@@ -1,24 +1,24 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import { when } from "mobx";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, {Component} from 'react';
+import {inject, observer} from 'mobx-react';
+import {when} from 'mobx';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 // styled-components
-import { Centered } from "./site/styles";
+import {Centered} from './site/styles';
 
 // components
-import Home from "./site/Home";
+import Home from './site/Home';
 // import Nav from "./Nav";
 
 // Models
-import Berry from "./models/Berries";
-import Beet from "./models/Beets";
-import Test from "./Test";
+import Berry from './models/Berries';
+import Beet from './models/Beets';
+import Test from './Test';
 
 // api
-import { fetchAllStations } from "./api";
+import {fetchAllStations} from './api';
 
-@inject("store")
+@inject('store')
 @observer
 class App extends Component {
   constructor(props) {
