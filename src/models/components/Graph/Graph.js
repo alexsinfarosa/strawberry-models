@@ -32,7 +32,7 @@ export default class Graph extends Component {
       aspect = 2;
     }
     return (
-      <Flex mt={4} column>
+      <Flex mt={4} mb={4} column>
         <h2>Cumulative Degree Day Graph</h2>
         <Box
           mt={3}

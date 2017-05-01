@@ -1,40 +1,37 @@
-import React, {Component} from 'react';
-import {inject, observer} from 'mobx-react';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
 
 //styled-components
-import {NavBox, Navlink} from './styles';
-import {Icon} from 'antd';
+import { NavBox, Navlink, Header1, Header2 } from "./styles";
+import { Icon } from "antd";
 
 // styles
-import {Flex, Box} from 'reflexbox';
+import { Flex, Box } from "reflexbox";
 
 // import cuLogo from '../../public/CU_LOGO_RED.gif';
 
-@inject('store')
+@inject("store")
 @observer
 class Nav extends Component {
   render() {
     const isActive = {
-      color: 'black',
-      textDecoration: 'underline',
-      textUnderlinePosition: 'under',
+      color: "black",
+      textDecoration: "underline",
+      textUnderlinePosition: "under"
     };
     return (
-      <Flex column>
-        <Flex p={2} justify="space-between">
+      <Flex column mb={3}>
+        <Flex
+          p={3}
+          justify="space-between"
+          align="center"
+          style={{ background: "#FF6E40", color: "white" }}
+        >
           <Box>
             {/* <img src={cuLogo} alt="cornell logo" /> */}
-            <h2 style={{color: 'red'}}>Cornell</h2>
+            <h2>Cornell</h2>
           </Box>
           <Box><h2><Icon type="login" /> Login</h2></Box>
-        </Flex>
-
-        <Flex p={2} m={2} justify="center">
-          <Box style={{textAlign: 'center'}}>
-            <h1>NEWA</h1>
-            <br />
-            <h2>Network for Environment and Weather Applications</h2>
-          </Box>
         </Flex>
 
         <Flex p={2} m={2} justify="space-around">
@@ -55,6 +52,14 @@ class Nav extends Component {
               Beet
             </Navlink>
           </NavBox>
+        </Flex>
+
+        <Flex mt={4} p={2} m={2} justify="center">
+          <Box style={{ textAlign: "center" }}>
+            <Header1>NEWA</Header1>
+            <br />
+            <Header2>Network for Environment and Weather Applications</Header2>
+          </Box>
         </Flex>
 
       </Flex>
