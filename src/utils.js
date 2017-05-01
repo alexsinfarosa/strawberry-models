@@ -373,7 +373,7 @@ export const berryModel = (station, data, endDate) => {
 
     let formattedDate = format(day[0], "MMM D");
     if (isAfter(day[0], today)) {
-      formattedDate = `${format(day[0], "MMM D")} - Forecast`;
+      formattedDate = `${format(day[0], "MMM D")}`;
     }
 
     // Build an array of objects with what you need...!
