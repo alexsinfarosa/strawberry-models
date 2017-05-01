@@ -1,32 +1,32 @@
-import React, {Component} from 'react';
-import {inject, observer} from 'mobx-react';
-import {Link} from 'react-router-dom';
-import {autorun} from 'mobx';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
+import { Link } from "react-router-dom";
+import { autorun } from "mobx";
 
 // styles
 // import "./styles";
 
 // antd
-import {Layout, Menu, Icon} from 'antd';
-const {Header, Sider, Content} = Layout;
+import { Layout, Menu, Icon } from "antd";
+const { Header, Sider, Content } = Layout;
 
 //  components
-import Subject from '../components/Subject';
-import State from '../components/State';
-import Station from '../components/Station';
-import DatePicker from '../components/DatePicker';
+import Subject from "../components/Subject";
+import State from "../components/State";
+import Station from "../components/Station";
+import DatePicker from "../components/DatePicker";
 
-import TheMap from '../components/TheMap';
-import Strawberries from './Strawberries';
-import BluberryMaggot from './BluberryMaggot';
+import TheMap from "../components/TheMap";
+import Strawberries from "./Strawberries";
+import BluberryMaggot from "./BluberryMaggot";
 
 // api
 import {
   fetchACISData,
   getSisterStationIdAndNetwork,
   fetchSisterStationData,
-  fetchForecastData,
-} from '../../api';
+  fetchForecastData
+} from "../../api";
 
 // utility functions
 import {
@@ -35,32 +35,33 @@ import {
   containsMissingValues,
   replaceConsecutiveMissingValues,
   RHAdjustment,
-} from '../../utils';
+  getData
+} from "../../utils";
 
-@inject('store')
+@inject("store")
 @observer
 export default class Berry extends Component {
   constructor(props) {
     super(props);
-    // const {
-    //   protocol,
-    //   station,
-    //   startDate,
-    //   endDate,
-    //   currentYear,
-    //   startDateYear,
-    // } = this.props.store.app;
+    const {
+      protocol,
+      station,
+      startDate,
+      endDate,
+      currentYear,
+      startDateYear
+    } = this.props.store.app;
     autorun(() => {
       if (this.props.store.app.areRequiredFieldsSet) {
-        // return Data(
-        //   protocol,
-        //   station,
-        //   startDate,
-        //   endDate,
-        //   currentYear,
-        //   startDateYear
-        // );
-        return this.getData(berryModel);
+        return getData(
+          protocol,
+          station,
+          startDate,
+          endDate,
+          currentYear,
+          startDateYear
+        );
+        // return this.getData(berryModel);
       }
     });
   }
@@ -73,7 +74,7 @@ export default class Berry extends Component {
       startDate,
       endDate,
       currentYear,
-      startDateYear,
+      startDateYear
     } = this.props.store.app;
 
     this.props.store.app.setACISData([]);
@@ -122,7 +123,7 @@ export default class Berry extends Component {
   };
 
   render() {
-    const {disease} = this.props.store.app;
+    const { disease } = this.props.store.app;
     return (
       <Layout>
         <Sider
@@ -132,13 +133,13 @@ export default class Berry extends Component {
             this.props.store.app.setIsCollapsed(collapsed);
           }}
           style={{
-            background: 'white',
-            padding: true ? 0 : 24,
+            background: "white",
+            padding: true ? 0 : 24
           }}
           width={248}
         >
 
-          <Menu defaultSelectedKeys={['1']}>
+          <Menu defaultSelectedKeys={["1"]}>
             <Subject />
             <State />
             <Station />
@@ -149,24 +150,24 @@ export default class Berry extends Component {
         <Layout>
           <Header
             style={{
-              position: 'fixed',
-              width: '100%',
-              background: '#fff',
+              position: "fixed",
+              width: "100%",
+              background: "#fff"
             }}
           >
             <Menu
               mode="horizontal"
-              defaultSelectedKeys={['2']}
+              defaultSelectedKeys={["2"]}
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                lineHeight: '62px',
+                display: "flex",
+                justifyContent: "space-between",
+                lineHeight: "62px"
               }}
             >
-              <Menu.Item key="1" style={{fontSize: '.8rem'}}>
+              <Menu.Item key="1" style={{ fontSize: ".8rem" }}>
                 <Link to="/"><Icon type="home" />Home</Link>
               </Menu.Item>
-              <Menu.Item disabled key="2" style={{fontSize: '.8rem'}}>
+              <Menu.Item disabled key="2" style={{ fontSize: ".8rem" }}>
                 Berry Model
               </Menu.Item>
 
@@ -175,14 +176,14 @@ export default class Berry extends Component {
           <Content
             // overflow="initial"
             style={{
-              margin: '62px 0px 0px 0px',
+              margin: "62px 0px 0px 0px",
               padding: 24,
-              background: '#fff',
-              minHeight: 280,
+              background: "#fff",
+              minHeight: 280
             }}
           >
             <TheMap />
-            {disease.family === 'Strawberries'
+            {disease.family === "Strawberries"
               ? <Strawberries />
               : <BluberryMaggot />}
           </Content>

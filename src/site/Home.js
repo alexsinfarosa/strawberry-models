@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
 //styled-components
-import { Main } from "../appStyles";
 import { SquareBox } from "./styles";
 
 // styles
-import { Flex, Box } from "reflexbox";
+import { Flex } from "reflexbox";
 
 // components
 import Nav from "./Nav";
