@@ -371,10 +371,15 @@ export const berryModel = (station, data, endDate) => {
     cdd += dd;
     // console.log(cdd);
 
+    let formattedDate = format(day[0], "MMM D");
+    if (isAfter(day[0], today)) {
+      formattedDate = `${format(day[0], "MMM D")} - Forecast`;
+    }
+
     // Build an array of objects with what you need...!
     arr.push({
       botrytis: {
-        date: format(day[0], "MMM D"),
+        date: formattedDate,
         time: dateTextDisplay,
         temp: day[1],
         rh: day[2],
@@ -384,7 +389,7 @@ export const berryModel = (station, data, endDate) => {
         riskLevel: botrytisIR
       },
       anthracnose: {
-        date: format(day[0], "MMM D"),
+        date: formattedDate,
         time: dateTextDisplay,
         temp: day[1],
         rh: day[2],
@@ -394,7 +399,7 @@ export const berryModel = (station, data, endDate) => {
         riskLevel: anthracnoseIR
       },
       blueberryMaggot: {
-        date: format(day[0], "MMM D"),
+        date: formattedDate,
         temp: day[1],
         time: dateTextDisplay,
         base: base,
