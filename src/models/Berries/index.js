@@ -30,7 +30,6 @@ import {
 
 // utility functions
 import {
-  berryModel,
   replaceNonConsecutiveMissingValues,
   containsMissingValues,
   replaceConsecutiveMissingValues,

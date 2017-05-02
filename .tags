@@ -1,0 +1,45 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+@inject.color	src/site/Nav.js	/^    const isActive = {$/;"	p
+@inject.isModalVisible	src/models/components/RTableNOTUSED.js	/^  state = {$/;"	p
+@inject.textDecoration	src/site/Nav.js	/^      color: "black",$/;"	p
+@inject.textUnderlinePosition	src/site/Nav.js	/^      textDecoration: "underline",$/;"	p
+antd	package.json	/^    "antd": "^2.9.1",$/;"	f
+axios	package.json	/^    "axios": "^0.15.3",$/;"	f
+build	package.json	/^    "build": "react-scripts build",$/;"	f
+const.app	src/stores/index.js	/^const store = {$/;"	p
+const.tp	src/Test.js	/^const data = {$/;"	p
+custom-react-scripts	package.json	/^    "custom-react-scripts": "0.0.23"$/;"	f
+date-fns	package.json	/^    "date-fns": "^1.28.0",$/;"	f
+dependencies	package.json	/^  "dependencies": {$/;"	f
+deploy	package.json	/^    "deploy": "gh-pages -d build"$/;"	f
+devDependencies	package.json	/^  "devDependencies": {$/;"	f
+eject	package.json	/^    "eject": "react-scripts eject",$/;"	f
+export.1	src/models/Beets/table.js	/^export const table = {$/;"	p
+gh-pages	package.json	/^    "gh-pages": "^0.12.0",$/;"	f
+homepage	package.json	/^  "homepage": "http:\/\/newadata.nrcc.cornell.edu\/newa\/",$/;"	f
+leaflet	package.json	/^    "leaflet": "^1.0.3",$/;"	f
+lodash	package.json	/^    "lodash": "^4.17.4",$/;"	f
+mobx	package.json	/^    "mobx": "^3.1.2",$/;"	f
+mobx-react	package.json	/^    "mobx-react": "^4.1.1",$/;"	f
+name	package.json	/^  "name": "beet",$/;"	f
+polished	package.json	/^    "polished": "^1.0.3",$/;"	f
+predeploy	package.json	/^    "predeploy": "npm run build",$/;"	f
+private	package.json	/^  "private": true,$/;"	f
+react	package.json	/^    "react": "^15.4.2",$/;"	f
+react-dom	package.json	/^    "react-dom": "^15.4.2",$/;"	f
+react-leaflet	package.json	/^    "react-leaflet": "^1.1.0",$/;"	f
+react-motion	package.json	/^    "react-motion": "^0.5.0",$/;"	f
+react-motion-drawer	package.json	/^    "react-motion-drawer": "^2.1.5",$/;"	f
+react-router-dom	package.json	/^    "react-router-dom": "^4.1.1",$/;"	f
+recharts	package.json	/^    "recharts": "^0.21.2",$/;"	f
+reflexbox	package.json	/^    "reflexbox": "^2.2.3",$/;"	f
+scripts	package.json	/^  "scripts": {$/;"	f
+start	package.json	/^    "start": "react-scripts start",$/;"	f
+styled-components	package.json	/^    "styled-components": "^1.4.4"$/;"	f
+test	package.json	/^    "test": "react-scripts test --env=jsdom",$/;"	f
+version	package.json	/^  "version": "0.1.0",$/;"	f

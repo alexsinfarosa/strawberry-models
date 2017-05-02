@@ -1,7 +1,3 @@
-import flatten from "lodash/flatten";
-import isBefore from "date-fns/is_before";
-import isAfter from "date-fns/is_after";
-import isToday from "date-fns/is_today";
 import format from "date-fns/format";
 import addDays from "date-fns/add_days";
 
@@ -17,7 +13,6 @@ import {
 } from "./api";
 
 // PRE FETCHING ---------------------------------------------------------
-// Returns an array of objects. Each object is a station with the following
 export const matchIconsToStations = (protocol, stations, state) => {
   const arr = [];
   const newa = `${protocol}//newa2.nrcc.cornell.edu/gifs/newa_small.png`;
@@ -119,7 +114,7 @@ export const allStationsX = (
   return stationsWithIcons;
 };
 
-// POST FETCHING ---------------------------------------------------------------
+// POST FETCHING ----------------------------------------------------------------------------
 
 // Returns the average of two numbers.
 export const avgTwoStringNumbers = (a, b) => {
@@ -150,6 +145,7 @@ export const replaceNonConsecutiveMissingValues = data => {
 //   const missingValues = arr.filter(e => e === "M").length;
 // };
 
+// Replaces current station (cStation) missing values with compared station
 export const compareAndReplace = (cStation, sStation) => {
   return cStation.map((e, i) => {
     if (e === "M" && sStation[i] !== "M") {
@@ -180,7 +176,7 @@ export const average = data => {
   return Math.round(results.reduce((acc, val) => acc + val, 0) / data.length);
 };
 
-// Returns array containing only temperature values where rh was above a certain value.
+// Returns array with elements above the second argument of the function
 export const aboveValue = (data, value) => {
   return data.map(e => {
     if (e > value) {
@@ -190,7 +186,106 @@ export const aboveValue = (data, value) => {
   });
 };
 
-// Returns the data array (MAIN FUNCTION) --------------------------------------
+// Returns array with elements equal to and above the second argument of the function
+export const aboveEqualToValue = (data, value) => {
+  return data.map(e => {
+    if (e >= value) {
+      return e;
+    }
+    return false;
+  });
+};
+
+// Convert Fahrenheit to Celcius
+export const fahrenheitToCelcius = data => {
+  return (data - 32) * 5 / 9;
+};
+
+// Returns wetness interval (W) and average temperature at those intervals (T)
+export const leafWetnessAndTemps = (day, currentYear, startDateYear) => {
+  let RH, PT, LW, TP, params;
+  if (currentYear === startDateYear) {
+    RH = day.rhFinal.map(e => (e >= 90 ? e : false));
+    PT = day.ptFinal.map(e => (e > 0 ? e : false));
+    TP = day.tpFinal.map(e => (e > 0 ? e : false));
+    params = [RH, PT];
+  } else {
+    RH = day.rhDiff.map(e => (e >= 90 ? e : false));
+    PT = day.ptDiff.map(e => (e > 0 ? e : false));
+    LW = day.lwDiff.map(e => (e > 0 ? e : false));
+    TP = day.tpDiff.map(e => (e > 0 ? e : false));
+    params = [RH, PT, LW];
+  }
+  // console.log(params);
+  const transpose = m => m[0].map((x, i) => m.map(x => x[i]));
+
+  // Returns true if there is at least one true value in the array
+  const transposed = transpose(params).map(e => e.find(e => e !== false));
+  // console.log(transposed);
+  let indices = transposed.map((e, i) => (e !== undefined ? i : e));
+  // console.log(indices);
+  indices = indices.filter(e => typeof e === "number");
+  // console.log(indices);
+  let pairs = [];
+  for (const [i, e] of indices.entries()) {
+    if (i !== 0) {
+      const L = indices[i - 1];
+      const R = e;
+      const T = R - L;
+      const size = R - L + 1;
+      if (T < 5) {
+        pairs.push([L, R, size]);
+      }
+    }
+  }
+  // console.log(pairs);
+
+  for (const pair of pairs) {
+    for (let i = 0; i < pair[2]; i++) {
+      transposed.splice(pair[0] + i, 1, true);
+    }
+  }
+
+  // console.log(transposed);
+  const W = transposed.filter(e => e === true).length;
+  // console.log(W);
+
+  const filteredTemps = TP.map((temp, i) => {
+    if (transposed[i] === true) {
+      return temp;
+    }
+    return undefined;
+  });
+
+  // console.log(filteredTemps);
+
+  let T = average(filteredTemps.filter(e => e !== undefined));
+  T = fahrenheitToCelcius(T);
+  // console.log(W, T);
+  return { W, T };
+};
+
+// Berries model ----------------------------------------------------------------------------
+export const botrytis = data => {
+  const W = data.W;
+  const T = data.T;
+  const i = -4.268 + 0.0294 * W * T - 0.0901 * W - 0.0000235 * W * T ** 3;
+  return (1 / (1 + Math.exp(-i))).toFixed(2);
+};
+
+export const anthracnose = data => {
+  const W = data.W;
+  const T = data.T;
+  const i =
+    -3.70 +
+    0.33 * W -
+    0.069 * W * T +
+    0.0050 * W * T ** 2 -
+    0.000093 * W * T ** 3;
+  return (1 / (1 + Math.exp(-i))).toFixed(2);
+};
+
+// Returns the data array (MAIN FUNCTION) ---------------------------------------------------
 export const getData = async (
   protocol,
   station,
@@ -296,32 +391,34 @@ export const getData = async (
     // calculate cdd (cumulative degree day)
     cdd += dd;
 
-    // calculate relative humidity above 90% (RH > 90)
-    const rhAbove90 = currentYear === startDateYear
-      ? aboveValue(day.rhFinal, 90)
-      : aboveValue(day.rhDiff, 90);
+    // returns relative humidity above 90% (RH > 90)
+    const rhAboveValues = currentYear === startDateYear
+      ? aboveEqualToValue(day.rhFinal, 90)
+      : aboveEqualToValue(day.rhDiff, 90);
+
+    // returns leaf wetness above 0 (LW > 0)
+    // const lwAboveValues = currentYear === startDateYear
+    //   ? aboveValue(day.lwFinal, 0)
+    //   : aboveValue(day.lwDiff, 0);
+
+    // returns precipitation above 0 (PT > 0)
+    // const ptAboveValues = currentYear === startDateYear
+    //   ? aboveValue(day.ptFinal, 0)
+    //   : aboveValue(day.ptDiff, 0);
 
     // Number of hours where relative humidity was above 90%
-    const hrsRH = rhAbove90.filter(e => e !== false).length;
+    const hrsRH = rhAboveValues.filter(e => e !== false).length;
 
     // calculate dicv ...
     let dicv = 0;
-    if (avg > 58 && avg < 95) {
+    if (avg >= 59 && avg <= 94 && hrsRH > 0) {
       dicv = table[hrsRH.toString()][avg.toString()];
     }
 
-    // setup Past, Current or Forecast text
-    let timeframe;
-    const today = format(new Date(), "YYYY-MM-DD");
-    if (isBefore(day.date, today)) {
-      timeframe = "Past";
-    }
-    if (isToday(day.date, today)) {
-      timeframe = "Today";
-    }
-    if (isAfter(day.date, today)) {
-      timeframe = "Forecast";
-    }
+    const W_and_T = leafWetnessAndTemps(day, currentYear, startDateYear);
+
+    const indexBotrytis = botrytis(W_and_T);
+    const indexAnthracnose = anthracnose(W_and_T);
 
     // CREATE OBJECT WITH THINGS YOU NEED...
     ciccio.push({
@@ -330,111 +427,19 @@ export const getData = async (
       rh: currentYear === startDateYear ? day.rhFinalAdj : day.rhDiff,
       lw: currentYear === startDateYear ? "No data for forecast" : day.lwDiff,
       pt: currentYear === startDateYear ? day.ptFinal : day.ptDiff,
-      time: timeframe,
       base: base,
       Tmin: min,
       Tmax: max,
       Tavg: avg,
       dd: dd,
       cdd: cdd,
-      rhAbove90: rhAbove90,
+      W_and_T: W_and_T,
       hrsRH: hrsRH,
-      dicv: dicv
+      dicv: dicv,
+      botrytis: indexBotrytis,
+      anthracnose: indexAnthracnose
     });
   }
   // ciccio.map(e => console.log(e));
   return ciccio;
-};
-
-// Returns an array of arrays. Each array has a date (String), a temp (Array) and a LW array
-export const leafWetnessAndTemps = data => {
-  // Returns true if leaf wetness values are greater than 0
-  const LW = flatten(data.map(day => day[3].map(e => e > 0)));
-  // Returns true if relative humidity values are greater than or equal to 90
-  const RH = flatten(data.map(day => day[2].map(e => e >= 90)));
-  // Returns true if precipitation values are greater than 0
-  const PT = flatten(data.map(day => day[4].map(e => e > 0)));
-
-  const params = [LW, RH, PT];
-  const transpose = m => m[0].map((x, i) => m.map(x => x[i]));
-  // Returns a true values if there is at least one true value in the array
-  const transposed = transpose(params).map(e => e.find(e => e === true));
-  let indices = transposed.map((e, i) => (e === true ? i : e));
-  indices = indices.filter(e => typeof e === "number");
-
-  let pairs = [];
-  for (const [i, e] of indices.entries()) {
-    if (i !== 0) {
-      const L = indices[i - 1];
-      const R = e;
-      const T = R - L;
-      const size = R - L + 1;
-      if (T < 5) {
-        pairs.push([L, R, size]);
-      }
-    }
-  }
-
-  for (const pair of pairs) {
-    for (let i = 0; i < pair[2]; i++) {
-      transposed.splice(pair[0] + i, 1, true);
-    }
-  }
-
-  let filteredLW = [];
-  while (transposed.length > 0) {
-    filteredLW.push(transposed.splice(0, 24));
-  }
-
-  const dates = data.map(day => day[0]);
-
-  let temps = filteredLW.map((day, d) => {
-    return day.map((e, i) => {
-      if (e === true) {
-        return data[d][1][i];
-      }
-      return e;
-    });
-  });
-
-  temps = temps.map(day => day.filter(e => e !== undefined && e !== "M"));
-  temps = temps.map(day => average(day));
-
-  filteredLW = filteredLW.map(day => day.filter(e => e === true).length);
-
-  let results = [];
-  for (const [i, d] of dates.entries()) {
-    results.push([d, temps[i], filteredLW[i]]);
-  }
-  return results;
-};
-
-// STRAWBERRY MODEL -------------------------------------------------------------------------
-
-// Convert Fahrenheit to Celcius
-export const fahrenheitToCelcius = data => {
-  return (data - 32) * 5 / 9;
-};
-
-export const indexBotrytis = data => {
-  return data.map(day => {
-    const T = fahrenheitToCelcius(day[1]);
-    const W = day[2];
-    const i = -4.268 + 0.0294 * W * T - 0.0901 * W - 0.0000235 * W * T ** 3;
-    return (1 / (1 + Math.exp(-i))).toFixed(2);
-  });
-};
-
-export const indexAnthracnose = data => {
-  return data.map(day => {
-    const T = fahrenheitToCelcius(day[1]);
-    const W = day[2];
-    const i =
-      -3.70 +
-      0.33 * W -
-      0.069 * W * T +
-      0.0050 * W * T ** 2 -
-      0.000093 * W * T ** 3;
-    return (1 / (1 + Math.exp(-i))).toFixed(2);
-  });
 };
