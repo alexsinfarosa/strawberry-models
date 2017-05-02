@@ -83,7 +83,7 @@ export const michiganIdAdjustment = station => {
   return station.id;
 };
 
-export const allStationsX = (
+export const allStations = (
   protocol,
   acis,
   stations,
@@ -285,6 +285,54 @@ export const anthracnose = data => {
   return (1 / (1 + Math.exp(-i))).toFixed(2);
 };
 
+// This function will shift data from (0, 23) to (12, 24)
+export const noonToNoon = data => {
+  let results = [];
+
+  // get all dates
+  const dates = data.map(day => day[0]);
+
+  // shifting Temperature array
+  const TP = data.map(day => day[1]);
+  const TPFlat = [].concat(...TP);
+  let TPShifted = [];
+  while (TPFlat.length > 24) {
+    TPShifted.push(TPFlat.splice(12, 24));
+  }
+
+  // shifting relative humidity array
+  let RH = data.map(day => day[2]);
+  const RHFlat = [].concat(...RH);
+  let RHShifted = [];
+  while (RHFlat.length > 24) {
+    RHShifted.push(RHFlat.splice(12, 24));
+  }
+
+  // shifting leaf wetness array
+  const LW = data.map(day => day[3]);
+  const LWFlat = [].concat(...LW);
+  let LWShifted = [];
+  while (LWFlat.length > 24) {
+    LWShifted.push(LWFlat.splice(12, 24));
+  }
+
+  // shifting precipitation array
+  const PT = data.map(day => day[4]);
+  const PTFlat = [].concat(...PT);
+  let PTShifted = [];
+  while (PTFlat.length > 24) {
+    PTShifted.push(PTFlat.splice(12, 24));
+  }
+
+  for (const [i, el] of dates.entries()) {
+    results[i] = [el, TPShifted[i], RHShifted[i], LWShifted[i], PTShifted[i]];
+  }
+
+  // Since to shift data we requested one day more from the server, we slice to get rid of
+  // the extra day
+  return results.slice(0, -1);
+};
+
 // Returns the data array (MAIN FUNCTION) ---------------------------------------------------
 export const getData = async (
   protocol,
@@ -297,6 +345,7 @@ export const getData = async (
   // Cleaning and Adjustments
   let acis = [];
   acis = await fetchACISData(protocol, station, startDate, endDate);
+  acis = noonToNoon(acis);
 
   let results = [];
   for (const day of acis) {
@@ -314,7 +363,7 @@ export const getData = async (
   }
 
   const idAndNetwork = await getSisterStationIdAndNetwork(protocol, station);
-  const sisterStationData = await fetchSisterStationData(
+  let sisterStationData = await fetchSisterStationData(
     protocol,
     idAndNetwork,
     station,
@@ -323,8 +372,9 @@ export const getData = async (
     currentYear,
     startDateYear
   );
+  sisterStationData = noonToNoon(sisterStationData);
 
-  // Adding to the 'day' object sister's data
+  // Adding to the 'day' object, sister's data
   for (const [i, day] of sisterStationData.entries()) {
     results[i]["tpSis"] = replaceNonConsecutiveMissingValues(day[1]);
     results[i]["rhSis"] = replaceNonConsecutiveMissingValues(day[2]);
@@ -345,14 +395,15 @@ export const getData = async (
   }
 
   // fetching forecast data
-  const forecastData = await fetchForecastData(
+  let forecastData = await fetchForecastData(
     protocol,
     station,
     startDate,
     endDate
   );
+  forecastData = noonToNoon(forecastData);
 
-  // Adding to the 'day' object forecast data
+  // Adding to the 'day' object, forecast data
   for (const [i, day] of forecastData.entries()) {
     results[i]["tpFore"] = replaceNonConsecutiveMissingValues(day[1]);
     results[i]["rhFore"] = replaceNonConsecutiveMissingValues(day[2]);
@@ -420,6 +471,26 @@ export const getData = async (
     const indexBotrytis = botrytis(W_and_T);
     const indexAnthracnose = anthracnose(W_and_T);
 
+    // setup botrytis risk level
+    let botrytisRL = "";
+    if (indexBotrytis < 0.50) {
+      botrytisRL = "Low";
+    } else if (indexBotrytis >= 0.50 && indexBotrytis < 0.70) {
+      botrytisRL = "Moderate";
+    } else {
+      botrytisRL = "High";
+    }
+
+    // setup anthracnose risk level
+    let anthracnoseRL = "";
+    if (indexAnthracnose < 0.50) {
+      anthracnoseRL = "Low";
+    } else if (indexAnthracnose >= 0.50 && indexAnthracnose < 0.70) {
+      anthracnoseRL = "Moderate";
+    } else {
+      anthracnoseRL = "High";
+    }
+
     // CREATE OBJECT WITH THINGS YOU NEED...
     ciccio.push({
       date: format(day.date, "MMM D"),
@@ -436,8 +507,16 @@ export const getData = async (
       W_and_T: W_and_T,
       hrsRH: hrsRH,
       dicv: dicv,
-      botrytis: indexBotrytis,
-      anthracnose: indexAnthracnose
+      botrytis: {
+        date: format(day.date, "MMM D"),
+        index: indexBotrytis,
+        riskLevel: botrytisRL
+      },
+      anthracnose: {
+        date: format(day.date, "MMM D"),
+        index: indexAnthracnose,
+        riskLevel: anthracnoseRL
+      }
     });
   }
   // ciccio.map(e => console.log(e));

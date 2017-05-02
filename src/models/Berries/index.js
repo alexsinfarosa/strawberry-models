@@ -59,7 +59,7 @@ export default class Berry extends Component {
           endDate,
           currentYear,
           startDateYear
-        );
+        ).then(data => this.props.store.app.setACISData(data));
         // return this.getData(berryModel);
       }
     });
@@ -185,6 +185,7 @@ export default class Berry extends Component {
             {disease.family === "Strawberries"
               ? <Strawberries />
               : <BluberryMaggot />}
+
           </Content>
         </Layout>
       </Layout>

@@ -45,6 +45,7 @@ export default class Strawberries extends Component {
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
+    console.log(takeRight(ACISData, 8).map(day => day.botrytis));
     return (
       <Flex column>
         <Box>
