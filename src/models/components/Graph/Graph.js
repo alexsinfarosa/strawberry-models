@@ -19,7 +19,9 @@ import { Flex, Box } from "reflexbox";
 export default class Graph extends Component {
   render() {
     const { ACISData } = this.props.store.app;
-    const data = ACISData.map(e => e.blueberryMaggot);
+
+    // Potential bug. Chartjs needs a javascript array
+    const data = ACISData.map(e => e);
 
     // Change the aspect ratio when viewed on different devices
     let aspect;

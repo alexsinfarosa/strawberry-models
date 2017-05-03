@@ -84,7 +84,7 @@ export default class BluberryMaggot extends Component {
           </Box>
 
         </Flex>
-        {/* {areRequiredFieldsSet && <Graph />} */}
+        {areRequiredFieldsSet && <Graph />}
       </Flex>
     );
   }
