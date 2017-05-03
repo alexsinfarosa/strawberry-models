@@ -7,6 +7,7 @@ import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
 const splitText = text => {
+  console.log(text);
   return text.split("-");
 };
 
