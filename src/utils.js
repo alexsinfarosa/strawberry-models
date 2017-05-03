@@ -1,5 +1,6 @@
 import format from "date-fns/format";
 import addDays from "date-fns/add_days";
+import isAfter from "date-fns/is_after";
 
 // table for the beet model
 import { table } from "../src/models/Beets/table";
@@ -424,6 +425,12 @@ export const getData = async (
   const base = 50;
   let cdd = 0;
   for (const day of results) {
+    let date = format(day.date, "MMM D");
+    const today = new Date();
+    if (isAfter(day.date, today)) {
+      date = `${date} - Forecast`;
+    }
+
     const avg = currentYear === startDateYear
       ? average(day.tpFinal)
       : average(day.tpDiff);
@@ -479,7 +486,7 @@ export const getData = async (
     }
 
     // setup botrytis risk level
-    let botrytis = { date: format(day.date, "MMM D"), index: indexBotrytis };
+    let botrytis = { date: date, index: indexBotrytis };
     if (indexBotrytis !== "No Data") {
       if (indexBotrytis < 0.50) {
         botrytis["riskLevel"] = "Low";
@@ -495,7 +502,7 @@ export const getData = async (
 
     // setup anthracnose risk level
     let anthracnose = {
-      date: format(day.date, "MMM D"),
+      date: date,
       index: indexAnthracnose
     };
     if (indexAnthracnose !== "No Data") {
@@ -513,7 +520,8 @@ export const getData = async (
 
     // CREATE OBJECT WITH THINGS YOU NEED...
     ciccio.push({
-      date: format(day.date, "MMM D"),
+      date: date,
+      graphDate: format(day.date, "MMM D"),
       tp: currentYear === startDateYear ? day.tpFinal : day.tpDiff,
       rh: currentYear === startDateYear ? day.rhFinalAdj : day.rhDiff,
       lw: currentYear === startDateYear ? "No data for forecast" : day.lwDiff,

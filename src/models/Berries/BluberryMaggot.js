@@ -7,13 +7,26 @@ import { Table } from "antd";
 
 import Graph from "../components/Graph/Graph";
 
+const splitText = text => {
+  // console.log(text);
+  return text.split("-");
+};
+
 const columns = [
   {
     title: "Date",
     dataIndex: "date",
     key: "date",
     fixed: "left",
-    width: 60
+    width: 80,
+    render: text => (
+      <div>
+        <div>{splitText(text)[0]}</div>
+        <div style={{ fontSize: ".6rem", color: "red" }}>
+          {splitText(text)[1]}
+        </div>
+      </div>
+    )
   },
   {
     title: "Degree Days",

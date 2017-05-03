@@ -7,7 +7,7 @@ import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
 const splitText = text => {
-  console.log(text);
+  // console.log(text);
   return text.split("-");
 };
 
@@ -21,7 +21,7 @@ const columns = [
     render: text => (
       <div>
         <span>{splitText(text)[0]}</span>
-        <span style={{ fontSize: ".5rem", color: "red", marginLeft: "5px" }}>
+        <span style={{ fontSize: ".6rem", color: "red", marginLeft: "5px" }}>
           {splitText(text)[1]}
         </span>
       </div>
