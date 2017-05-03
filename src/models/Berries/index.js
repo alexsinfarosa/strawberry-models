@@ -20,109 +20,39 @@ import TheMap from "../components/TheMap";
 import Strawberries from "./Strawberries";
 import BluberryMaggot from "./BluberryMaggot";
 
-// api
-import {
-  fetchACISData,
-  getSisterStationIdAndNetwork,
-  fetchSisterStationData,
-  fetchForecastData
-} from "../../api";
-
 // utility functions
-import {
-  replaceNonConsecutiveMissingValues,
-  containsMissingValues,
-  replaceConsecutiveMissingValues,
-  RHAdjustment,
-  getData
-} from "../../utils";
+import { getData } from "../../utils";
 
 @inject("store")
 @observer
 export default class Berry extends Component {
-  constructor(props) {
-    super(props);
+  runMainFunction = () => {
     const {
       protocol,
-      station,
+      getStation,
       startDate,
       endDate,
       currentYear,
-      startDateYear
+      startDateYear,
+      areRequiredFieldsSet
     } = this.props.store.app;
-    autorun(() => {
-      if (this.props.store.app.areRequiredFieldsSet) {
-        return getData(
-          protocol,
-          station,
-          startDate,
-          endDate,
-          currentYear,
-          startDateYear
-        ).then(data => this.props.store.app.setACISData(data));
-        // return this.getData(berryModel);
-      }
-    });
-  }
-
-  getData = async currentModel => {
-    // console.log("this.getData fired!");
-    const {
-      protocol,
-      station,
-      startDate,
-      endDate,
-      currentYear,
-      startDateYear
-    } = this.props.store.app;
-
-    this.props.store.app.setACISData([]);
-    let acis = [];
-
-    // Fetch ACIS data
-    acis = await fetchACISData(protocol, station, startDate, endDate);
-    acis = replaceNonConsecutiveMissingValues(acis);
-
-    if (!containsMissingValues(acis)) {
-      acis = currentModel(station, acis, endDate);
-      this.props.store.app.setACISData(acis);
-      return;
+    if (areRequiredFieldsSet) {
+      this.props.store.app.setACISData([]);
+      getData(
+        protocol,
+        getStation,
+        startDate,
+        endDate,
+        currentYear,
+        startDateYear
+      ).then(data => this.props.store.app.setACISData(data));
     }
-
-    // Get Id and network to fetch sister station data
-    const idAndNetwork = await getSisterStationIdAndNetwork(protocol, station);
-    const sisterStationData = await fetchSisterStationData(
-      protocol,
-      idAndNetwork,
-      station,
-      startDate,
-      endDate,
-      currentYear,
-      startDateYear
-    );
-    acis = replaceConsecutiveMissingValues(sisterStationData, acis);
-    if (currentYear !== startDateYear) {
-      acis = currentModel(station, acis, endDate);
-      this.props.store.app.setACISData(acis);
-      return;
-    }
-    let forecastData = await fetchForecastData(
-      protocol,
-      station,
-      startDate,
-      endDate
-    );
-
-    // Forcast data needs to have relative humidity array adjusted
-    forecastData = RHAdjustment(forecastData);
-    acis = replaceConsecutiveMissingValues(forecastData, acis);
-    acis = currentModel(station, acis, endDate);
-    this.props.store.app.setACISData(acis);
-    return;
   };
 
   render() {
     const { disease } = this.props.store.app;
+    autorun(() => this.runMainFunction());
+
     return (
       <Layout>
         <Sider

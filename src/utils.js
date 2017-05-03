@@ -207,13 +207,13 @@ export const leafWetnessAndTemps = (day, currentYear, startDateYear) => {
   if (currentYear === startDateYear) {
     RH = day.rhFinal.map(e => (e >= 90 ? e : false));
     PT = day.ptFinal.map(e => (e > 0 ? e : false));
-    TP = day.tpFinal.map(e => (e > 0 ? e : false));
+    TP = day.tpFinal;
     params = [RH, PT];
   } else {
     RH = day.rhDiff.map(e => (e >= 90 ? e : false));
     PT = day.ptDiff.map(e => (e > 0 ? e : false));
     LW = day.lwDiff.map(e => (e > 0 ? e : false));
-    TP = day.tpDiff.map(e => (e > 0 ? e : false));
+    TP = day.tpDiff;
     params = [RH, PT, LW];
   }
   // console.log(params);
@@ -266,14 +266,14 @@ export const leafWetnessAndTemps = (day, currentYear, startDateYear) => {
 };
 
 // Berries model ----------------------------------------------------------------------------
-export const botrytis = data => {
+export const botrytisModel = data => {
   const W = data.W;
   const T = data.T;
   const i = -4.268 + 0.0294 * W * T - 0.0901 * W - 0.0000235 * W * T ** 3;
   return (1 / (1 + Math.exp(-i))).toFixed(2);
 };
 
-export const anthracnose = data => {
+export const anthracnoseModel = data => {
   const W = data.W;
   const T = data.T;
   const i =
@@ -466,29 +466,49 @@ export const getData = async (
       dicv = table[hrsRH.toString()][avg.toString()];
     }
 
+    // Returns an object {W: Int, T: Int}
     const W_and_T = leafWetnessAndTemps(day, currentYear, startDateYear);
 
-    const indexBotrytis = botrytis(W_and_T);
-    const indexAnthracnose = anthracnose(W_and_T);
+    let indexBotrytis = botrytisModel(W_and_T);
+    if (indexBotrytis === "NaN") {
+      indexBotrytis = "No Data";
+    }
+    let indexAnthracnose = anthracnoseModel(W_and_T);
+    if (indexAnthracnose === "NaN") {
+      indexAnthracnose = "No Data";
+    }
 
     // setup botrytis risk level
-    let botrytisRL = "";
-    if (indexBotrytis < 0.50) {
-      botrytisRL = "Low";
-    } else if (indexBotrytis >= 0.50 && indexBotrytis < 0.70) {
-      botrytisRL = "Moderate";
-    } else {
-      botrytisRL = "High";
+    let botrytis = { date: format(day.date, "MMM D"), index: indexBotrytis };
+    if (indexBotrytis !== "No Data") {
+      if (indexBotrytis < 0.50) {
+        botrytis["riskLevel"] = "Low";
+        botrytis["color"] = "low";
+      } else if (indexBotrytis >= 0.50 && indexBotrytis < 0.70) {
+        botrytis["riskLevel"] = "Moderate";
+        botrytis["color"] = "moderate";
+      } else {
+        botrytis["riskLevel"] = "High";
+        botrytis["color"] = "high";
+      }
     }
 
     // setup anthracnose risk level
-    let anthracnoseRL = "";
-    if (indexAnthracnose < 0.50) {
-      anthracnoseRL = "Low";
-    } else if (indexAnthracnose >= 0.50 && indexAnthracnose < 0.70) {
-      anthracnoseRL = "Moderate";
-    } else {
-      anthracnoseRL = "High";
+    let anthracnose = {
+      date: format(day.date, "MMM D"),
+      index: indexAnthracnose
+    };
+    if (indexAnthracnose !== "No Data") {
+      if (indexAnthracnose < 0.50) {
+        anthracnose["riskLevel"] = "Low";
+        anthracnose["color"] = "low";
+      } else if (indexAnthracnose >= 0.50 && indexAnthracnose < 0.70) {
+        anthracnose["riskLevel"] = "Low";
+        anthracnose["color"] = "low";
+      } else {
+        anthracnose["riskLevel"] = "Low";
+        anthracnose["color"] = "low";
+      }
     }
 
     // CREATE OBJECT WITH THINGS YOU NEED...
@@ -507,16 +527,8 @@ export const getData = async (
       W_and_T: W_and_T,
       hrsRH: hrsRH,
       dicv: dicv,
-      botrytis: {
-        date: format(day.date, "MMM D"),
-        index: indexBotrytis,
-        riskLevel: botrytisRL
-      },
-      anthracnose: {
-        date: format(day.date, "MMM D"),
-        index: indexAnthracnose,
-        riskLevel: anthracnoseRL
-      }
+      botrytis: botrytis,
+      anthracnose: anthracnose
     });
   }
   // ciccio.map(e => console.log(e));

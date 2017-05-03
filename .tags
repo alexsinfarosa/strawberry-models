@@ -23,6 +23,8 @@ export.1	src/models/Beets/table.js	/^export const table = {$/;"	p
 gh-pages	package.json	/^    "gh-pages": "^0.12.0",$/;"	f
 homepage	package.json	/^  "homepage": "http:\/\/newadata.nrcc.cornell.edu\/newa\/",$/;"	f
 leaflet	package.json	/^    "leaflet": "^1.0.3",$/;"	f
+let.date	src/utils.js	/^    let anthracnose = {$/;"	p
+let.date	src/utils.js	/^    let botrytis = { date: format(day.date, "MMM D"), index: indexBotrytis };$/;"	p
 lodash	package.json	/^    "lodash": "^4.17.4",$/;"	f
 mobx	package.json	/^    "mobx": "^3.1.2",$/;"	f
 mobx-react	package.json	/^    "mobx-react": "^4.1.1",$/;"	f

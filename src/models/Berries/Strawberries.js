@@ -29,15 +29,6 @@ const columns = [
 @inject("store")
 @observer
 export default class Strawberries extends Component {
-  rowColor = (record, index) => {
-    if (record.index < 0.50) {
-      return "low";
-    } else if (record.index >= 0.50 && record.index < 0.70) {
-      return "moderate";
-    } else {
-      return "high";
-    }
-  };
   render() {
     const {
       ACISData,
@@ -45,7 +36,6 @@ export default class Strawberries extends Component {
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
-    console.log(takeRight(ACISData, 8).map(day => day.botrytis));
     return (
       <Flex column>
         <Box>
@@ -59,7 +49,7 @@ export default class Strawberries extends Component {
             <Table
               columns={columns}
               rowKey={record => record.date}
-              rowClassName={this.rowColor}
+              rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}
               dataSource={
@@ -76,7 +66,7 @@ export default class Strawberries extends Component {
             <Table
               columns={columns}
               rowKey={record => record.date}
-              rowClassName={this.rowColor}
+              rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}
               dataSource={

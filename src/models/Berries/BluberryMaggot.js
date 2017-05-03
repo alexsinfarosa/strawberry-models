@@ -62,7 +62,6 @@ export default class BluberryMaggot extends Component {
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
-    ACISData.map(e => console.log(e));
     return (
       <Flex column>
         <Box>
