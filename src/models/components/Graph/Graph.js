@@ -19,7 +19,9 @@ import { Flex, Box } from "reflexbox";
 export default class Graph extends Component {
   render() {
     const { ACISData } = this.props.store.app;
-    const data = ACISData.map(e => e.blueberryMaggot);
+
+    // Potential bug. Chartjs needs a javascript array
+    const data = ACISData.map(e => e);
 
     // Change the aspect ratio when viewed on different devices
     let aspect;
@@ -45,9 +47,9 @@ export default class Graph extends Component {
           <ResponsiveContainer width="100%" aspect={aspect}>
             <LineChart
               data={data}
-              margin={{ top: 20, right: 0, left: -25, bottom: 20 }}
+              margin={{ top: 20, right: 0, left: -30, bottom: 20 }}
             >
-              <XAxis dataKey="date" tick={<CustomLabel />} />
+              <XAxis dataKey="graphDate" tick={<CustomLabel />} />
               <YAxis />
               <CartesianGrid stroke="#E9E9E9" strokeDasharray="7 7" />
               <Tooltip />

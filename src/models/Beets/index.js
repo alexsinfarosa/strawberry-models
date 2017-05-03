@@ -120,7 +120,7 @@ export default class Beet extends Component {
   };
 
   render() {
-    const { disease } = this.props.store.app;
+    // const { disease } = this.props.store.app;
     return (
       <Layout>
         <Sider

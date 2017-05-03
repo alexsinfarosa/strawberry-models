@@ -1,58 +1,71 @@
-import React, {Component} from 'react';
-import {inject, observer} from 'mobx-react';
-import takeRight from 'lodash/takeRight';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
+import takeRight from "lodash/takeRight";
 
-import {Flex, Box} from 'reflexbox';
-import {Table} from 'antd';
+import { Flex, Box } from "reflexbox";
+import { Table } from "antd";
 
-import Graph from '../components/Graph/Graph';
+import Graph from "../components/Graph/Graph";
+
+const splitText = text => {
+  // console.log(text);
+  return text.split("-");
+};
 
 const columns = [
   {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
-    fixed: 'left',
-    width: 60,
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
+    fixed: "left",
+    width: 80,
+    render: text => (
+      <div>
+        <div>{splitText(text)[0]}</div>
+        <div style={{ fontSize: ".6rem", color: "red" }}>
+          {splitText(text)[1]}
+        </div>
+      </div>
+    )
   },
   {
-    title: 'Degree Days',
+    title: "Degree Days",
     children: [
       {
-        title: 'Daily',
-        dataIndex: 'dd',
-        key: 'dd',
+        title: "Daily",
+        dataIndex: "dd",
+        key: "dd"
       },
       {
-        title: 'Cumulative',
-        dataIndex: 'cdd',
-        key: 'cdd',
-      },
-    ],
+        title: "Cumulative",
+        dataIndex: "cdd",
+        key: "cdd"
+      }
+    ]
   },
   {
-    title: 'Temperature (˚F)',
+    title: "Temperature (˚F)",
     children: [
       {
-        title: 'Min',
-        dataIndex: 'min',
-        key: 'min',
+        title: "Min",
+        dataIndex: "Tmin",
+        key: "Tmin"
       },
       {
-        title: 'Max',
-        dataIndex: 'max',
-        key: 'max',
+        title: "Max",
+        dataIndex: "Tmax",
+        key: "Tmax"
       },
       {
-        title: 'Avg',
-        dataIndex: 'average',
-        key: 'average',
-      },
-    ],
-  },
+        title: "Avg",
+        dataIndex: "Tavg",
+        key: "Tavg"
+      }
+    ]
+  }
 ];
 
-@inject('store')
+@inject("store")
 @observer
 export default class BluberryMaggot extends Component {
   render() {
@@ -60,7 +73,7 @@ export default class BluberryMaggot extends Component {
       ACISData,
       disease,
       station,
-      areRequiredFieldsSet,
+      areRequiredFieldsSet
     } = this.props.store.app;
     return (
       <Flex column>
@@ -79,11 +92,7 @@ export default class BluberryMaggot extends Component {
               rowKey={record => record.date}
               loading={ACISData.length === 0}
               pagination={false}
-              dataSource={
-                areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.blueberryMaggot)
-                  : null
-              }
+              dataSource={areRequiredFieldsSet ? takeRight(ACISData, 8) : null}
             />
           </Box>
 

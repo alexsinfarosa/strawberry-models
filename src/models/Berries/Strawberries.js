@@ -7,7 +7,7 @@ import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
 const splitText = text => {
-  console.log(text.split("-"));
+  // console.log(text);
   return text.split("-");
 };
 
@@ -21,7 +21,7 @@ const columns = [
     render: text => (
       <div>
         <span>{splitText(text)[0]}</span>
-        <span style={{ fontSize: ".5rem", color: "red", marginLeft: "5px" }}>
+        <span style={{ fontSize: ".6rem", color: "red", marginLeft: "5px" }}>
           {splitText(text)[1]}
         </span>
       </div>
@@ -42,15 +42,6 @@ const columns = [
 @inject("store")
 @observer
 export default class Strawberries extends Component {
-  rowColor = (record, index) => {
-    if (record.index < 0.50) {
-      return "low";
-    } else if (record.index >= 0.50 && record.index < 0.70) {
-      return "moderate";
-    } else {
-      return "high";
-    }
-  };
   render() {
     const {
       ACISData,
@@ -71,7 +62,7 @@ export default class Strawberries extends Component {
             <Table
               columns={columns}
               rowKey={record => record.date}
-              rowClassName={this.rowColor}
+              rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}
               dataSource={
@@ -88,7 +79,7 @@ export default class Strawberries extends Component {
             <Table
               columns={columns}
               rowKey={record => record.date}
-              rowClassName={this.rowColor}
+              rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}
               dataSource={

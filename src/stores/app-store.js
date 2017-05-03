@@ -19,6 +19,9 @@ export default class AppStore {
   @observable isCollapsed = false;
   @action setIsCollapsed = d => this.isCollapsed = !this.isCollapsed;
 
+  @observable isLoading = false;
+  @action setIsLoading = d => this.isLoading = d;
+
   // Berry disease------------------------------------------------------------------------
   @observable diseases = [
     { family: "Strawberries", name: ["botrytis", "anthracnose"] },
