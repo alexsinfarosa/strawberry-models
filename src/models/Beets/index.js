@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { Link } from "react-router-dom";
-import { autorun } from "mobx";
+// import { autorun } from "mobx";
 
 // styles
 // import "./styles";
@@ -18,109 +18,15 @@ import DatePicker from "../components/DatePicker";
 
 import TheMap from "../components/TheMap";
 
-// api
-import {
-  fetchACISData,
-  getSisterStationIdAndNetwork,
-  fetchSisterStationData,
-  fetchForecastData
-} from "../../api";
-
 // utility functions
-import {
-  berryModel,
-  replaceNonConsecutiveMissingValues,
-  containsMissingValues,
-  replaceConsecutiveMissingValues,
-  RHAdjustment
-} from "../../utils";
+// import { getData } from "../../utils";
 
 @inject("store")
 @observer
-export default class Beet extends Component {
-  constructor(props) {
-    super(props);
-    // const {
-    //   protocol,
-    //   station,
-    //   startDate,
-    //   endDate,
-    //   currentYear,
-    //   startDateYear,
-    // } = this.props.store.app;
-    autorun(() => {
-      if (this.props.store.app.areRequiredFieldsSet) {
-        // return Data(
-        //   protocol,
-        //   station,
-        //   startDate,
-        //   endDate,
-        //   currentYear,
-        //   startDateYear
-        // );
-        return this.getData(berryModel);
-      }
-    });
-  }
-
-  getData = async currentModel => {
-    // console.log("this.getData fired!");
-    const {
-      protocol,
-      station,
-      startDate,
-      endDate,
-      currentYear,
-      startDateYear
-    } = this.props.store.app;
-
-    this.props.store.app.setACISData([]);
-    let acis = [];
-
-    // Fetch ACIS data
-    acis = await fetchACISData(protocol, station, startDate, endDate);
-    acis = replaceNonConsecutiveMissingValues(acis);
-
-    if (!containsMissingValues(acis)) {
-      acis = currentModel(station, acis, endDate);
-      this.props.store.app.setACISData(acis);
-      return;
-    }
-
-    // Get Id and network to fetch sister station data
-    const idAndNetwork = await getSisterStationIdAndNetwork(protocol, station);
-    const sisterStationData = await fetchSisterStationData(
-      protocol,
-      idAndNetwork,
-      station,
-      startDate,
-      endDate,
-      currentYear,
-      startDateYear
-    );
-    acis = replaceConsecutiveMissingValues(sisterStationData, acis);
-    if (currentYear !== startDateYear) {
-      acis = currentModel(station, acis, endDate);
-      this.props.store.app.setACISData(acis);
-      return;
-    }
-    let forecastData = await fetchForecastData(
-      protocol,
-      station,
-      startDate,
-      endDate
-    );
-
-    // Forcast data needs to have relative humidity array adjusted
-    forecastData = RHAdjustment(forecastData);
-    acis = replaceConsecutiveMissingValues(forecastData, acis);
-    acis = currentModel(station, acis, endDate);
-    this.props.store.app.setACISData(acis);
-    return;
-  };
-
+export default class Beets extends Component {
   render() {
-    // const { disease } = this.props.store.app;
+    const { areRequiredFieldsSet } = this.props.store.app;
+
     return (
       <Layout>
         <Sider
@@ -165,7 +71,7 @@ export default class Beet extends Component {
                 <Link to="/"><Icon type="home" />Home</Link>
               </Menu.Item>
               <Menu.Item disabled key="2" style={{ fontSize: ".8rem" }}>
-                Berry Model
+                Beet Model
               </Menu.Item>
 
             </Menu>
@@ -180,6 +86,10 @@ export default class Beet extends Component {
             }}
           >
             <TheMap />
+            {areRequiredFieldsSet &&
+              <div>
+                beets
+              </div>}
 
           </Content>
         </Layout>
