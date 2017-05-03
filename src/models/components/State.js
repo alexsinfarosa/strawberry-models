@@ -11,7 +11,7 @@ import { states } from "../../states";
 class State extends Component {
   handleChange = value => {
     this.props.store.app.setState(value);
-    console.log(`state: ${value}`);
+    // console.log(`state: ${value}`);
   };
   render() {
     const { state } = this.props.store.app;

@@ -12,7 +12,7 @@ const Option = Select.Option;
 class State extends Component {
   handleChange = value => {
     this.props.store.app.setStation(value);
-    console.log(`station: ${value}`);
+    // console.log(`station: ${value}`);
   };
   render() {
     const { getCurrentStateStations, getStation } = this.props.store.app;

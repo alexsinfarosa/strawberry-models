@@ -42,7 +42,7 @@ export default class Berry extends Component {
     } = this.props.store.app;
     if (areRequiredFieldsSet) {
       this.props.store.app.setACISData([]);
-      getData(
+      return getData(
         protocol,
         getStation,
         startDate,
@@ -54,7 +54,7 @@ export default class Berry extends Component {
   };
 
   render() {
-    const { disease } = this.props.store.app;
+    const { areRequiredFieldsSet, disease } = this.props.store.app;
 
     return (
       <Layout>
@@ -115,9 +115,12 @@ export default class Berry extends Component {
             }}
           >
             <TheMap />
-            {disease.family === "Strawberries"
-              ? <Strawberries />
-              : <BluberryMaggot />}
+            {areRequiredFieldsSet &&
+              <div>
+                {disease.family === "Strawberries"
+                  ? <Strawberries />
+                  : <BluberryMaggot />}
+              </div>}
 
           </Content>
         </Layout>
