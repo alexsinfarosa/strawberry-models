@@ -6,13 +6,25 @@ import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
+const splitText = text => {
+  return text.split("-");
+};
+
 const columns = [
   {
     title: "Date",
     dataIndex: "date",
     key: "date",
     fixed: "left",
-    width: 120
+    width: 120,
+    render: text => (
+      <div>
+        <span>{splitText(text)[0]}</span>
+        <span style={{ fontSize: ".5rem", color: "red", marginLeft: "5px" }}>
+          {splitText(text)[1]}
+        </span>
+      </div>
+    )
   },
   {
     title: "Index",
