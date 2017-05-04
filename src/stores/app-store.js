@@ -42,13 +42,15 @@ export default class AppStore {
     ],
     beet: [{ name: "Cercospora Beticola", diseases: [] }]
   };
-  @observable subject = JSON.parse(localStorage.getItem(`subjects`)) || {};
+  @observable subject = JSON.parse(
+    localStorage.getItem(`subjects.${this.model}`)
+  ) || {};
   @action resetSubject = d => (this.subject = d);
   @action setSubject = d => {
     this.subject = this.subjects[this.model].find(
       subject => subject.name === d
     );
-    localStorage.setItem("subjects", JSON.stringify(this.subject));
+    localStorage.setItem("subjects", JSON.stringify(this.subjects));
   };
 
   // Station------------------------------------------------------------------------------

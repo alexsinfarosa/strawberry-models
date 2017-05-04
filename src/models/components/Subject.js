@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-// import { toJS } from "mobx";
+import { toJS } from "mobx";
 import { Select } from "antd";
 const Option = Select.Option;
 
@@ -12,8 +12,8 @@ class Subject extends Component {
     console.log(`subject: ${value}`);
   };
   render() {
-    const { subject, subjects } = this.props.store.app;
-    const { model } = this.props;
+    const { subject, subjects, model } = this.props.store.app;
+    console.log(toJS(subject));
     return (
       <div style={{ marginBottom: "2rem" }}>
         <p
@@ -36,7 +36,7 @@ class Subject extends Component {
           style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
-          {subjects[model.slice(1)].map((subject, i) => {
+          {subjects[model].map((subject, i) => {
             return (
               <Option key={i} value={subject.name}>
                 {subject.name}

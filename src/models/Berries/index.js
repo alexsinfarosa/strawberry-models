@@ -28,8 +28,8 @@ import { getData } from "../../utils";
 export default class Berry extends Component {
   constructor(props) {
     super(props);
-    localStorage.removeItem("subjects");
-    this.props.store.app.resetSubject({});
+    // localStorage.removeItem("subjects");
+    // this.props.store.app.resetSubject({});
     this.props.store.app.setModel(this.props.location.pathname);
     autorun(() => this.runMainFunction());
   }
