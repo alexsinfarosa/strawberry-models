@@ -28,6 +28,7 @@ import { getData } from "../../utils";
 export default class Berry extends Component {
   constructor(props) {
     super(props);
+    this.props.store.app.setLocation(this.props.location.pathname);
     autorun(() => this.runMainFunction());
   }
   runMainFunction = () => {
@@ -54,8 +55,9 @@ export default class Berry extends Component {
   };
 
   render() {
-    const { areRequiredFieldsSet, disease } = this.props.store.app;
-
+    const { areRequiredFieldsSet, subject, subjects } = this.props.store.app;
+    const berry = subjects.filter(disease => disease.model === "/berry");
+    console.log(berry);
     return (
       <Layout>
         <Sider
@@ -72,14 +74,14 @@ export default class Berry extends Component {
         >
 
           <Menu defaultSelectedKeys={["1"]}>
-            <Subject />
+            <Subject model={this.props.location.pathname} />
             <State />
             <Station />
             <DatePicker />
           </Menu>
         </Sider>
 
-        <Layout>
+        <Layout style={{ background: "#fff" }}>
           <Header
             style={{
               position: "fixed",
@@ -108,16 +110,18 @@ export default class Berry extends Component {
           <Content
             // overflow="initial"
             style={{
-              margin: "62px 0px 0px 0px",
-              padding: 24,
-              background: "#fff",
-              minHeight: 280
+              margin: "62px auto",
+              padding: 48,
+              minHeight: 280,
+              width: "100%",
+              maxWidth: 1200,
+              background: "#fff"
             }}
           >
             <TheMap />
             {areRequiredFieldsSet &&
               <div>
-                {disease.family === "Strawberries"
+                {subject.name === "Strawberries"
                   ? <Strawberries />
                   : <BluberryMaggot />}
               </div>}

@@ -45,17 +45,17 @@ export default class Strawberries extends Component {
   render() {
     const {
       ACISData,
-      disease,
+      subject,
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
     return (
       <Flex column>
         <Box>
-          <h2>{disease.family} Prediction For {station.name}</h2>
+          <h2>{subject.name} Prediction For {station.name}</h2>
         </Box>
 
-        <Flex justify="space-around" wrap>
+        <Flex justify="space-between" wrap>
           <Box mt={3} col={12} lg={5} md={5} sm={12}>
             <h3>Botrytis</h3>
 

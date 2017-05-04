@@ -7,9 +7,29 @@ import { Table } from "antd";
 
 import Graph from "../components/Graph/Graph";
 
-const splitText = text => {
-  // console.log(text);
-  return text.split("-");
+const forecastText = date => {
+  return (
+    <div>
+      <div>{date.split("-")[0]}</div>
+      <div style={{ fontSize: ".6rem", color: "red" }}>
+        {date.split("-")[1]}
+      </div>
+    </div>
+  );
+};
+
+const emergence = cdd => {
+  if (cdd > 913) {
+    return (
+      <div>
+        <div>{cdd}</div>
+        <div style={{ fontSize: ".6rem", color: "blue" }}>
+          Emergence
+        </div>
+      </div>
+    );
+  }
+  return cdd;
 };
 
 const columns = [
@@ -19,14 +39,7 @@ const columns = [
     key: "date",
     fixed: "left",
     width: 80,
-    render: text => (
-      <div>
-        <div>{splitText(text)[0]}</div>
-        <div style={{ fontSize: ".6rem", color: "red" }}>
-          {splitText(text)[1]}
-        </div>
-      </div>
-    )
+    render: date => forecastText(date)
   },
   {
     title: "Degree Days",
@@ -39,7 +52,8 @@ const columns = [
       {
         title: "Cumulative",
         dataIndex: "cdd",
-        key: "cdd"
+        key: "cdd",
+        render: cdd => emergence(cdd)
       }
     ]
   },
@@ -71,19 +85,19 @@ export default class BluberryMaggot extends Component {
   render() {
     const {
       ACISData,
-      disease,
+      subject,
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
     return (
       <Flex column>
         <Box>
-          <h2>{disease.family} Prediction For {station.name}</h2>
+          <h2>{subject.name} Prediction For {station.name}</h2>
         </Box>
 
         <Flex justify="center">
 
-          <Box mt={3} col={12} lg={10} md={10} sm={12}>
+          <Box mt={3} col={12} lg={12} md={12} sm={12}>
             <h3>Blueberry Maggot</h3>
 
             <Table

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import { toJS } from "mobx";
 import { Select } from "antd";
 const Option = Select.Option;
 
@@ -7,11 +8,14 @@ const Option = Select.Option;
 @observer
 class Subject extends Component {
   handleChange = value => {
-    this.props.store.app.setDisease(value);
-    // console.log(`disease: ${value}`);
+    this.props.store.app.setSubject(value);
+    console.log(`subject: ${value}`);
   };
   render() {
-    const { disease, diseases } = this.props.store.app;
+    const { subject, subjects } = this.props.store.app;
+    const { model } = this.props;
+    console.log(model);
+    const berries = subjects.filter(subject => subject.model === model);
     return (
       <div style={{ marginBottom: "2rem" }}>
         <p
@@ -29,14 +33,16 @@ class Subject extends Component {
           name="berry-diseases"
           size="large"
           autoFocus
-          value={disease.family}
+          value={subject.name}
           placeholder="Select Disease"
           style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
-          {diseases.map((disease, i) => {
+          {berries.map((subject, i) => {
             return (
-              <Option key={i} value={disease.family}>{disease.family}</Option>
+              <Option key={i} value={subject.name}>
+                {subject.name}
+              </Option>
             );
           })}
         </Select>

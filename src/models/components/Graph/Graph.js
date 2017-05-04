@@ -39,8 +39,8 @@ export default class Graph extends Component {
         <Box
           mt={3}
           col={12}
-          lg={10}
-          md={10}
+          lg={12}
+          md={12}
           sm={12}
           style={{ margin: "0 auto" }}
         >

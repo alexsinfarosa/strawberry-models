@@ -1,25 +1,25 @@
-import React, {Component} from 'react';
-import {inject, observer} from 'mobx-react';
-import {states} from '../../states';
-import {TileLayer, Marker} from 'react-leaflet';
-import L from 'leaflet';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
+import { states } from "../../states";
+import { TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
 
 // styled-components
-import {MapContainer} from './styles';
+import { MapContainer } from "./styles";
 
-import {Flex, Box} from 'reflexbox';
+import { Flex, Box } from "reflexbox";
 
 const myIcon = e =>
   L.icon({
-    iconUrl: e,
+    iconUrl: e
   });
 
-@inject('store')
+@inject("store")
 @observer
 export default class TheMap extends Component {
   onClickSetStation = e => {
-    const {lat, lng} = e.latlng;
-    const {stations, state} = this.props.store.app;
+    const { lat, lng } = e.latlng;
+    const { stations, state } = this.props.store.app;
     const selectedStation = stations.filter(
       station => station.lat === lat && station.lon === lng
     )[0];
@@ -38,7 +38,7 @@ export default class TheMap extends Component {
 
   render() {
     // const position = [this.state.lat, this.state.lng];
-    const {stationsWithMatchedIcons, state, protocol} = this.props.store.app;
+    const { stationsWithMatchedIcons, state, protocol } = this.props.store.app;
 
     const MarkerList = stationsWithMatchedIcons.map(station => (
       <Marker
@@ -54,7 +54,7 @@ export default class TheMap extends Component {
 
     return (
       <Flex justify="center">
-        <Box mb={4} col={12} lg={10} md={10} sm={12}>
+        <Box mb={4} col={12} lg={12} md={12} sm={12}>
           <MapContainer
             ref="map"
             center={

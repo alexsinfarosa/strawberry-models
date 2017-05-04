@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
 //styled-components
-import { SquareBox } from "./styles";
+// import { SquareBox } from "./styles";
 
 // styles
 import { Flex } from "reflexbox";
@@ -21,7 +21,7 @@ export default class Home extends Component {
         <Nav />
 
         <Flex mt={4} column>
-          <Flex m={4} justify="space-between" wrap>
+          {/* <Flex m={4} justify="space-between" wrap>
 
             <SquareBox col={12} lg={3} md={4} sm={12}>About Newa</SquareBox>
             <SquareBox col={12} lg={3} md={4} sm={12}>
@@ -30,9 +30,9 @@ export default class Home extends Component {
             <SquareBox col={12} lg={3} md={4} sm={12}>
               Pest Forecast Tools
             </SquareBox>
-          </Flex>
+          </Flex> */}
 
-          <Flex m={4} justify="space-around" wrap>
+          {/* <Flex m={4} justify="space-around" wrap>
 
             <SquareBox col={12} lg={2} md={3} sm={12}>
               Crop Management Tools
@@ -47,7 +47,7 @@ export default class Home extends Component {
               Station Pages
             </SquareBox>
 
-          </Flex>
+          </Flex> */}
         </Flex>
 
       </Flex>

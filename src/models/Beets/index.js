@@ -24,6 +24,10 @@ import TheMap from "../components/TheMap";
 @inject("store")
 @observer
 export default class Beets extends Component {
+  constructor(props) {
+    super(props);
+    this.props.store.app.setLocation(this.props.location.pathname);
+  }
   render() {
     const { areRequiredFieldsSet } = this.props.store.app;
 
@@ -43,7 +47,7 @@ export default class Beets extends Component {
         >
 
           <Menu defaultSelectedKeys={["1"]}>
-            <Subject />
+            <Subject model={this.props.location.pathname} />
             <State />
             <Station />
             <DatePicker />

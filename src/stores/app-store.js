@@ -8,7 +8,7 @@ export default class AppStore {
   @observable protocol = window.location.protocol;
   @computed get areRequiredFieldsSet() {
     return (
-      Object.keys(this.disease).length !== 0 &&
+      Object.keys(this.subject).length !== 0 &&
       Object.keys(this.state).length !== 0 &&
       Object.keys(this.station).length !== 0
     );
@@ -22,20 +22,8 @@ export default class AppStore {
   @observable isLoading = false;
   @action setIsLoading = d => (this.isLoading = d);
 
-  // Berry disease------------------------------------------------------------------------
-  @observable diseases = [
-    { family: "Strawberries", name: ["botrytis", "anthracnose"] },
-    { family: "Blueberries", name: ["blueberry Maggot"] },
-    { family: "Beets", name: ["Cercospora"] }
-  ];
-  @observable disease = JSON.parse(
-    localStorage.getItem("berry-diseases")
-  ) || {};
-  @action setDisease = d => {
-    this.disease = this.diseases.find(disease => disease.family === d);
-    localStorage.setItem("berry-diseases", JSON.stringify(this.disease));
-  };
-
+  @observable location = "";
+  @action setLocation = d => (this.location = d.slice(1));
   // State--------------------------------------------------------------------------------
   @observable state = JSON.parse(localStorage.getItem("state")) || {};
   @action setState = stateName => {
@@ -44,8 +32,22 @@ export default class AppStore {
     this.state = states.filter(state => state.name === stateName)[0];
     localStorage.setItem("state", JSON.stringify(this.state));
   };
-
-  // Station-------------------------------------------------------------------------------
+  // Berry subject------------------------------------------------------------------------
+  @observable subjects = [
+    {
+      model: "/berry",
+      name: "Strawberries",
+      diseases: ["botrytis", "anthracnose"]
+    },
+    { model: "/berry", name: "Blueberries", diseases: ["Blueberrie Maggot"] },
+    { model: "/beet", name: "Cercospora Beticola", diseases: [] }
+  ];
+  @observable subject = JSON.parse(localStorage.getItem(`subjects`)) || {};
+  @action setSubject = d => {
+    this.subject = this.subjects.find(subject => subject.name === d);
+    localStorage.setItem("subjects", JSON.stringify(this.subject));
+  };
+  // Station------------------------------------------------------------------------------
   @observable stations = [];
   @action setStations = d => (this.stations = d);
   @computed get stationsWithMatchedIcons() {
