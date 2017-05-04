@@ -26,7 +26,9 @@ import TheMap from "../components/TheMap";
 export default class Beets extends Component {
   constructor(props) {
     super(props);
-    this.props.store.app.setLocation(this.props.location.pathname);
+    localStorage.removeItem("subjects");
+    this.props.store.app.resetSubject({});
+    this.props.store.app.setModel(this.props.location.pathname);
   }
   render() {
     const { areRequiredFieldsSet } = this.props.store.app;

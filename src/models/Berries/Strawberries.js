@@ -6,9 +6,15 @@ import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
-const splitText = text => {
-  // console.log(text);
-  return text.split("-");
+const forecastText = date => {
+  return (
+    <div>
+      <div>{date.split("-")[0]}</div>
+      <div style={{ fontSize: ".6rem", color: "red" }}>
+        {date.split("-")[1]}
+      </div>
+    </div>
+  );
 };
 
 const columns = [
@@ -18,14 +24,7 @@ const columns = [
     key: "date",
     fixed: "left",
     width: 120,
-    render: text => (
-      <div>
-        <span>{splitText(text)[0]}</span>
-        <span style={{ fontSize: ".6rem", color: "red", marginLeft: "5px" }}>
-          {splitText(text)[1]}
-        </span>
-      </div>
-    )
+    render: date => forecastText(date)
   },
   {
     title: "Index",
@@ -46,6 +45,7 @@ export default class Strawberries extends Component {
     const {
       ACISData,
       subject,
+      model,
       station,
       areRequiredFieldsSet
     } = this.props.store.app;

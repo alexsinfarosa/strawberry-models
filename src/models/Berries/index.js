@@ -28,7 +28,9 @@ import { getData } from "../../utils";
 export default class Berry extends Component {
   constructor(props) {
     super(props);
-    this.props.store.app.setLocation(this.props.location.pathname);
+    localStorage.removeItem("subjects");
+    this.props.store.app.resetSubject({});
+    this.props.store.app.setModel(this.props.location.pathname);
     autorun(() => this.runMainFunction());
   }
   runMainFunction = () => {
@@ -55,9 +57,7 @@ export default class Berry extends Component {
   };
 
   render() {
-    const { areRequiredFieldsSet, subject, subjects } = this.props.store.app;
-    const berry = subjects.filter(disease => disease.model === "/berry");
-    console.log(berry);
+    const { areRequiredFieldsSet, subject } = this.props.store.app;
     return (
       <Layout>
         <Sider

@@ -7,6 +7,7 @@
 @inject.color	src/site/Nav.js	/^    const isActive = {$/;"	p
 @inject.textDecoration	src/site/Nav.js	/^      color: "black",$/;"	p
 @inject.textUnderlinePosition	src/site/Nav.js	/^      textDecoration: "underline",$/;"	p
+@observable.berry	src/stores/app-store.js	/^  @observable subjects = {$/;"	p
 antd	package.json	/^    "antd": "^2.9.1",$/;"	f
 axios	package.json	/^    "axios": "^0.15.3",$/;"	f
 build	package.json	/^    "build": "react-scripts build",$/;"	f

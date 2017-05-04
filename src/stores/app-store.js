@@ -22,8 +22,9 @@ export default class AppStore {
   @observable isLoading = false;
   @action setIsLoading = d => (this.isLoading = d);
 
-  @observable location = "";
-  @action setLocation = d => (this.location = d.slice(1));
+  @observable model = "";
+  @action setModel = d => (this.model = d.slice(1));
+
   // State--------------------------------------------------------------------------------
   @observable state = JSON.parse(localStorage.getItem("state")) || {};
   @action setState = stateName => {
@@ -32,21 +33,24 @@ export default class AppStore {
     this.state = states.filter(state => state.name === stateName)[0];
     localStorage.setItem("state", JSON.stringify(this.state));
   };
+
   // Berry subject------------------------------------------------------------------------
-  @observable subjects = [
-    {
-      model: "/berry",
-      name: "Strawberries",
-      diseases: ["botrytis", "anthracnose"]
-    },
-    { model: "/berry", name: "Blueberries", diseases: ["Blueberrie Maggot"] },
-    { model: "/beet", name: "Cercospora Beticola", diseases: [] }
-  ];
+  @observable subjects = {
+    berry: [
+      { name: "Strawberries", diseases: ["botrytis", "anthracnose"] },
+      { name: "Blueberries", diseases: ["Blueberrie Maggot"] }
+    ],
+    beet: [{ name: "Cercospora Beticola", diseases: [] }]
+  };
   @observable subject = JSON.parse(localStorage.getItem(`subjects`)) || {};
+  @action resetSubject = d => (this.subject = d);
   @action setSubject = d => {
-    this.subject = this.subjects.find(subject => subject.name === d);
+    this.subject = this.subjects[this.model].find(
+      subject => subject.name === d
+    );
     localStorage.setItem("subjects", JSON.stringify(this.subject));
   };
+
   // Station------------------------------------------------------------------------------
   @observable stations = [];
   @action setStations = d => (this.stations = d);

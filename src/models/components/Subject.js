@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import { toJS } from "mobx";
+// import { toJS } from "mobx";
 import { Select } from "antd";
 const Option = Select.Option;
 
@@ -14,8 +14,6 @@ class Subject extends Component {
   render() {
     const { subject, subjects } = this.props.store.app;
     const { model } = this.props;
-    console.log(model);
-    const berries = subjects.filter(subject => subject.model === model);
     return (
       <div style={{ marginBottom: "2rem" }}>
         <p
@@ -38,7 +36,7 @@ class Subject extends Component {
           style={{ width: 200, textAlign: "left" }}
           onChange={this.handleChange}
         >
-          {berries.map((subject, i) => {
+          {subjects[model.slice(1)].map((subject, i) => {
             return (
               <Option key={i} value={subject.name}>
                 {subject.name}
