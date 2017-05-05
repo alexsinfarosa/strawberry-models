@@ -44,7 +44,7 @@ export default class AppStore {
   };
   @observable subject = {};
   @action resetSubject = () => (this.subject = {});
-  @action setSubjectFromLocalStorage = d => this.subject = d;
+  @action setSubjectFromLocalStorage = d => (this.subject = d);
   @action setSubject = d => {
     this.subject = this.subjects[this.model].find(
       subject => subject.name === d
@@ -77,10 +77,10 @@ export default class AppStore {
 
   // Dates----------------------------------------------------------------------------------
   @observable currentYear = new Date().getFullYear().toString();
-  @observable endDate = JSON.parse(localStorage.getItem("endDate")) || null;
+  @observable endDate = new Date();
   @action setEndDate = d => {
     this.endDate = format(d, "YYYY-MM-DD");
-    localStorage.setItem("endDate", JSON.stringify(this.endDate));
+    // localStorage.setItem("endDate", JSON.stringify(this.endDate));
   };
   @computed get startDate() {
     return `${format(this.endDate, "YYYY")}-01-01`;
