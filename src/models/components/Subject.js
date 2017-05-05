@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import { toJS } from "mobx";
+// import { toJS } from "mobx";
 import { Select } from "antd";
 const Option = Select.Option;
 
@@ -9,11 +9,10 @@ const Option = Select.Option;
 class Subject extends Component {
   handleChange = value => {
     this.props.store.app.setSubject(value);
-    console.log(`subject: ${value}`);
+    // console.log(`subject: ${value}`);
   };
   render() {
     const { subject, subjects, model } = this.props.store.app;
-    console.log(toJS(subject));
     return (
       <div style={{ marginBottom: "2rem" }}>
         <p

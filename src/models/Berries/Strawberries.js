@@ -45,7 +45,6 @@ export default class Strawberries extends Component {
     const {
       ACISData,
       subject,
-      model,
       station,
       areRequiredFieldsSet
     } = this.props.store.app;

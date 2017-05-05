@@ -28,9 +28,10 @@ import { getData } from "../../utils";
 export default class Berry extends Component {
   constructor(props) {
     super(props);
-    // localStorage.removeItem("subjects");
-    // this.props.store.app.resetSubject({});
     this.props.store.app.setModel(this.props.location.pathname);
+    this.props.store.app.setSubjectFromLocalStorage(
+      JSON.parse(localStorage.getItem(`${this.props.store.app.model}`)) || {}
+    );
     autorun(() => this.runMainFunction());
   }
   runMainFunction = () => {
