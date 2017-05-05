@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx";
-import { matchIconsToStations } from "../utils";
+import { matchIconsToStations, cumulativeDICV } from "../utils";
 import { states } from "../states";
 import format from "date-fns/format";
 
@@ -77,10 +77,11 @@ export default class AppStore {
 
   // Dates----------------------------------------------------------------------------------
   @observable currentYear = new Date().getFullYear().toString();
-  @observable endDate = new Date();
+  @observable endDate = JSON.parse(localStorage.getItem("endDate")) ||
+    new Date();
   @action setEndDate = d => {
     this.endDate = format(d, "YYYY-MM-DD");
-    // localStorage.setItem("endDate", JSON.stringify(this.endDate));
+    localStorage.setItem("endDate", JSON.stringify(this.endDate));
   };
   @computed get startDate() {
     return `${format(this.endDate, "YYYY")}-01-01`;
@@ -92,25 +93,31 @@ export default class AppStore {
   // ACISData -------------------------------------------------------------------------------
   @observable ACISData = [];
   @action setACISData = d => (this.ACISData = d);
-  @computed get dates() {
-    return this.ACISData.map(e => e.date);
+
+  @computed get DICV() {
+    return this.ACISData.map(e => e.dicv);
   }
-  @computed get temps() {
-    return this.ACISData.map(e => e.temp);
+
+  @computed get A2Day() {
+    return this.DICV.map((e, i) => {
+      if (i > 0) {
+        return e + this.DICV[i - 1];
+      }
+      return e;
+    });
   }
-  @computed get rhs() {
-    return this.ACISData.map(e => e.rh);
+
+  @computed get A14Day() {
+    const partial = this.DICV.slice(-22);
+    return cumulativeDICV(partial);
   }
-  @computed get lws() {
-    return this.ACISData.map(e => e.lw);
+
+  @computed get A21Day() {
+    const partial = this.DICV.slice(-29);
+    return cumulativeDICV(partial);
   }
-  @computed get pts() {
-    return this.ACISData.map(e => e.pt);
-  }
-  @computed get botrytis() {
-    return this.ACISData.map(e => e.botrytis);
-  }
-  @computed get anthracnose() {
-    return this.ACISData.map(e => e.anthracnose);
+
+  @computed get season() {
+    return cumulativeDICV(this.DICV);
   }
 }

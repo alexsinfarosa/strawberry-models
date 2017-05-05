@@ -12,7 +12,6 @@ antd	package.json	/^    "antd": "^2.9.1",$/;"	f
 axios	package.json	/^    "axios": "^0.15.3",$/;"	f
 build	package.json	/^    "build": "react-scripts build",$/;"	f
 const.app	src/stores/index.js	/^const store = {$/;"	p
-const.tp	src/Test.js	/^const data = {$/;"	p
 custom-react-scripts	package.json	/^    "custom-react-scripts": "0.0.23"$/;"	f
 date-fns	package.json	/^    "date-fns": "^1.28.0",$/;"	f
 dependencies	package.json	/^  "dependencies": {$/;"	f
@@ -22,6 +21,8 @@ eject	package.json	/^    "eject": "react-scripts eject",$/;"	f
 export.1	src/models/Beets/table.js	/^export const table = {$/;"	p
 gh-pages	package.json	/^    "gh-pages": "^0.12.0",$/;"	f
 homepage	package.json	/^  "homepage": "http:\/\/newadata.nrcc.cornell.edu\/newa\/",$/;"	f
+i	src/Test.js	/^    var i, ret = Array(n);$/;"	v
+i	src/utils.js	/^  var i, ret = Array(n);$/;"	v
 leaflet	package.json	/^    "leaflet": "^1.0.3",$/;"	f
 let.date	src/utils.js	/^    let anthracnose = {$/;"	p
 let.date	src/utils.js	/^    let botrytis = { date: date, index: indexBotrytis };$/;"	p

@@ -61,7 +61,8 @@ export const networkTemperatureAdjustment = network => {
   if (network === "newa" || network === "icao" || network === "njwx") {
     return "23";
   } else if (
-    network === "miwx" || (network === "cu_log" || network === "culog")
+    network === "miwx" ||
+    (network === "cu_log" || network === "culog")
   ) {
     return "126";
   }
@@ -69,7 +70,7 @@ export const networkTemperatureAdjustment = network => {
 
 // Handling Relative Humidity Adjustment
 export const networkHumidityAdjustment = network =>
-  (network === "miwx" ? "143" : "24");
+  network === "miwx" ? "143" : "24";
 
 // Handling Michigan state ID adjustment
 export const michiganIdAdjustment = station => {
@@ -150,9 +151,9 @@ export const replaceNonConsecutiveMissingValues = data => {
 export const compareAndReplace = (cStation, sStation) => {
   return cStation.map((e, i) => {
     if (e === "M" && sStation[i] !== "M") {
-      return sStation[i];
+      return sStation[i].toString();
     }
-    return e;
+    return e.toString();
   });
 };
 
@@ -170,9 +171,14 @@ export const RHAdjustment = arr => {
 
 // Returns average of all the values in array
 export const average = data => {
-  if (data.length === 0) {
-    return 0;
-  }
+  // handling the case for T and W
+  if (data.length === 0) return 0;
+
+  // handling the case when data is null or has 24 Missing values
+  const missingValues = data.filter(e => e === "M").length;
+  if (typeof data === null || missingValues === 24) return "No Data";
+
+  //  calculating average
   let results = data.map(e => parseFloat(e));
   return Math.round(results.reduce((acc, val) => acc + val, 0) / data.length);
 };
@@ -259,7 +265,6 @@ export const leafWetnessAndTemps = (day, currentYear, startDateYear) => {
   });
 
   // console.log(filteredTemps);
-
   let T = average(filteredTemps.filter(e => e !== undefined));
   T = fahrenheitToCelcius(T);
   // console.log(W, T);
@@ -334,6 +339,45 @@ export const noonToNoon = data => {
   return results.slice(0, -1);
 };
 
+// From numeric.js
+const linspace = (a, b, n) => {
+  if (typeof n === "undefined") n = Math.max(Math.round(b - a) + 1, 1);
+  if (n < 2) {
+    return n === 1 ? [a] : [];
+  }
+  var i, ret = Array(n);
+  n--;
+  for (i = n; i >= 0; i--) {
+    ret[i] = (i * b + (n - i) * a) / n;
+  }
+  return ret;
+};
+
+// Returns an array with all missing values replace by linspace function
+const linspaceMissingValues = data => {
+  const checkIfAllMValues = data.filter(e => e === "M").length;
+  if (checkIfAllMValues === 24) {
+    return "No data available for this day";
+  } else if (checkIfAllMValues < 12) {
+    let results = data;
+    while (results.findIndex(e => e === "M") !== -1) {
+      const firstIndex = data.findIndex(e => e === "M");
+      const valuesToReplace = data.slice(firstIndex).findIndex(e => e !== "M");
+      const lastIndex = firstIndex + valuesToReplace - 1;
+      const startRange = firstIndex - 1;
+      const endRange = lastIndex + 1;
+      const range = linspace(startRange, endRange, valuesToReplace);
+
+      for (let i = 0; i < valuesToReplace; i++) {
+        results.splice(firstIndex + i, 1, range[i].toString());
+      }
+    }
+    return results;
+  } else {
+    return data;
+  }
+};
+
 // Returns the data array (MAIN FUNCTION) ---------------------------------------------------
 export const getData = async (
   protocol,
@@ -395,6 +439,16 @@ export const getData = async (
     results[i]["ptDiff"] = compareAndReplace(day.pt, day.ptSis);
   }
 
+  // getting rid of all missing values
+  // for (const [i, day] of results.entries()) {
+  //   results[i]["tpDiff"] = linspaceMissingValues(day.tpDiff);
+  //   results[i]["rhDiff"] = linspaceMissingValues(day.rhDiff);
+  //   results[i]["lwDiff"] = currentYear === startDateYear
+  //     ? null
+  //     : linspaceMissingValues(day.lwDiff);
+  //   results[i]["ptDiff"] = linspaceMissingValues(day.ptDiff);
+  // }
+
   // fetching forecast data
   let forecastData = await fetchForecastData(
     protocol,
@@ -406,19 +460,26 @@ export const getData = async (
 
   // Adding to the 'day' object, forecast data
   for (const [i, day] of forecastData.entries()) {
-    results[i]["tpFore"] = replaceNonConsecutiveMissingValues(day[1]);
-    results[i]["rhFore"] = replaceNonConsecutiveMissingValues(day[2]);
-    results[i]["ptFore"] = replaceNonConsecutiveMissingValues(day[3]);
+    results[i]["tpForecast"] = replaceNonConsecutiveMissingValues(day[1]);
+    results[i]["rhForecast"] = replaceNonConsecutiveMissingValues(day[2]);
+    results[i]["ptForecast"] = replaceNonConsecutiveMissingValues(day[3]);
   }
 
   // replacing tpDiff values with forecast station temperatures (tpf)
   for (const [i, day] of results.entries()) {
-    results[i]["tpFinal"] = compareAndReplace(day.tpDiff, day.tpFore);
-    results[i]["rhFinal"] = compareAndReplace(day.rhDiff, day.rhFore);
+    results[i]["tpFinal"] = compareAndReplace(day.tpDiff, day.tpForecast);
+    results[i]["rhFinal"] = compareAndReplace(day.rhDiff, day.rhForecast);
     // Forcast data needs to have relative humidity array adjusted
     results[i]["rhFinalAdj"] = RHAdjustment(day.rhFinal);
-    results[i]["ptFinal"] = compareAndReplace(day.ptDiff, day.ptFore);
+    results[i]["ptFinal"] = compareAndReplace(day.ptDiff, day.ptForecast);
   }
+
+  // getting rid of all missing values
+  // for (const [i, day] of results.entries()) {
+  //   results[i]["tpFinal"] = linspaceMissingValues(day.tpFinal);
+  //   results[i]["rhFinalAdj"] = linspaceMissingValues(day.rhFinalAdj);
+  //   results[i]["ptFinal"] = linspaceMissingValues(day.ptFinal);
+  // }
 
   // MAKING CALCULATIONS --------------------------------------------------------------------
   let ciccio = [];
@@ -469,6 +530,7 @@ export const getData = async (
 
     // calculate dicv ...
     let dicv = 0;
+    // console.log(avg);
     if (avg >= 59 && avg <= 94 && hrsRH > 0) {
       dicv = table[hrsRH.toString()][avg.toString()];
     }
@@ -539,6 +601,13 @@ export const getData = async (
       anthracnose: anthracnose
     });
   }
-  // ciccio.map(e => console.log(e));
+  ciccio.map(e => console.log(e));
   return ciccio;
+};
+
+// Returns an array with cumulative Daily Infection Critical Values
+export const cumulativeDICV = dicv => {
+  const arr = [];
+  dicv.reduce((prev, curr, i) => (arr[i] = prev + curr), 0);
+  return arr;
 };

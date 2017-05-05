@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { Link } from "react-router-dom";
-// import { autorun } from "mobx";
+import { autorun } from "mobx";
 
 // styles
 // import "./styles";
@@ -17,9 +17,10 @@ import Station from "../components/Station";
 import DatePicker from "../components/DatePicker";
 
 import TheMap from "../components/TheMap";
+import CercosporaBeticola from "./Cercospora-beticola";
 
 // utility functions
-// import { getData } from "../../utils";
+import { getData } from "../../utils";
 
 @inject("store")
 @observer
@@ -30,7 +31,33 @@ export default class Beets extends Component {
     this.props.store.app.setSubjectFromLocalStorage(
       JSON.parse(localStorage.getItem(`${this.props.store.app.model}`)) || {}
     );
+
+    autorun(() => this.runMainFunction());
   }
+
+  runMainFunction = () => {
+    const {
+      protocol,
+      getStation,
+      startDate,
+      endDate,
+      currentYear,
+      startDateYear,
+      areRequiredFieldsSet
+    } = this.props.store.app;
+    if (areRequiredFieldsSet) {
+      this.props.store.app.setACISData([]);
+      return getData(
+        protocol,
+        getStation,
+        startDate,
+        endDate,
+        currentYear,
+        startDateYear
+      ).then(data => this.props.store.app.setACISData(data));
+    }
+  };
+
   render() {
     const { areRequiredFieldsSet } = this.props.store.app;
 
@@ -93,10 +120,7 @@ export default class Beets extends Component {
             }}
           >
             <TheMap />
-            {areRequiredFieldsSet &&
-              <div>
-                beets
-              </div>}
+            {areRequiredFieldsSet && <CercosporaBeticola />}
 
           </Content>
         </Layout>

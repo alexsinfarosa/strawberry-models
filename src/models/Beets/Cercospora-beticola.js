@@ -2,10 +2,20 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
 
+import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
-import Graph from "../components/Graph/Graph";
+const forecastText = date => {
+  return (
+    <div>
+      <div>{date.split("-")[0]}</div>
+      <div style={{ fontSize: ".6rem", color: "red" }}>
+        {date.split("-")[1]}
+      </div>
+    </div>
+  );
+};
 
 const columns = [
   {
@@ -13,42 +23,18 @@ const columns = [
     dataIndex: "date",
     key: "date",
     fixed: "left",
-    width: 60
+    width: 120,
+    render: date => forecastText(date)
   },
   {
-    title: "Degree Days",
-    children: [
-      {
-        title: "Daily",
-        dataIndex: "dd",
-        key: "dd"
-      },
-      {
-        title: "Cumulative",
-        dataIndex: "cdd",
-        key: "cdd"
-      }
-    ]
+    title: "Daily Infection Values",
+    dataIndex: "dicv",
+    key: "dicv"
   },
   {
-    title: "Temperature (˚F)",
-    children: [
-      {
-        title: "Min",
-        dataIndex: "min",
-        key: "min"
-      },
-      {
-        title: "Max",
-        dataIndex: "max",
-        key: "max"
-      },
-      {
-        title: "Avg",
-        dataIndex: "average",
-        key: "average"
-      }
-    ]
+    title: "Risk Level",
+    dataIndex: "riskLevel",
+    key: "riskLevel"
   }
 ];
 
@@ -58,37 +44,34 @@ export default class CercosporaBeticola extends Component {
   render() {
     const {
       ACISData,
-      disease,
+      subject,
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
     return (
       <Flex column>
         <Box>
-          <h2>{disease.family} Prediction For {station.name}</h2>
+          <h2>{subject.name} Prediction For {station.name}</h2>
         </Box>
 
-        <Flex justify="center">
-
-          <Box mt={3} col={12} lg={10} md={10} sm={12}>
-            <h3>Blueberry Maggot</h3>
+        <Flex justify="space-between" wrap>
+          <Box mt={3} col={12} lg={5} md={5} sm={12}>
+            <h3>Cercospora Beticola</h3>
 
             <Table
               columns={columns}
-              bordered
               rowKey={record => record.date}
+              rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}
               dataSource={
                 areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.blueberryMaggot)
+                  ? takeRight(ACISData, 8).map(day => day.botrytis)
                   : null
               }
             />
           </Box>
-
         </Flex>
-        {areRequiredFieldsSet && <Graph />}
       </Flex>
     );
   }
