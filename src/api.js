@@ -175,11 +175,11 @@ export const fetchForecastData = (protocol, station, startDate, endDate) => {
       const TP = res[0].map(day => day[1]);
       const RH = res[1].map(day => day[1]);
       // Fake data, done to make forecast similar to ACIS since forecast does not have LW
-      const LW = new Array(24).fill("M");
+      // const LW = new Array(24).fill("M");
       const PT = res[2].map(day => day[1]);
       let results = [];
       dates.map((day, i) => {
-        return results.push([dates[i], TP[i], RH[i], LW, PT[i]]);
+        return results.push([dates[i], TP[i], RH[i], PT[i]]);
       });
       return results;
     })

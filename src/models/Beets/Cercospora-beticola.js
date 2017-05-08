@@ -48,6 +48,8 @@ export default class CercosporaBeticola extends Component {
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
+    // console.log(takeRight(ACISData, 8).map(day => day));
+
     return (
       <Flex column>
         <Box>
@@ -56,7 +58,7 @@ export default class CercosporaBeticola extends Component {
 
         <Flex justify="space-between" wrap>
           <Box mt={3} col={12} lg={5} md={5} sm={12}>
-            <h3>Cercospora Beticola</h3>
+            <h3>Cercospora leaf spot on table beet</h3>
 
             <Table
               columns={columns}
@@ -66,7 +68,7 @@ export default class CercosporaBeticola extends Component {
               pagination={false}
               dataSource={
                 areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.botrytis)
+                  ? takeRight(ACISData, 8).map(day => day.cercosporaBeticola)
                   : null
               }
             />

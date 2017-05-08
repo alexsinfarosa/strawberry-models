@@ -127,17 +127,42 @@ export const avgTwoStringNumbers = (a, b) => {
 
 // It replaces non consecutive values in data with the average
 // of the left and the right values
+// export const replaceNonConsecutiveMissingValues = data => {
+//   return data.map((val, i) => {
+//     if (i === 0 && val === "M") {
+//       return data[i + 1];
+//     } else if (i === data.length - 1 && val === "M") {
+//       return data[i - 1];
+//     } else if (val === "M" && data[i - 1] !== "M" && data[i + 1] !== "M") {
+//       return avgTwoStringNumbers(data[i - 1], data[i + 1]);
+//     } else {
+//       return val;
+//     }
+//   });
+// };
+
 export const replaceNonConsecutiveMissingValues = data => {
-  return data.map((val, i) => {
-    if (i === 0 && val === "M") {
-      return data[i + 1];
-    } else if (i === data.length - 1 && val === "M") {
-      return data[i - 1];
-    } else if (val === "M" && data[i - 1] !== "M" && data[i + 1] !== "M") {
-      return avgTwoStringNumbers(data[i - 1], data[i + 1]);
-    } else {
-      return val;
-    }
+  return data.map(day => {
+    return day.map(param => {
+      if (Array.isArray(param)) {
+        return param.map((e, i) => {
+          if (i === 0 && e === "M") {
+            return param[i + 1];
+          } else if (i === param.length - 1 && e === "M") {
+            return param[i - 1];
+          } else if (
+            e === "M" &&
+            param[i - 1] !== "M" &&
+            param[i + 1] !== "M"
+          ) {
+            return avgTwoStringNumbers(param[i - 1], param[i + 1]);
+          } else {
+            return e;
+          }
+        });
+      }
+      return param;
+    });
   });
 };
 
@@ -148,7 +173,7 @@ export const replaceNonConsecutiveMissingValues = data => {
 // };
 
 // Replaces current station (cStation) missing values with compared station
-export const compareAndReplace = (cStation, sStation) => {
+export const replaceMissingValues = (cStation, sStation) => {
   return cStation.map((e, i) => {
     if (e === "M" && sStation[i] !== "M") {
       return sStation[i].toString();
@@ -176,7 +201,7 @@ export const average = data => {
 
   // handling the case when data is null or has 24 Missing values
   const missingValues = data.filter(e => e === "M").length;
-  if (typeof data === null || missingValues === 24) return "No Data";
+  if (data.length === 0 || missingValues === 24) return "No Data";
 
   //  calculating average
   let results = data.map(e => parseFloat(e));
@@ -212,15 +237,15 @@ export const fahrenheitToCelcius = data => {
 export const leafWetnessAndTemps = (day, currentYear, startDateYear) => {
   let RH, PT, LW, TP, params;
   if (currentYear === startDateYear) {
+    TP = day.tpFinal;
     RH = day.rhFinal.map(e => (e >= 90 ? e : false));
     PT = day.ptFinal.map(e => (e > 0 ? e : false));
-    TP = day.tpFinal;
     params = [RH, PT];
   } else {
-    RH = day.rhDiff.map(e => (e >= 90 ? e : false));
-    PT = day.ptDiff.map(e => (e > 0 ? e : false));
-    LW = day.lwDiff.map(e => (e > 0 ? e : false));
-    TP = day.tpDiff;
+    TP = day.tpFinal;
+    RH = day.rhFinal.map(e => (e >= 90 ? e : false));
+    LW = day.lwFinal.map(e => (e > 0 ? e : false));
+    PT = day.ptFinal.map(e => (e > 0 ? e : false));
     params = [RH, PT, LW];
   }
   // console.log(params);
@@ -353,8 +378,8 @@ const linspace = (a, b, n) => {
   return ret;
 };
 
-// Returns an array with all missing values replace by linspace function
-const linspaceMissingValues = data => {
+// Returns an array with all missing values replace by the linspace function
+export const linspaceMissingValues = data => {
   const checkIfAllMValues = data.filter(e => e === "M").length;
   if (checkIfAllMValues === 24) {
     return "No data available for this day";
@@ -390,96 +415,131 @@ export const getData = async (
   // Cleaning and Adjustments
   let acis = [];
   acis = await fetchACISData(protocol, station, startDate, endDate);
+  acis = replaceNonConsecutiveMissingValues(acis);
   acis = noonToNoon(acis);
+  // acis.slice(0, 3).map(e => e.map(d => console.log(d)));
 
+  // currentYear !== startDateYear means it is not this year, hence no forecast
   let results = [];
-  for (const day of acis) {
-    // creating a 'day' object with the returned params from ACIS
-    results.push({
-      date: day[0],
-      tp: replaceNonConsecutiveMissingValues(day[1]),
-      rh: replaceNonConsecutiveMissingValues(day[2]),
-      // no lw for forecast data
-      lw: currentYear === startDateYear
-        ? null
-        : replaceNonConsecutiveMissingValues(day[3]),
-      pt: replaceNonConsecutiveMissingValues(day[4])
-    });
+  if (currentYear !== startDateYear) {
+    for (const day of acis) {
+      // creating a 'day' object with the returned params from ACIS
+      results.push({
+        date: day[0],
+        tp: day[1],
+        rh: day[2],
+        lw: day[3],
+        pt: day[4]
+      });
+    }
+
+    const idAndNetwork = await getSisterStationIdAndNetwork(protocol, station);
+    let sisterStationData = await fetchSisterStationData(
+      protocol,
+      idAndNetwork,
+      station,
+      startDate,
+      endDate,
+      currentYear,
+      startDateYear
+    );
+    sisterStationData = replaceNonConsecutiveMissingValues(sisterStationData);
+    sisterStationData = noonToNoon(sisterStationData);
+
+    // Adding to the 'day' object, sister's data
+    for (const [i, day] of sisterStationData.entries()) {
+      results[i]["tpSis"] = day[1];
+      results[i]["rhSis"] = day[2];
+      results[i]["lwSis"] = day[3];
+      results[i]["ptSis"] = day[4];
+    }
+
+    // replacing missing values with sister station
+    for (const [i, day] of results.entries()) {
+      results[i]["tpFinal"] = replaceMissingValues(day.tp, day.tpSis);
+      results[i]["rhFinal"] = replaceMissingValues(day.rh, day.rhSis);
+      results[i]["lwFinal"] = replaceMissingValues(day.lw, day.lwSis);
+      results[i]["ptFinal"] = replaceMissingValues(day.pt, day.ptSis);
+    }
+    console.log("We are in past year");
+    // results.map(e => console.log(e.date, e.tp, e.tpSis, e.tpFinal));
+  } else {
+    // currentYear === startDateYear means it is forecast
+    for (const day of acis) {
+      // creating a 'day' object with the returned params from ACIS
+      results.push({
+        date: day[0],
+        tp: day[1],
+        rh: day[2],
+        pt: day[4]
+      });
+    }
+
+    const idAndNetwork = await getSisterStationIdAndNetwork(protocol, station);
+    let sisterStationData = await fetchSisterStationData(
+      protocol,
+      idAndNetwork,
+      station,
+      startDate,
+      endDate,
+      currentYear,
+      startDateYear
+    );
+    sisterStationData = replaceNonConsecutiveMissingValues(sisterStationData);
+    sisterStationData = noonToNoon(sisterStationData);
+
+    // Adding to the 'day' object, sister's data
+    for (const [i, day] of sisterStationData.entries()) {
+      results[i]["tpSis"] = day[1];
+      results[i]["rhSis"] = day[2];
+      results[i]["ptSis"] = day[4];
+    }
+
+    // replacing missing values with sister station
+    for (const [i, day] of results.entries()) {
+      results[i]["tpCurrentAndSiter"] = replaceMissingValues(day.tp, day.tpSis);
+      results[i]["rhCurrentAndSiter"] = replaceMissingValues(day.rh, day.rhSis);
+      results[i]["ptCurrentAndSiter"] = replaceMissingValues(day.pt, day.ptSis);
+    }
+    // fetching forecast data
+    let forecastData = await fetchForecastData(
+      protocol,
+      station,
+      startDate,
+      endDate
+    );
+    forecastData = replaceNonConsecutiveMissingValues(forecastData);
+    forecastData = noonToNoon(forecastData);
+
+    // forecastData.map(day => day.map(p => console.log(p)));
+
+    // Adding to the 'day' object, forecast data
+    for (const [i, day] of forecastData.entries()) {
+      results[i]["tpForecast"] = day[1];
+      results[i]["rhForecast"] = day[2];
+      results[i]["ptForecast"] = day[3];
+    }
+
+    // replacing tpDiff values with forecast station temperatures (tpf)
+    for (const [i, day] of results.entries()) {
+      results[i]["tpFinal"] = replaceMissingValues(
+        day.tpCurrentAndSiter,
+        day.tpForecast
+      );
+      // Forcast data needs to have relative humidity array adjusted
+      results[i]["rhFinal"] = RHAdjustment(
+        replaceMissingValues(day.rhCurrentAndSiter, day.rhForecast)
+      );
+      results[i]["ptFinal"] = replaceMissingValues(
+        day.ptCurrentAndSiter,
+        day.ptForecast
+      );
+    }
   }
 
-  const idAndNetwork = await getSisterStationIdAndNetwork(protocol, station);
-  let sisterStationData = await fetchSisterStationData(
-    protocol,
-    idAndNetwork,
-    station,
-    startDate,
-    endDate,
-    currentYear,
-    startDateYear
-  );
-  sisterStationData = noonToNoon(sisterStationData);
-
-  // Adding to the 'day' object, sister's data
-  for (const [i, day] of sisterStationData.entries()) {
-    results[i]["tpSis"] = replaceNonConsecutiveMissingValues(day[1]);
-    results[i]["rhSis"] = replaceNonConsecutiveMissingValues(day[2]);
-    results[i]["lwSis"] = currentYear === startDateYear
-      ? null
-      : replaceNonConsecutiveMissingValues(day[3]);
-    results[i]["ptSis"] = replaceNonConsecutiveMissingValues(day[4]);
-  }
-
-  // replacing temperature (tp) with sister station temperatures (tps)
-  for (const [i, day] of results.entries()) {
-    results[i]["tpDiff"] = compareAndReplace(day.tp, day.tpSis);
-    results[i]["rhDiff"] = compareAndReplace(day.rh, day.rhSis);
-    results[i]["lwDiff"] = currentYear === startDateYear
-      ? null
-      : compareAndReplace(day.lw, day.lwSis);
-    results[i]["ptDiff"] = compareAndReplace(day.pt, day.ptSis);
-  }
-
-  // getting rid of all missing values
-  // for (const [i, day] of results.entries()) {
-  //   results[i]["tpDiff"] = linspaceMissingValues(day.tpDiff);
-  //   results[i]["rhDiff"] = linspaceMissingValues(day.rhDiff);
-  //   results[i]["lwDiff"] = currentYear === startDateYear
-  //     ? null
-  //     : linspaceMissingValues(day.lwDiff);
-  //   results[i]["ptDiff"] = linspaceMissingValues(day.ptDiff);
-  // }
-
-  // fetching forecast data
-  let forecastData = await fetchForecastData(
-    protocol,
-    station,
-    startDate,
-    endDate
-  );
-  forecastData = noonToNoon(forecastData);
-
-  // Adding to the 'day' object, forecast data
-  for (const [i, day] of forecastData.entries()) {
-    results[i]["tpForecast"] = replaceNonConsecutiveMissingValues(day[1]);
-    results[i]["rhForecast"] = replaceNonConsecutiveMissingValues(day[2]);
-    results[i]["ptForecast"] = replaceNonConsecutiveMissingValues(day[3]);
-  }
-
-  // replacing tpDiff values with forecast station temperatures (tpf)
-  for (const [i, day] of results.entries()) {
-    results[i]["tpFinal"] = compareAndReplace(day.tpDiff, day.tpForecast);
-    results[i]["rhFinal"] = compareAndReplace(day.rhDiff, day.rhForecast);
-    // Forcast data needs to have relative humidity array adjusted
-    results[i]["rhFinalAdj"] = RHAdjustment(day.rhFinal);
-    results[i]["ptFinal"] = compareAndReplace(day.ptDiff, day.ptForecast);
-  }
-
-  // getting rid of all missing values
-  // for (const [i, day] of results.entries()) {
-  //   results[i]["tpFinal"] = linspaceMissingValues(day.tpFinal);
-  //   results[i]["rhFinalAdj"] = linspaceMissingValues(day.rhFinalAdj);
-  //   results[i]["ptFinal"] = linspaceMissingValues(day.ptFinal);
-  // }
+  // results.map(e =>
+  //   console.log(e.date, e.tp, e.tpCurrentAndSiter, e.tpForecast, e.tpFinal)
+  // );
 
   // MAKING CALCULATIONS --------------------------------------------------------------------
   let ciccio = [];
@@ -492,47 +552,34 @@ export const getData = async (
       date = `${date} - Forecast`;
     }
 
-    const avg = currentYear === startDateYear
-      ? average(day.tpFinal)
-      : average(day.tpDiff);
-
-    const min = currentYear === startDateYear
-      ? Math.min(...day.tpFinal)
-      : Math.min(...day.tpDiff);
-
-    const max = currentYear === startDateYear
-      ? Math.max(...day.tpFinal)
-      : Math.max(...day.tpDiff);
+    const Tavg = average(day.tpFinal);
+    const Tmin = Math.min(...day.tpFinal);
+    const Tmax = Math.max(...day.tpFinal);
 
     // calculate dd (degree day)
-    const dd = avg - base > 0 ? avg - base : 0;
+    const dd = Tavg - base > 0 ? Tavg - base : 0;
 
     // calculate cdd (cumulative degree day)
     cdd += dd;
 
-    // returns relative humidity above 90% (RH > 90)
-    const rhAboveValues = currentYear === startDateYear
-      ? aboveEqualToValue(day.rhFinal, 90)
-      : aboveEqualToValue(day.rhDiff, 90);
-
-    // returns leaf wetness above 0 (LW > 0)
-    // const lwAboveValues = currentYear === startDateYear
-    //   ? aboveValue(day.lwFinal, 0)
-    //   : aboveValue(day.lwDiff, 0);
-
-    // returns precipitation above 0 (PT > 0)
-    // const ptAboveValues = currentYear === startDateYear
-    //   ? aboveValue(day.ptFinal, 0)
-    //   : aboveValue(day.ptDiff, 0);
+    // returns relative humidity above or equal to 90% (RH >= 90)
+    const rhAboveValues = aboveEqualToValue(day.rhFinal, 90);
 
     // Number of hours where relative humidity was above 90%
     const hrsRH = rhAboveValues.filter(e => e !== false).length;
 
     // calculate dicv ...
-    let dicv = 0;
-    // console.log(avg);
-    if (avg >= 59 && avg <= 94 && hrsRH > 0) {
-      dicv = table[hrsRH.toString()][avg.toString()];
+    let cercosporaBeticola = { date, dicv: 0, color: "low" };
+    if (Tavg >= 59 && Tavg <= 94 && hrsRH > 0) {
+      const dicv = table[hrsRH.toString()][Tavg.toString()];
+      cercosporaBeticola["dicv"] = dicv;
+      if (dicv >= 0 && dicv <= 3) {
+        cercosporaBeticola["color"] = "low";
+      } else if (dicv >= 4 && dicv <= 6) {
+        cercosporaBeticola["color"] = "moderate";
+      } else {
+        cercosporaBeticola["color"] = "high";
+      }
     }
 
     // Returns an object {W: Int, T: Int}
@@ -582,23 +629,23 @@ export const getData = async (
 
     // CREATE OBJECT WITH THINGS YOU NEED...
     ciccio.push({
-      date: date,
+      date,
       graphDate: format(day.date, "MMM D"),
-      tp: currentYear === startDateYear ? day.tpFinal : day.tpDiff,
-      rh: currentYear === startDateYear ? day.rhFinalAdj : day.rhDiff,
-      lw: currentYear === startDateYear ? "No data for forecast" : day.lwDiff,
-      pt: currentYear === startDateYear ? day.ptFinal : day.ptDiff,
-      base: base,
-      Tmin: min,
-      Tmax: max,
-      Tavg: avg,
-      dd: dd,
-      cdd: cdd,
-      W_and_T: W_and_T,
-      hrsRH: hrsRH,
-      dicv: dicv,
-      botrytis: botrytis,
-      anthracnose: anthracnose
+      tp: day.tpFinal,
+      rh: day.rhFinal,
+      lw: day.lwFinal,
+      pt: day.ptFinal,
+      base,
+      Tmin,
+      Tmax,
+      Tavg,
+      dd,
+      cdd,
+      W_and_T,
+      hrsRH,
+      botrytis,
+      anthracnose,
+      cercosporaBeticola
     });
   }
   ciccio.map(e => console.log(e));
