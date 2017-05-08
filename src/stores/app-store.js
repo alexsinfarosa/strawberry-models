@@ -95,7 +95,7 @@ export default class AppStore {
   @action setACISData = d => (this.ACISData = d);
 
   @computed get DICV() {
-    return this.ACISData.map(e => e.dicv);
+    return this.ACISData.map(e => e.cercosporaBeticola.dicv);
   }
 
   @computed get A2Day() {
@@ -104,6 +104,18 @@ export default class AppStore {
         return e + this.DICV[i - 1];
       }
       return e;
+    });
+  }
+
+  @computed get riskLevel() {
+    return this.A2Day.map(e => {
+      if (e >= 0 && e <= 3) {
+        return "Low";
+      } else if (e >= 4 && e <= 6) {
+        return "Moderate";
+      } else {
+        return "High";
+      }
     });
   }
 

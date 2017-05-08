@@ -541,11 +541,11 @@ export const getData = async (
   //   console.log(e.date, e.tp, e.tpCurrentAndSiter, e.tpForecast, e.tpFinal)
   // );
 
-  // MAKING CALCULATIONS --------------------------------------------------------------------
+  // // MAKING CALCULATIONS --------------------------------------------------------------------
   let ciccio = [];
   const base = 50;
   let cdd = 0;
-  for (const day of results) {
+  for (const [i, day] of results.entries()) {
     let date = format(day.date, "MMM D");
     const today = new Date();
     if (isAfter(day.date, today)) {
@@ -569,18 +569,12 @@ export const getData = async (
     const hrsRH = rhAboveValues.filter(e => e !== false).length;
 
     // calculate dicv ...
-    let cercosporaBeticola = { date, dicv: 0, color: "low" };
+    let dicv = 0;
+    let dicv2Day = 0;
     if (Tavg >= 59 && Tavg <= 94 && hrsRH > 0) {
-      const dicv = table[hrsRH.toString()][Tavg.toString()];
-      cercosporaBeticola["dicv"] = dicv;
-      if (dicv >= 0 && dicv <= 3) {
-        cercosporaBeticola["color"] = "low";
-      } else if (dicv >= 4 && dicv <= 6) {
-        cercosporaBeticola["color"] = "moderate";
-      } else {
-        cercosporaBeticola["color"] = "high";
-      }
+      dicv = table[hrsRH.toString()][Tavg.toString()];
     }
+    let cercosporaBeticola = { date, dicv };
 
     // Returns an object {W: Int, T: Int}
     const W_and_T = leafWetnessAndTemps(day, currentYear, startDateYear);
@@ -648,7 +642,7 @@ export const getData = async (
       cercosporaBeticola
     });
   }
-  ciccio.map(e => console.log(e));
+  // ciccio.map(e => console.log(e));
   return ciccio;
 };
 
