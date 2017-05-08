@@ -537,11 +537,9 @@ export const getData = async (
     }
   }
 
-  // results.map(e =>
-  //   console.log(e.date, e.tp, e.tpCurrentAndSiter, e.tpForecast, e.tpFinal)
-  // );
+  // results.map(e => console.log(e));
 
-  // // MAKING CALCULATIONS --------------------------------------------------------------------
+  // MAKING CALCULATIONS --------------------------------------------------------------------
   let ciccio = [];
   const base = 50;
   let cdd = 0;
@@ -568,12 +566,12 @@ export const getData = async (
     // Number of hours where relative humidity was above 90%
     const hrsRH = rhAboveValues.filter(e => e !== false).length;
 
-    // calculate dicv ...
+    // calculate dicv..
     let dicv = 0;
-    let dicv2Day = 0;
     if (Tavg >= 59 && Tavg <= 94 && hrsRH > 0) {
       dicv = table[hrsRH.toString()][Tavg.toString()];
     }
+
     let cercosporaBeticola = { date, dicv };
 
     // Returns an object {W: Int, T: Int}
