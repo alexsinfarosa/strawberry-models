@@ -5,7 +5,7 @@ import takeRight from "lodash/takeRight";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
 
-import Graph from "../components/Graph/Graph";
+import Graph from "./Graph/Graph";
 
 const forecastText = date => {
   return (
@@ -24,7 +24,7 @@ const emergence = cdd => {
       <div>
         <div>{cdd}</div>
         <div style={{ fontSize: ".6rem", color: "blue" }}>
-          Emergence
+          Emergence Occurred
         </div>
       </div>
     );
@@ -89,6 +89,7 @@ export default class BluberryMaggot extends Component {
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
+
     return (
       <Flex column>
         <Box>

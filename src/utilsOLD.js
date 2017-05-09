@@ -537,53 +537,116 @@ export const getData = async (
     }
   }
 
-  // Add to the results objects params that might be needed
+  // results.map(e => console.log(e));
+
+  // MAKING CALCULATIONS --------------------------------------------------------------------
+  let ciccio = [];
   const base = 50;
   let cdd = 0;
   for (const [i, day] of results.entries()) {
-    results[i]["base"] = base;
-
-    // date
     let date = format(day.date, "MMM D");
     const today = new Date();
     if (isAfter(day.date, today)) {
       date = `${date} - Forecast`;
     }
-    results[i]["date"] = date;
 
-    // The date to display on graphs
-    results[i]["dateDisplayGraph"] = format(day.date, "MMM D");
-
-    // average, min and max temperatures
     const Tavg = average(day.tpFinal);
     const Tmin = Math.min(...day.tpFinal);
     const Tmax = Math.max(...day.tpFinal);
-    results[i]["Tavg"] = Tavg;
-    results[i]["Tmin"] = Tmin;
-    results[i]["Tmax"] = Tmax;
 
     // calculate dd (degree day)
     const dd = Tavg - base > 0 ? Tavg - base : 0;
-    results[i]["dd"] = dd;
 
     // calculate cdd (cumulative degree day)
     cdd += dd;
-    results[i]["cdd"] = cdd;
 
     // returns relative humidity above or equal to 90% (RH >= 90)
     const rhAboveValues = aboveEqualToValue(day.rhFinal, 90);
-    results[i]["rhAboveValues"] = rhAboveValues;
 
-    // Number of hours where relative humidity is equal to or above 90%
+    // Number of hours where relative humidity was above 90%
     const hrsRH = rhAboveValues.filter(e => e !== false).length;
-    results[i]["hrsRH"] = hrsRH;
 
     // calculate dicv..
     let dicv = 0;
     if (Tavg >= 59 && Tavg <= 94 && hrsRH > 0) {
       dicv = table[hrsRH.toString()][Tavg.toString()];
     }
-    results[i]["dicv"] = dicv;
+
+    let cercosporaBeticola = { date, dicv };
+
+    // Returns an object {W: Int, T: Int}
+    const W_and_T = leafWetnessAndTemps(day, currentYear, startDateYear);
+
+    let indexBotrytis = botrytisModel(W_and_T);
+    if (indexBotrytis === "NaN") {
+      indexBotrytis = "No Data";
+    }
+    let indexAnthracnose = anthracnoseModel(W_and_T);
+    if (indexAnthracnose === "NaN") {
+      indexAnthracnose = "No Data";
+    }
+
+    // setup botrytis risk level
+    let botrytis = { date: date, index: indexBotrytis };
+    if (indexBotrytis !== "No Data") {
+      if (indexBotrytis < 0.50) {
+        botrytis["riskLevel"] = "Low";
+        botrytis["color"] = "low";
+      } else if (indexBotrytis >= 0.50 && indexBotrytis < 0.70) {
+        botrytis["riskLevel"] = "Moderate";
+        botrytis["color"] = "moderate";
+      } else {
+        botrytis["riskLevel"] = "High";
+        botrytis["color"] = "high";
+      }
+    }
+
+    // setup anthracnose risk level
+    let anthracnose = {
+      date: date,
+      index: indexAnthracnose
+    };
+    if (indexAnthracnose !== "No Data") {
+      if (indexAnthracnose < 0.50) {
+        anthracnose["riskLevel"] = "Low";
+        anthracnose["color"] = "low";
+      } else if (indexAnthracnose >= 0.50 && indexAnthracnose < 0.70) {
+        anthracnose["riskLevel"] = "Low";
+        anthracnose["color"] = "low";
+      } else {
+        anthracnose["riskLevel"] = "Low";
+        anthracnose["color"] = "low";
+      }
+    }
+
+    // CREATE OBJECT WITH THINGS YOU NEED...
+    ciccio.push({
+      date,
+      graphDate: format(day.date, "MMM D"),
+      tp: day.tpFinal,
+      rh: day.rhFinal,
+      lw: day.lwFinal,
+      pt: day.ptFinal,
+      base,
+      Tmin,
+      Tmax,
+      Tavg,
+      dd,
+      cdd,
+      W_and_T,
+      hrsRH,
+      botrytis,
+      anthracnose,
+      cercosporaBeticola
+    });
   }
-  return results;
+  // ciccio.map(e => console.log(e));
+  return ciccio;
+};
+
+// Returns an array with cumulative Daily Infection Critical Values
+export const cumulativeDICV = dicv => {
+  const arr = [];
+  dicv.reduce((prev, curr, i) => (arr[i] = prev + curr), 0);
+  return arr;
 };

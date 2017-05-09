@@ -18,7 +18,7 @@ import DatePicker from "../components/DatePicker";
 
 import TheMap from "../components/TheMap";
 import Strawberries from "./Strawberries";
-import BluberryMaggot from "./BluberryMaggot";
+import BluberryMaggot from "./BluberryMaggot/BluberryMaggot";
 
 // utility functions
 import { getData } from "../../utils";

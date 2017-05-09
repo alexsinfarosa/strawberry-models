@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
+import { autorun } from "mobx";
 
 import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
+
+// utils
+import {
+  leafWetnessAndTemps,
+  botrytisModel,
+  anthracnoseModel
+} from "../../utils";
 
 const forecastText = date => {
   return (
@@ -41,6 +49,64 @@ const columns = [
 @inject("store")
 @observer
 export default class Strawberries extends Component {
+  constructor(props) {
+    super(props);
+    autorun(() => this.createDataModel());
+  }
+
+  createDataModel = () => {
+    const { ACISData, currentYear, startDateYear } = this.props.store.app;
+
+    for (const day of ACISData) {
+      // Returns an object {W: Int, T: Int}
+      const W_and_T = leafWetnessAndTemps(day, currentYear, startDateYear);
+
+      let indexBotrytis = botrytisModel(W_and_T);
+      if (indexBotrytis === "NaN") {
+        indexBotrytis = "No Data";
+      }
+      let indexAnthracnose = anthracnoseModel(W_and_T);
+      if (indexAnthracnose === "NaN") {
+        indexAnthracnose = "No Data";
+      }
+
+      // setup botrytis risk level
+      let botrytis = { date: day.date, index: indexBotrytis };
+      if (indexBotrytis !== "No Data") {
+        if (indexBotrytis < 0.50) {
+          botrytis["riskLevel"] = "Low";
+          botrytis["color"] = "low";
+        } else if (indexBotrytis >= 0.50 && indexBotrytis < 0.70) {
+          botrytis["riskLevel"] = "Moderate";
+          botrytis["color"] = "moderate";
+        } else {
+          botrytis["riskLevel"] = "High";
+          botrytis["color"] = "high";
+        }
+      }
+
+      // setup anthracnose risk level
+      let anthracnose = {
+        date: day.date,
+        index: indexAnthracnose
+      };
+      if (indexAnthracnose !== "No Data") {
+        if (indexAnthracnose < 0.50) {
+          anthracnose["riskLevel"] = "Low";
+          anthracnose["color"] = "low";
+        } else if (indexAnthracnose >= 0.50 && indexAnthracnose < 0.70) {
+          anthracnose["riskLevel"] = "Low";
+          anthracnose["color"] = "low";
+        } else {
+          anthracnose["riskLevel"] = "Low";
+          anthracnose["color"] = "low";
+        }
+      }
+
+      this.props.store.berry.setStrawberry({ botrytis, anthracnose });
+    }
+  };
+
   render() {
     const {
       ACISData,
@@ -48,6 +114,7 @@ export default class Strawberries extends Component {
       station,
       areRequiredFieldsSet
     } = this.props.store.app;
+    const { strawberry } = this.props.store.berry;
     return (
       <Flex column>
         <Box>
@@ -66,7 +133,7 @@ export default class Strawberries extends Component {
               pagination={false}
               dataSource={
                 areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.botrytis)
+                  ? takeRight(strawberry, 8).map(day => day.botrytis)
                   : null
               }
             />
@@ -83,7 +150,7 @@ export default class Strawberries extends Component {
               pagination={false}
               dataSource={
                 areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.anthracnose)
+                  ? takeRight(strawberry, 8).map(day => day.anthracnose)
                   : null
               }
             />

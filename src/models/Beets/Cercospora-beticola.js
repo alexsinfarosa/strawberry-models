@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
-import { toJS } from "mobx";
+import { autorun } from "mobx";
 
 import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
+import Graph from "./Graph/Graph";
 
+// To display the 'forecast text' and style the cell
 const forecastText = date => {
   return (
     <div>
@@ -18,6 +20,7 @@ const forecastText = date => {
   );
 };
 
+// to style the single cell
 const riskLevelColors = dicv2Day => {
   if (dicv2Day >= 0 && dicv2Day <= 3) {
     return "low";
@@ -28,97 +31,144 @@ const riskLevelColors = dicv2Day => {
   }
 };
 
+const noData = data => {
+  if (data === "No Data") {
+    return <span style={{ fontSize: ".6rem", color: "red" }}>No Data</span>;
+  }
+  return data;
+};
+
+// columns for the model
+const columns = [
+  {
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
+    fixed: "left",
+    width: 100,
+    render: date => forecastText(date)
+  },
+  {
+    title: "Infection Values",
+    children: [
+      {
+        title: "Daily",
+        dataIndex: "dicv",
+        key: "dicv"
+      },
+      {
+        title: "2-Day",
+        dataIndex: "a2Day",
+        key: "a2Day",
+        render: (text, record, i) => {
+          return {
+            props: {
+              className: riskLevelColors(text)
+            },
+            children: text
+          };
+        }
+      },
+      {
+        title: "Risk Level",
+        dataIndex: "a2DayIR",
+        key: "a2DayIR",
+        render: (text, record, i) => {
+          return {
+            props: {
+              className: record.color
+            },
+            children: text
+          };
+        }
+      }
+    ]
+  },
+  {
+    title: "Accumulation Infection Values",
+    children: [
+      {
+        title: "14-Day",
+        dataIndex: "a14Day",
+        key: "a14Day",
+        render: data => noData(data)
+      },
+      {
+        title: "21-Day",
+        dataIndex: "a21Day",
+        key: "a21Day",
+        render: data => noData(data)
+      },
+      {
+        title: "Season",
+        dataIndex: "season",
+        key: "season"
+      }
+    ]
+  }
+];
+
 @inject("store")
 @observer
 export default class CercosporaBeticola extends Component {
+  constructor(props) {
+    super(props);
+    autorun(() => this.createDataModel());
+  }
+
+  createDataModel = () => {
+    const { ACISData } = this.props.store.app;
+    const data = {};
+    let a2Day = 0;
+    let season = 0;
+    for (const [i, day] of ACISData.entries()) {
+      // determine a2Day
+      if (i > 0) {
+        a2Day = day.dicv + ACISData[i - 1].dicv;
+      }
+
+      // a2Day Infection Risk
+      let a2DayIR = "";
+      let color = "";
+      if (a2Day >= 0 && a2Day <= 3) {
+        a2DayIR = "Low";
+        color = "low";
+      } else if (a2Day >= 4 && a2Day <= 6) {
+        a2DayIR = "Moderate";
+        color = "moderate";
+      } else {
+        a2DayIR = "High";
+        color = "high";
+      }
+
+      // 14-Day Accumulation Infection Values
+      const a14Day = ACISData.slice(i - 14, i).map(e => e.dicv);
+      // 21-Day Accumulation Infection Values
+      const a21Day = ACISData.slice(i - 21, i).map(e => e.dicv);
+      // Season Total Infection Values
+      season += day.dicv;
+
+      // building the object
+      data["date"] = day.date;
+      data["dicv"] = day.dicv;
+      data["a2Day"] = a2Day;
+      data["a2DayIR"] = a2DayIR;
+      data["color"] = color;
+      data["a14Day"] = a14Day[13] === undefined ? "No Data" : a14Day[13];
+      data["a21Day"] = a21Day[20] === undefined ? "No Data" : a21Day[20];
+      data["season"] = season;
+      this.props.store.beet.setCercosporaBeticola(data);
+    }
+  };
+
   render() {
     const {
       ACISData,
       subject,
       station,
-      areRequiredFieldsSet,
-      A2Day,
-      riskLevel,
-      A14Day,
-      A21Day,
-      season
+      areRequiredFieldsSet
     } = this.props.store.app;
-
-    const a2day = takeRight(A2Day, 8);
-    const riskLevelA2 = takeRight(riskLevel, 8);
-    const a14day = takeRight(A14Day, 8);
-    const a21day = takeRight(A21Day, 8);
-    const seasonIF = takeRight(season, 8);
-
-    const columns = [
-      {
-        title: "Date",
-        dataIndex: "date",
-        key: "date",
-        fixed: "left",
-        width: 100,
-        render: date => forecastText(date)
-      },
-      {
-        title: "Infection Values",
-        children: [
-          {
-            title: "Daily",
-            dataIndex: "dicv",
-            key: "dicv"
-          },
-          {
-            title: "2-Day",
-            key: "A2Day",
-            render: (text, record, i) => {
-              return {
-                props: {
-                  className: riskLevelColors(a2day[i])
-                },
-                children: a2day[i]
-              };
-            }
-          },
-          {
-            title: "Risk Level",
-            // dataIndex: "riskLevel",
-            key: "riskLevel",
-            render: (text, record, i) => {
-              return {
-                props: {
-                  className: riskLevelColors(a2day[i])
-                },
-                children: riskLevelA2[i]
-              };
-            }
-          }
-        ]
-      },
-      {
-        title: "Accumulation Infection Values",
-        children: [
-          {
-            title: "14-Day",
-            // dataIndex: "riskLevel",
-            key: "14-Day",
-            render: (text, record, i) => a14day[i]
-          },
-          {
-            title: "21-Day",
-            // dataIndex: "riskLevel",
-            key: "21-Day",
-            render: (text, record, i) => a21day[i]
-          },
-          {
-            title: "Season",
-            // dataIndex: "riskLevel",
-            key: "season",
-            render: (text, record, i) => seasonIF[i]
-          }
-        ]
-      }
-    ];
-
+    const { cercosporaBeticola } = this.props.store.beet;
     return (
       <Flex column>
         <Box>
@@ -130,19 +180,21 @@ export default class CercosporaBeticola extends Component {
             <h3>Cercospora leaf spot on table beet</h3>
 
             <Table
+              bordered
               columns={columns}
               rowKey={record => record.date}
-              rowClassName={record => record.color}
+              // rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}
               dataSource={
                 areRequiredFieldsSet
-                  ? takeRight(ACISData, 8).map(day => day.cercosporaBeticola)
+                  ? takeRight(cercosporaBeticola, 8).map(day => day)
                   : null
               }
             />
           </Box>
         </Flex>
+        {areRequiredFieldsSet && <Graph />}
       </Flex>
     );
   }

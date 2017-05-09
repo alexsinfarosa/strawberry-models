@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx";
-import { matchIconsToStations, cumulativeDICV } from "../utils";
+import { matchIconsToStations } from "../utils";
 import { states } from "../states";
 import format from "date-fns/format";
 
@@ -94,42 +94,4 @@ export default class AppStore {
   @observable ACISData = [];
   @action setACISData = d => (this.ACISData = d);
 
-  @computed get DICV() {
-    return this.ACISData.map(e => e.cercosporaBeticola.dicv);
-  }
-
-  @computed get A2Day() {
-    return this.DICV.map((e, i) => {
-      if (i > 0) {
-        return e + this.DICV[i - 1];
-      }
-      return e;
-    });
-  }
-
-  @computed get riskLevel() {
-    return this.A2Day.map(e => {
-      if (e >= 0 && e <= 3) {
-        return "Low";
-      } else if (e >= 4 && e <= 6) {
-        return "Moderate";
-      } else {
-        return "High";
-      }
-    });
-  }
-
-  @computed get A14Day() {
-    const partial = this.DICV.slice(-22);
-    return cumulativeDICV(partial);
-  }
-
-  @computed get A21Day() {
-    const partial = this.DICV.slice(-29);
-    return cumulativeDICV(partial);
-  }
-
-  @computed get season() {
-    return cumulativeDICV(this.DICV);
-  }
 }

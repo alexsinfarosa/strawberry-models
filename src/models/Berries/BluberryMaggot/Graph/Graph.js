@@ -47,9 +47,9 @@ export default class Graph extends Component {
           <ResponsiveContainer width="100%" aspect={aspect}>
             <LineChart
               data={data}
-              margin={{ top: 20, right: 0, left: -30, bottom: 20 }}
+              margin={{ top: 20, right: 0, left: -25, bottom: 20 }}
             >
-              <XAxis dataKey="graphDate" tick={<CustomLabel />} />
+              <XAxis dataKey="dateDisplayGraph" tick={<CustomLabel />} />
               <YAxis />
               <CartesianGrid stroke="#E9E9E9" strokeDasharray="7 7" />
               <Tooltip />
