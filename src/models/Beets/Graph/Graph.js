@@ -44,7 +44,7 @@ export default class Graph extends Component {
       aspect = 2;
     }
 
-    const { graphData, barColor } = this.props.store.app;
+    const { barColor } = this.props.store.beet;
 
     const renderTooltip = props => {
       const { payload, label } = props;
@@ -62,7 +62,7 @@ export default class Graph extends Component {
 
     return (
       <Flex mt={4} mb={4} column>
-        <h2>A2-Day Risk Level</h2>
+        <h2>2-Day Infection Values</h2>
         <Box
           mt={3}
           col={12}
@@ -89,8 +89,6 @@ export default class Graph extends Component {
                 align="center"
                 verticalAlign="top"
                 height={48}
-                // wrapperStyle={{ paddingTop: "30px" }}
-                // verticalAlign="bottom"
                 iconSize={16}
                 iconType="rect"
                 payload={[
