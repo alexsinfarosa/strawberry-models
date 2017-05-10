@@ -23,14 +23,9 @@ gh-pages	package.json	/^    "gh-pages": "^0.12.0",$/;"	f
 homepage	package.json	/^  "homepage": "http:\/\/newadata.nrcc.cornell.edu\/newa\/",$/;"	f
 i	src/Test.js	/^    var i, ret = Array(n);$/;"	v
 i	src/utils.js	/^  var i, ret = Array(n);$/;"	v
-i	src/utilsOLD.js	/^  var i, ret = Array(n);$/;"	v
 leaflet	package.json	/^    "leaflet": "^1.0.3",$/;"	f
 let.date	src/models/Berries/Strawberries.js	/^      let anthracnose = {$/;"	p
 let.date	src/models/Berries/Strawberries.js	/^      let botrytis = { date: day.dateTable, index: indexBotrytis };$/;"	p
-let.date	src/utilsOLD.js	/^    let anthracnose = {$/;"	p
-let.date	src/utilsOLD.js	/^    let botrytis = { date: date, index: indexBotrytis };$/;"	p
-let.index	src/utilsOLD.js	/^      date: date,$/;"	p
-let.index	src/utilsOLD.js	/^    let botrytis = { date: date, index: indexBotrytis };$/;"	p
 lodash	package.json	/^    "lodash": "^4.17.4",$/;"	f
 mobx	package.json	/^    "mobx": "^3.1.2",$/;"	f
 mobx-react	package.json	/^    "mobx-react": "^4.1.1",$/;"	f

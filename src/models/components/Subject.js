@@ -27,7 +27,7 @@ class Subject extends Component {
           Disease:
         </p>
         <Select
-          name="berry-diseases"
+          name="subject"
           size="large"
           autoFocus
           value={subject.name}
