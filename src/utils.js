@@ -543,16 +543,19 @@ export const getData = async (
   for (const [i, day] of results.entries()) {
     results[i]["base"] = base;
 
-    // date
-    let date = format(day.date, "MMM D");
+    // date to display on graphs
+    results[i]["dateGraph"] = format(day.date, "MMM D");
+
+    // date to display as text
+    results[i]["dateText"] = format(day.date, "MMMM Do");
+
+    // date to display in tables
+    let dateTable = format(day.date, "MMM D");
     const today = new Date();
     if (isAfter(day.date, today)) {
-      date = `${date} - Forecast`;
+      dateTable = `${dateTable} - Forecast`;
     }
-    results[i]["date"] = date;
-
-    // The date to display on graphs
-    results[i]["dateDisplayGraph"] = format(day.date, "MMM D");
+    results[i]["dateTable"] = dateTable;
 
     // average, min and max temperatures
     const Tavg = average(day.tpFinal);

@@ -6,7 +6,12 @@ import { autorun } from "mobx";
 import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
 import { Table } from "antd";
+
+// components
 import Graph from "./Graph/Graph";
+
+// styled-components
+import { RiskLevel } from "./styles";
 
 // To display the 'forecast text' and style the cell
 const forecastText = date => {
@@ -21,15 +26,15 @@ const forecastText = date => {
 };
 
 // to style the single cell
-const riskLevelColors = dicv2Day => {
-  if (dicv2Day >= 0 && dicv2Day <= 3) {
-    return "low";
-  } else if (dicv2Day >= 4 && dicv2Day <= 6) {
-    return "moderate";
-  } else {
-    return "high";
-  }
-};
+// const riskLevelColors = dicv2Day => {
+//   if (dicv2Day >= 0 && dicv2Day <= 3) {
+//     return "low";
+//   } else if (dicv2Day >= 4 && dicv2Day <= 6) {
+//     return "moderate";
+//   } else {
+//     return "high";
+//   }
+// };
 
 const noData = data => {
   if (data === "No Data") {
@@ -38,50 +43,67 @@ const noData = data => {
   return data;
 };
 
+const riskLevel = (text, record, i) => {
+  // console.log(text, record, i);
+  return (
+    <div>
+      <span style={{ color: record.colorBar }}>{text}</span>
+      <RiskLevel style={{ background: record.colorBar }}>
+        {record.a2DayIR}
+      </RiskLevel>
+    </div>
+  );
+};
+
 // columns for the model
 const columns = [
   {
     title: "Date",
-    dataIndex: "date",
-    key: "date",
+    dataIndex: "dateTable",
+    key: "dateTable",
     fixed: "left",
-    width: 100,
+    width: 60,
+    className: "table",
     render: date => forecastText(date)
   },
   {
     title: "Infection Values",
+
     children: [
       {
         title: "Daily",
+        className: "table",
         dataIndex: "dicv",
         key: "dicv"
       },
       {
         title: "2-Day",
+        className: "table",
         dataIndex: "a2Day",
         key: "a2Day",
-        render: (text, record, i) => {
-          return {
-            props: {
-              className: riskLevelColors(text)
-            },
-            children: text
-          };
-        }
-      },
-      {
-        title: "Risk Level",
-        dataIndex: "a2DayIR",
-        key: "a2DayIR",
-        render: (text, record, i) => {
-          return {
-            props: {
-              className: record.color
-            },
-            children: text
-          };
-        }
+        // render: (text, record, i) => {
+        //   return {
+        //     props: {
+        //       className: riskLevelColors(text)
+        //     },
+        //     children: text
+        //   };
+        // }
+        render: (text, record, i) => riskLevel(text, record, i)
       }
+      // {
+      //   title: "Risk Level",
+      //   dataIndex: "a2DayIR",
+      //   key: "a2DayIR",
+      //   render: (text, record, i) => {
+      //     return {
+      //       props: {
+      //         className: record.color
+      //       },
+      //       children: text
+      //     };
+      //   }
+      // }
     ]
   },
   {
@@ -89,18 +111,21 @@ const columns = [
     children: [
       {
         title: "14-Day",
+        className: "table",
         dataIndex: "a14Day",
         key: "a14Day",
         render: data => noData(data)
       },
       {
         title: "21-Day",
+        className: "table",
         dataIndex: "a21Day",
         key: "a21Day",
         render: data => noData(data)
       },
       {
         title: "Season",
+        className: "table",
         dataIndex: "season",
         key: "season"
       }
@@ -130,15 +155,19 @@ export default class CercosporaBeticola extends Component {
       // a2Day Infection Risk
       let a2DayIR = "";
       let color = "";
+      let colorBar = "";
       if (a2Day >= 0 && a2Day <= 3) {
         a2DayIR = "Low";
         color = "low";
+        colorBar = "#81C784";
       } else if (a2Day >= 4 && a2Day <= 6) {
         a2DayIR = "Moderate";
         color = "moderate";
+        colorBar = "#FCCE00";
       } else {
         a2DayIR = "High";
         color = "high";
+        colorBar = "#f44336";
       }
 
       // 14-Day Accumulation Infection Values
@@ -149,11 +178,14 @@ export default class CercosporaBeticola extends Component {
       season += day.dicv;
 
       // building the object
-      data["date"] = day.date;
+      data["dateTable"] = day.dateTable;
+      data["dateGraph"] = day.dateGraph;
+      data["dateText"] = day.dateText;
       data["dicv"] = day.dicv;
       data["a2Day"] = a2Day;
       data["a2DayIR"] = a2DayIR;
       data["color"] = color;
+      data["colorBar"] = colorBar;
       data["a14Day"] = a14Day[13] === undefined ? "No Data" : a14Day[13];
       data["a21Day"] = a21Day[20] === undefined ? "No Data" : a21Day[20];
       data["season"] = season;
@@ -182,7 +214,7 @@ export default class CercosporaBeticola extends Component {
             <Table
               bordered
               columns={columns}
-              rowKey={record => record.date}
+              rowKey={record => record.dateTable}
               // rowClassName={record => record.color}
               loading={ACISData.length === 0}
               pagination={false}

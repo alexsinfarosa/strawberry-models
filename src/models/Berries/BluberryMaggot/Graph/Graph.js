@@ -49,7 +49,7 @@ export default class Graph extends Component {
               data={data}
               margin={{ top: 20, right: 0, left: -25, bottom: 20 }}
             >
-              <XAxis dataKey="dateDisplayGraph" tick={<CustomLabel />} />
+              <XAxis dataKey="dateGraph" tick={<CustomLabel />} />
               <YAxis />
               <CartesianGrid stroke="#E9E9E9" strokeDasharray="7 7" />
               <Tooltip />

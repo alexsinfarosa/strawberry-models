@@ -6,23 +6,18 @@ import { Flex, Box } from "reflexbox";
 
 import {
   ComposedChart,
+  Cell,
   Bar,
-  Area,
   XAxis,
   YAxis,
-  Text,
   Tooltip,
   Legend,
   ResponsiveContainer
 } from "recharts";
 import CustomLabel from "./CustomLabel";
-import CustomBar from "./CustomBar";
-
-// styles
-import "./styles";
 
 // styled-components
-import { StyledTooltip } from "./styles";
+import { StyledTooltip } from "../styles";
 
 @inject("store")
 @observer
@@ -32,6 +27,9 @@ export default class Graph extends Component {
 
     // Potential bug. Chartjs needs a javascript array
     const data = cercosporaBeticola.map(e => e);
+    const aboveZero = data.find(day => day.a2Day > 0);
+    const indexAboveZero = data.findIndex(day => day.a2Day > 0);
+    const a2DayDataAboveZero = data.slice(indexAboveZero - 1);
 
     // Change the aspect ratio when viewed on different devices
     let aspect;
@@ -44,16 +42,15 @@ export default class Graph extends Component {
       aspect = 2;
     }
 
-    const { barColor } = this.props.store.beet;
-
     const renderTooltip = props => {
-      const { payload, label } = props;
-      if (payload.length > 0) {
+      const { payload, label, active } = props;
+      if (active === true) {
+        // console.log(props);
         return (
           <StyledTooltip>
             <h5>{format(label, "MMMM Do")}</h5>
-            <p style={{ color: payload[3].color }}>
-              {`${payload[3].name} Infection Values: ${payload[3].value}`}
+            <p style={{ color: payload[0].payload.colorBar }}>
+              {`2-Day Infection Values: ${payload[0].value}`}
             </p>
           </StyledTooltip>
         );
@@ -62,7 +59,23 @@ export default class Graph extends Component {
 
     return (
       <Flex mt={4} mb={4} column>
-        <h2>2-Day Infection Values</h2>
+        <h2>2-Day Infection Values Graph</h2>
+        <br />
+        {aboveZero &&
+          <h4>
+            All 2-Day values from
+            {" "}
+            <span style={{ color: "black" }}>
+              Jannuary 1st
+            </span>
+            {" "}to{" "}
+            <span style={{ color: "black" }}>
+              {aboveZero.dateText}
+            </span>
+            {" "}
+            are zero
+          </h4>}
+        <br />
         <Box
           mt={3}
           col={12}
@@ -73,12 +86,10 @@ export default class Graph extends Component {
         >
           <ResponsiveContainer width="100%" aspect={aspect}>
             <ComposedChart
-              width={610}
-              height={320}
-              data={data}
+              data={a2DayDataAboveZero}
               margin={{ top: 0, right: 20, left: -30, bottom: 5 }}
             >
-              <XAxis dataKey="date" tick={<CustomLabel />} />
+              <XAxis dataKey="dateGraph" tick={<CustomLabel />} />
               <YAxis
                 dataKey="a2Day"
                 allowDecimals={false}
@@ -86,53 +97,26 @@ export default class Graph extends Component {
               />
               <Tooltip content={renderTooltip} offset={20} />
               <Legend
-                align="center"
+                align="right"
                 verticalAlign="top"
                 height={48}
-                iconSize={16}
+                iconSize={18}
                 iconType="rect"
                 payload={[
-                  { value: "Low", type: "rect", color: "#A3FDA1" },
-                  { value: "Moderate", type: "rect", color: "#FDFAB0" },
-                  { value: "High", type: "rect", color: "#FFA0A0" }
+                  { value: "Low", type: "rect", color: "#81C784" },
+                  { value: "Moderate", type: "rect", color: "#FCCE00" },
+                  { value: "High", type: "rect", color: "#F44336" }
                 ]}
               />
-              <Area
-                activeDot={false}
-                name="Favorable"
-                type="monotone"
-                stackId="1"
-                dataKey="high"
-                stroke="#FFA0A0"
-                fill="#FFA0A0"
-                opacity={0.7}
-              />
-              <Area
-                activeDot={false}
-                name="Marginal"
-                type="monotone"
-                stackId="2"
-                dataKey="moderate"
-                stroke="#FDFAB0"
-                fill="#FDFAB0"
-                opacity={0.7}
-              />
-              <Area
-                activeDot={false}
-                name="Unfavorable"
-                type="monotone"
-                stackId="3"
-                dataKey="low"
-                stroke="#A3FDA1"
-                fill="#A3FDA1"
-                opacity={0.7}
-              />
-              <Bar
-                name="2-Day"
-                dataKey="a2Day"
-                shape={<CustomBar />}
-                fill={barColor}
-              />
+              <Bar dataKey="a2Day">
+                {a2DayDataAboveZero.map((e, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    cursor="pointer"
+                    fill={e.colorBar}
+                  />
+                ))}
+              </Bar>
 
             </ComposedChart>
           </ResponsiveContainer>

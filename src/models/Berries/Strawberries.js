@@ -28,6 +28,7 @@ const forecastText = date => {
 const columns = [
   {
     title: "Date",
+    className: "table",
     dataIndex: "date",
     key: "date",
     fixed: "left",
@@ -36,11 +37,13 @@ const columns = [
   },
   {
     title: "Index",
+    className: "table",
     dataIndex: "index",
     key: "index"
   },
   {
     title: "Risk Level",
+    className: "table",
     dataIndex: "riskLevel",
     key: "riskLevel"
   }
@@ -71,7 +74,7 @@ export default class Strawberries extends Component {
       }
 
       // setup botrytis risk level
-      let botrytis = { date: day.date, index: indexBotrytis };
+      let botrytis = { date: day.dateTable, index: indexBotrytis };
       if (indexBotrytis !== "No Data") {
         if (indexBotrytis < 0.50) {
           botrytis["riskLevel"] = "Low";
@@ -87,7 +90,7 @@ export default class Strawberries extends Component {
 
       // setup anthracnose risk level
       let anthracnose = {
-        date: day.date,
+        date: day.dateTable,
         index: indexAnthracnose
       };
       if (indexAnthracnose !== "No Data") {

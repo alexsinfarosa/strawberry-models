@@ -84,7 +84,7 @@ export default class Beets extends Component {
           </Menu>
         </Sider>
 
-        <Layout>
+        <Layout style={{ background: "#fff" }}>
           <Header
             style={{
               position: "fixed",
@@ -113,10 +113,12 @@ export default class Beets extends Component {
           <Content
             // overflow="initial"
             style={{
-              margin: "62px 0px 0px 0px",
-              padding: 24,
-              background: "#fff",
-              minHeight: 280
+              margin: "62px auto",
+              padding: 48,
+              minHeight: 280,
+              width: "100%",
+              maxWidth: 1200,
+              background: "#fff"
             }}
           >
             <TheMap />

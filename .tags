@@ -26,7 +26,7 @@ i	src/utils.js	/^  var i, ret = Array(n);$/;"	v
 i	src/utilsOLD.js	/^  var i, ret = Array(n);$/;"	v
 leaflet	package.json	/^    "leaflet": "^1.0.3",$/;"	f
 let.date	src/models/Berries/Strawberries.js	/^      let anthracnose = {$/;"	p
-let.date	src/models/Berries/Strawberries.js	/^      let botrytis = { date: day.date, index: indexBotrytis };$/;"	p
+let.date	src/models/Berries/Strawberries.js	/^      let botrytis = { date: day.dateTable, index: indexBotrytis };$/;"	p
 let.date	src/utilsOLD.js	/^    let anthracnose = {$/;"	p
 let.date	src/utilsOLD.js	/^    let botrytis = { date: date, index: indexBotrytis };$/;"	p
 let.index	src/utilsOLD.js	/^      date: date,$/;"	p

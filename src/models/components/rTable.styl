@@ -1,5 +1,6 @@
 .table {
   font-size: 12px;
+  text-align: center;
 
   @media (max-width: 992px) {
     font-size: 12px;
@@ -12,22 +13,27 @@
   }
 }
 
-.vertical-center-modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  & > .ant-modal {
-    top: 0
+table > .ant-table-thead > tr > th{
+  text-align: center;
+  // background-color: #FEF0E8;
+  @media (max-width: 992px) {
+    font-size: 12px;
+  }
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
+  @media (max-width: 400px) {
+    font-size: 8px
   }
 }
 
-// ul.ant-menu.ant-menu-vertical.ant-menu-light.ant-menu-root {
-//   background-color: green;
-//   width: 100% !important;
-//   position: relative !important;
-//   z-index: 1000 !important;
-// }
 
+ul.ant-menu.ant-menu-vertical.ant-menu-light.ant-menu-root {
+  // background-color: #FEF0E8;
+  // width: 100% !important;
+  // position: relative !important;
+  // z-index: 1000 !important;
+}
 
 .ant-layout-sider-zero-width-trigger {
   position: absolute;
@@ -48,17 +54,17 @@
 }
 
 
-.past {
-  background: #CCFFFF;
-}
-
-.current {
-  background: pink;
-}
-
-.forecast {
-  background: #EEE8AA;
-}
+// .past {
+//   background: #CCFFFF;
+// }
+//
+// .current {
+//   background: pink;
+// }
+//
+// .forecast {
+//   background: #EEE8AA;
+// }
 
 .low {
   background: #EEFAE5;

@@ -23,7 +23,7 @@ const emergence = cdd => {
     return (
       <div>
         <div>{cdd}</div>
-        <div style={{ fontSize: ".6rem", color: "blue" }}>
+        <div style={{ fontSize: ".6rem", color: "#3A75C4" }}>
           Emergence Occurred
         </div>
       </div>
@@ -35,10 +35,11 @@ const emergence = cdd => {
 const columns = [
   {
     title: "Date",
-    dataIndex: "date",
-    key: "date",
+    className: "table",
+    dataIndex: "dateTable",
+    key: "dateTable",
     fixed: "left",
-    width: 80,
+    width: 60,
     render: date => forecastText(date)
   },
   {
@@ -46,11 +47,13 @@ const columns = [
     children: [
       {
         title: "Daily",
+        className: "table",
         dataIndex: "dd",
         key: "dd"
       },
       {
         title: "Cumulative",
+        className: "table",
         dataIndex: "cdd",
         key: "cdd",
         render: cdd => emergence(cdd)
@@ -62,16 +65,19 @@ const columns = [
     children: [
       {
         title: "Min",
+        className: "table",
         dataIndex: "Tmin",
         key: "Tmin"
       },
       {
         title: "Max",
+        className: "table",
         dataIndex: "Tmax",
         key: "Tmax"
       },
       {
         title: "Avg",
+        className: "table",
         dataIndex: "Tavg",
         key: "Tavg"
       }
