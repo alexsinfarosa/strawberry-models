@@ -142,6 +142,7 @@ export default class CercosporaBeticola extends Component {
   }
 
   createDataModel = () => {
+    this.props.store.beet.resetCercospora();
     const { ACISData } = this.props.store.app;
     const data = {};
     let a2Day = 0;
@@ -226,7 +227,7 @@ export default class CercosporaBeticola extends Component {
             />
           </Box>
         </Flex>
-        {areRequiredFieldsSet && <Graph />}
+        <Graph />
       </Flex>
     );
   }

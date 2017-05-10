@@ -23,7 +23,7 @@ const emergence = cdd => {
     return (
       <div>
         <div>{cdd}</div>
-        <div style={{ fontSize: ".6rem", color: "#3A75C4" }}>
+        <div style={{ fontSize: ".6rem", color: "#118EE9" }}>
           Emergence Occurred
         </div>
       </div>

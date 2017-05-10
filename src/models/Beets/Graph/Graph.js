@@ -26,7 +26,8 @@ export default class Graph extends Component {
     const { cercosporaBeticola } = this.props.store.beet;
 
     // Potential bug. Chartjs needs a javascript array
-    const data = cercosporaBeticola.map(e => e);
+    let data = [];
+    data = cercosporaBeticola.map(e => e);
     const aboveZero = data.find(day => day.a2Day > 0);
     const indexAboveZero = data.findIndex(day => day.a2Day > 0);
     const a2DayDataAboveZero = data.slice(indexAboveZero - 1);
