@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
 //styled-components
-// import { SquareBox } from "./styles";
+import { CenteredBox } from "./styles";
 
 // styles
-import { Flex, Box } from "reflexbox";
+import { Flex } from "reflexbox";
 
 // components
 import Nav from "./Nav";
@@ -18,16 +18,16 @@ export default class Home extends Component {
       <Flex column>
         <Nav />
 
-        <Flex mt={4} column justify="center">
-          <Box style={{ margin: "0 auto" }}>
-            <h1>Work In Progress...</h1>
-          </Box>
+        <Flex p={3} mt={4} column justify="center">
+          <CenteredBox style={{ margin: "0 auto" }}>
+            <h1>Work In Progress..</h1>
+          </CenteredBox>
           <br />
-          <Box style={{ margin: "0 auto" }}>
+          <CenteredBox style={{ margin: "0 auto" }}>
             <h2>
-              The site helps to have all the models in one place
+              The site helps to have the models built so far in one place
             </h2>
-          </Box>
+          </CenteredBox>
         </Flex>
 
       </Flex>

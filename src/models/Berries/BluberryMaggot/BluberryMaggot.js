@@ -3,7 +3,9 @@ import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
 
 import { Flex, Box } from "reflexbox";
-import { Table } from "antd";
+// import { Table } from "antd";
+import Table from "antd/lib/table";
+import "antd/lib/table/style/css";
 
 import Graph from "./Graph/Graph";
 

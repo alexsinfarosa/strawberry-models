@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import { when } from "mobx";
-import { DatePicker } from "antd";
+// import { DatePicker } from "antd";
+import DatePicker from "antd/lib/date-picker";
+import "antd/lib/date-picker/style/css";
 import moment from "moment";
 
 @inject("store")

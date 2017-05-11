@@ -3,11 +3,15 @@ import { inject, observer } from "mobx-react";
 import { Link } from "react-router-dom";
 import { autorun } from "mobx";
 
-// styles
-// import "./styles";
-
 // antd
-import { Layout, Menu, Icon } from "antd";
+// import { Layout, Menu, Icon } from "antd";
+import Layout from "antd/lib/layout";
+import "antd/lib/layout/style/css";
+import Menu from "antd/lib/menu";
+import "antd/lib/menu/style/css";
+import Icon from "antd/lib/icon";
+import "antd/lib/icon/style/css";
+
 const { Header, Sider, Content } = Layout;
 
 //  components
@@ -104,7 +108,14 @@ export default class Beets extends Component {
               <Menu.Item key="1" style={{ fontSize: ".8rem" }}>
                 <Link to="/"><Icon type="home" />Home</Link>
               </Menu.Item>
-              <Menu.Item disabled key="2" style={{ fontSize: ".8rem" }}>
+              <Menu.Item
+                disabled
+                key="2"
+                style={{
+                  fontSize: ".8rem",
+                  pointerEvents: "none"
+                }}
+              >
                 Beet Model
               </Menu.Item>
 

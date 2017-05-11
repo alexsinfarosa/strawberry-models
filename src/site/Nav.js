@@ -3,7 +3,10 @@ import { inject, observer } from "mobx-react";
 
 //styled-components
 import { NavBox, Navlink, Header1, Header2 } from "./styles";
-import { Icon } from "antd";
+
+// antd
+import Icon from "antd/lib/icon";
+import "antd/lib/icon/style/css";
 
 // styles
 import { Flex, Box } from "reflexbox";

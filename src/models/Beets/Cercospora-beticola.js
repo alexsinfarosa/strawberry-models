@@ -5,7 +5,9 @@ import { autorun } from "mobx";
 
 import "../components/rTable.styl";
 import { Flex, Box } from "reflexbox";
-import { Table } from "antd";
+// import { Table } from "antd";
+import Table from "antd/lib/table";
+import "antd/lib/table/style/css";
 
 // components
 import Graph from "./Graph/Graph";

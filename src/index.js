@@ -12,7 +12,8 @@ import store from "./stores";
 import { Provider } from "mobx-react";
 
 // antd
-import { LocaleProvider } from "antd";
+// import { LocaleProvider } from "antd";
+import LocaleProvider from "antd/lib/locale-provider";
 import enUS from "antd/lib/locale-provider/en_US";
 
 ReactDOM.render(

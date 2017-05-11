@@ -16,7 +16,7 @@ export default class AppStore {
   @observable isVisible = true;
   @action setIsVisible = () => (this.isVisible = !this.isVisible);
 
-  @observable isCollapsed = false;
+  @observable isCollapsed = true;
   @action setIsCollapsed = d => (this.isCollapsed = !this.isCollapsed);
 
   @observable isLoading = false;
@@ -93,5 +93,4 @@ export default class AppStore {
   // ACISData -------------------------------------------------------------------------------
   @observable ACISData = [];
   @action setACISData = d => (this.ACISData = d);
-
 }

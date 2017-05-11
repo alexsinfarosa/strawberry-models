@@ -201,7 +201,7 @@ export const average = data => {
 
   // handling the case when data is null or has 24 Missing values
   const missingValues = data.filter(e => e === "M").length;
-  if (data.length === 0 || missingValues === 24) return "No Data";
+  if (data.length === 0 || missingValues === 24) return "Insufficient Data";
 
   //  calculating average
   let results = data.map(e => parseFloat(e));

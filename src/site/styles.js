@@ -4,6 +4,13 @@ import styled from "styled-components";
 import { Box } from "reflexbox";
 import { NavLink } from "react-router-dom";
 
+
+export const CenteredBox = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 export const NavBox = styled(Box)`
   textAlign: center;
 `;
