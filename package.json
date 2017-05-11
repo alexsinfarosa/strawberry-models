@@ -1,7 +1,9 @@
 {
   "name": "beet",
-  "homepage": "http://newadata.nrcc.cornell.edu/newa/",
+  "homepage": "https://alexsinfarosa.github.io/NEWA/",
   "version": "0.1.0",
+  "description": "NEWA project",
+  "author": "alexsinfarosa <as898@cornell.edu>",
   "private": true,
   "devDependencies": {
     "custom-react-scripts": "0.0.23"

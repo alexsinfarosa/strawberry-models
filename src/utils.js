@@ -461,7 +461,7 @@ export const getData = async (
       results[i]["lwFinal"] = replaceMissingValues(day.lw, day.lwSis);
       results[i]["ptFinal"] = replaceMissingValues(day.pt, day.ptSis);
     }
-    console.log("We are in past year");
+    // console.log("We are in past year");
     // results.map(e => console.log(e.date, e.tp, e.tpSis, e.tpFinal));
   } else {
     // currentYear === startDateYear means it is forecast

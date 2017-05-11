@@ -1,35 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
-// import "./Test.styl";
-
-// const data = [
-//   "0",
-//   "M",
-//   "M",
-//   "M",
-//   "4",
-//   "5",
-//   "6",
-//   "7",
-//   "8",
-//   "M",
-//   "M",
-//   "M",
-//   "M",
-//   "13",
-//   "14",
-//   "15",
-//   "16",
-//   "17",
-//   "18",
-//   "19",
-//   "20",
-//   "21",
-//   "22",
-//   "23"
-// ];
-
 @inject("store")
 @observer
 export default class Test extends Component {

@@ -20,7 +20,7 @@ export default class Home extends Component {
 
         <Flex p={3} mt={4} column justify="center">
           <CenteredBox style={{ margin: "0 auto" }}>
-            <h1>Work In Progress..</h1>
+            <h1>Work In Progress...</h1>
           </CenteredBox>
           <br />
           <CenteredBox style={{ margin: "0 auto" }}>

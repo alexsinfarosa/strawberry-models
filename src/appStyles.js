@@ -8,3 +8,10 @@ export const Main = styled(Box)`
   justify-content: space-around;
   height: 100vh;
 `;
+
+export const Centered = styled.div`
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+`;
