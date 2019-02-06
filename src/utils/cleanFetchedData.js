@@ -13,12 +13,13 @@ export default (acisData, params) => {
   // current station
   const currentStn = acisData.get("currentStn");
 
-  // dates has date of interest +5 days
+  // dates starts from december 31st up to dateOfInterest + 5 days
   let dates = currentStn.map(arr => arr[0]);
 
   const currentStnValues = averageMissingValues(
     flatten(currentStn.map(arr => arr[1]))
   );
+  console.log(currentStnValues);
 
   let replaced = currentStnValues;
 
@@ -38,8 +39,8 @@ export default (acisData, params) => {
     const forecastValues = flatten(forecast.map(arr => arr[1]));
 
     // replace missing values with forecast data
-    replaced = replaced.map(
-      (t, i) => (t === "M" ? forecastValues[i].toString() : t)
+    replaced = replaced.map((t, i) =>
+      t === "M" ? forecastValues[i].toString() : t
     );
   }
 
@@ -73,8 +74,8 @@ export default (acisData, params) => {
   const valuesHourly = [replaced[23], ...replaced.slice(24, -1)];
 
   // the valuesShifted array has the hour shifted
-  const valuesHourlyShifted = valuesHourly.map(
-    (v, i) => (v in indices ? valuesHourly[i - 1] : v)
+  const valuesHourlyShifted = valuesHourly.map((v, i) =>
+    v in indices ? valuesHourly[i - 1] : v
   );
 
   let left = 0;
@@ -83,8 +84,8 @@ export default (acisData, params) => {
   const valuesDaily = [...replaced.slice(24)];
 
   // the valuesShifted array has the hour shifted
-  const valuesDailysShifted = valuesDaily.map(
-    (v, i) => (v in indices ? valuesDaily[i - 1] : v)
+  const valuesDailysShifted = valuesDaily.map((v, i) =>
+    v in indices ? valuesDaily[i - 1] : v
   );
 
   dates.forEach((date, i) => {

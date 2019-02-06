@@ -37,15 +37,24 @@ export const fetchSisterStationHourlyData = params => {
 
 // Fetch forecast hourly data --------------------------------------------------------------
 const forecastUrl = `${protocol}//newa2.nrcc.cornell.edu/newaUtil/getFcstData`;
-const fetchHourlyForcestData = params => {
+const fetchHourlyForcestData = (variable, params) => {
   // always need to add 5 days
   const plusFiveDays = format(addDays(new Date(), 5), dateFormat);
   const [id, network] = params.sid.split(" ");
 
   return axios
-    .get(`${forecastUrl}/${id}/${network}/temp/${params.sdate}/${plusFiveDays}`)
+    .get(
+      `${forecastUrl}/${id}/${network}/${variable}/${
+        params.sdate
+      }/${plusFiveDays}`
+    )
     .then(res => res.data)
-    .catch(err => console.log("Failed to load hourly forecast data", err));
+    .catch(err =>
+      console.log(
+        `Failed to load hourly ${variable.toUpperCase} forecast data`,
+        err
+      )
+    );
 };
 
 // Main Function
@@ -67,8 +76,16 @@ export default async params => {
 
   if (params.isThisYear) {
     // get forecast hourly data
-    const forecastData = await fetchHourlyForcestData(params);
-    results.set("forecast", forecastData.data);
+    const temperatureForecastData = await fetchHourlyForcestData(
+      "temp",
+      params
+    );
+    const relativeHumidityForecastData = await fetchHourlyForcestData(
+      "rhum",
+      params
+    );
+    results.set("forecast", temperatureForecastData.data);
+    results.set("forecastRelativeHumidity", relativeHumidityForecastData.data);
   }
 
   results.set("currentStn", currentStation.data);
@@ -76,7 +93,7 @@ export default async params => {
   results.set("sisterStn", sisterStation.data);
 
   // clean data
-  // console.log(results, params);
+  console.log(results, params);
   const cleaned = cleanFetchedData(results, params);
 
   // console.log(cleaned);

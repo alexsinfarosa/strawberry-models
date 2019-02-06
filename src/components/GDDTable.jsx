@@ -12,7 +12,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Hidden from "@material-ui/core/Hidden";
 
 // date
 import { format, isSameDay, differenceInDays } from "date-fns/esm";
@@ -25,6 +24,7 @@ const styles = theme => ({
   },
   table: {
     // minWidth: 700,
+    width: "100%"
   },
   isMobile: {
     [theme.breakpoints.down("md")]: {
@@ -142,15 +142,23 @@ class GDDTable extends Component {
                 </TableRow>
 
                 <TableRow>
-                  <TableCell className={classes.tableCell} numeric>
+                  <TableCell
+                    className={classes.tableCell}
+                    style={{
+                      borderRight: "1px solid #E0E0E0",
+                      padding: 0
+                    }}
+                  >
                     BOTRYTIS
                   </TableCell>
 
-                  <TableCell className={classes.tableCell} numeric>
+                  <TableCell className={classes.tableCell} colSpan={20}>
+                    {/* FIX colSpan={20} */}
                     ANTHRACNOSE
                   </TableCell>
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {dataForTable.map(o => {
                   const isToday = isSameDay(new Date(dateOfInterest), o.date);
@@ -172,8 +180,6 @@ class GDDTable extends Component {
                       <TableCell
                         className={classes.tableCell}
                         style={{
-                          // padding: "0px 10px",
-                          // textAlign: "center",
                           fontSize: isToday ? "1.1rem" : null,
                           fontWeight: isToday ? 700 : null
                         }}
@@ -196,6 +202,7 @@ class GDDTable extends Component {
                       >
                         'B'
                       </TableCell>
+
                       <TableCell
                         className={classes.tableCell}
                         numeric

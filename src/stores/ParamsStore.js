@@ -116,7 +116,7 @@ export default class ParamsStore {
       if (Object.keys(params).length !== 0) {
         this.postalCode = params.postalCode;
         this.stationID = params.stationID;
-        this.dateOfInterest = new Date("04/15/2018");
+        this.dateOfInterest = new Date("04/15/2018 15:15");
       }
     }
   };
@@ -136,7 +136,11 @@ export default class ParamsStore {
         sid: `${idAdjustment(this.station)} ${this.station.network}`,
         sdate: this.sdate,
         edate: format(addDays(this.dateOfInterest, 5), "YYYY-MM-DD"),
-        elems: [{ vX: vXDef[this.station.network]["temp"], prec: 1 }],
+        elems: [
+          { vX: vXDef[this.station.network]["temp"], prec: 0 },
+          { vX: vXDef[this.station.network]["rhum"], prec: 0 },
+          { vX: vXDef[this.station.network]["lwet"], prec: 0 }
+        ],
         meta: "tzo",
         janFirst: `${getYear(this.dateOfInterest)}-01-01 00:00`,
         dateOfInterest: format(
