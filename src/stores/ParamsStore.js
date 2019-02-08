@@ -137,10 +137,16 @@ export default class ParamsStore {
         sdate: this.sdate,
         edate: format(addDays(this.dateOfInterest, 5), "YYYY-MM-DD"),
         elems: [
-          { vX: vXDef[this.station.network]["temp"], prec: 0 },
+          {
+            vX: vXDef[this.station.network]["temp"],
+            prec: 1,
+            units: "degC"
+          },
           { vX: vXDef[this.station.network]["rhum"], prec: 0 },
-          { vX: vXDef[this.station.network]["lwet"], prec: 0 }
+          { vX: vXDef[this.station.network]["lwet"], prec: 0 },
+          { vX: vXDef[this.station.network]["pcpn"], prec: 2 }
         ],
+        eleNames: ["temp", "rhum", "lwet", "pcpn"],
         meta: "tzo",
         janFirst: `${getYear(this.dateOfInterest)}-01-01 00:00`,
         dateOfInterest: format(

@@ -13,7 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
 // pest management messages
-import { pestManagement } from "../assets/pestManagement";
+// import { pestManagement } from "../assets/pestManagement";
 
 // styles
 const styles = theme => ({
@@ -48,21 +48,21 @@ const styles = theme => ({
 class ManagementTable extends Component {
   render() {
     const { classes } = this.props;
-    const { dataForTable } = this.props.appStore.currentModel;
+    // const { dataForTable } = this.props.appStore.currentModel;
 
-    let cdd;
-    if (dataForTable.length !== 0) {
-      cdd = dataForTable[2].cdd;
-    }
-    let status;
-    if (cdd <= 613) status = pestManagement[1];
-    if (cdd > 613 && cdd <= 863) status = pestManagement[2];
-    if (cdd > 863 && cdd <= 963) status = pestManagement[3];
-    if (cdd > 964) status = pestManagement[4];
+    // let cdd;
+    // if (dataForTable.length !== 0) {
+    //   cdd = dataForTable[2].cdd;
+    // }
+    // let status;
+    // if (cdd <= 613) status = pestManagement[1];
+    // if (cdd > 613 && cdd <= 863) status = pestManagement[2];
+    // if (cdd > 863 && cdd <= 963) status = pestManagement[3];
+    // if (cdd > 964) status = pestManagement[4];
 
     return (
       <div className={classes.root}>
-        {status ? (
+        {true ? (
           <div>
             <Typography
               variant="subheading"
