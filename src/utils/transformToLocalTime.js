@@ -30,14 +30,11 @@ export default (params, acisData) => {
     .map(date => dailyToHourlyDates(date))
     .reduce((acc, results) => [...acc, ...results], []);
 
-  console.log(results);
   // array of indeces where the value must be shifted (DST)
-  const indices = results.hourlyDatesLST.map((hour, i) => {
-    const tzoFromDate = parseInt(format(new Date(hour), "Z"), 10);
+  const indices = results.hourlyDatesLST.map((date, i) => {
+    const tzoFromDate = parseInt(format(new Date(date), "Z"), 10);
     return tzoFromDate !== meta.tzo ? i : null;
   });
-
-  console.log(indices);
 
   // // // generating the array of objects
   let hourlyData = [];

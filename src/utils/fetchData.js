@@ -1,7 +1,6 @@
 import axios from "axios";
 import { format, addDays } from "date-fns/esm";
 import cleanFetchedData from "./cleanFetchedData";
-import transformToLocalTime from "./transformToLocalTime";
 
 const protocol = window.location.protocol;
 const dateFormat = "YYYY-MM-DD";
@@ -64,7 +63,7 @@ export default async params => {
 
   // get current station hourly data
   const currentStation = await fetchCurrentStationHourlyData(params);
-  transformToLocalTime(params, currentStation);
+
   // get sister station id and network
   const sisterStationIdAndNetwork = await fetchSisterStationIdAndNetwork(
     params

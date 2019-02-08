@@ -120,7 +120,7 @@ class App extends Component {
               <MenuIcon />
             </IconButton>
             <Hidden smUp>
-              <Typography variant="header" style={{ color: "#fff" }}>
+              <Typography variant="subheading" style={{ color: "#fff" }}>
                 Strawberry Disease Forecast Models
               </Typography>
             </Hidden>

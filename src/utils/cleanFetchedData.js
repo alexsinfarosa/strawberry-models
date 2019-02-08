@@ -14,9 +14,11 @@ export default (acisData, params) => {
   const currentStn = acisData.get("currentStn");
 
   // dates starts from december 31st up to dateOfInterest + 5 days
-  let dates = acisData.get("dates");
+  let dates = currentStn.map(arr => arr[0]);
 
-  const currentStnValues = averageMissingValues(flatten(currentStn));
+  const currentStnValues = averageMissingValues(
+    flatten(currentStn.map(arr => arr[1]))
+  );
 
   let replaced = currentStnValues;
 
@@ -24,7 +26,7 @@ export default (acisData, params) => {
   const sisterStn = acisData.get("sisterStn");
   if (sisterStn) {
     // a station can have not data at all and return an error
-    const sisterStnValues = flatten(sisterStn);
+    const sisterStnValues = flatten(sisterStn.map(arr => arr[1]));
 
     // replace current station values with sister station's
     replaced = replaced.map((t, i) => (t === "M" ? sisterStnValues[i] : t));
@@ -32,8 +34,8 @@ export default (acisData, params) => {
 
   // if date of interest is in current year
   if (params.isThisYear) {
-    const forecast = acisData.get("forecastTemp");
-    const forecastValues = flatten(forecast);
+    const forecast = acisData.get("forecast");
+    const forecastValues = flatten(forecast.map(arr => arr[1]));
 
     // replace missing values with forecast data
     replaced = replaced.map((t, i) =>
@@ -53,7 +55,7 @@ export default (acisData, params) => {
     .map(date => dailyToHourlyDates(date))
     .reduce((acc, results) => [...acc, ...results], []);
 
-  // array of indeces where the hour must be shifted (LST)
+  // array of indeces where the hour must be shifted
   const arrOFIndeces = hourlyDates.map((hour, i) => {
     const tzoFromDate = parseInt(format(new Date(hour), "Z"), 10);
     return tzoFromDate !== tzo ? i : null;
@@ -63,6 +65,7 @@ export default (acisData, params) => {
   const indices = arrOFIndeces.filter(d => d);
 
   // generating the array of objects
+
   let hourlyData = [];
   let dailyData = [];
 
@@ -76,6 +79,13 @@ export default (acisData, params) => {
 
   let left = 0;
   let right = 0;
+  // values go from yyyy-01-01 00:00 to dateOfInterest current hour
+  const valuesDaily = [...replaced.slice(24)];
+
+  // the valuesShifted array has the hour shifted
+  const valuesDailysShifted = valuesDaily.map((v, i) =>
+    v in indices ? valuesDaily[i - 1] : v
+  );
 
   dates.forEach((date, i) => {
     const numOfHours = dailyToHourlyDatesLST(startOfDay(date), endOfDay(date))
@@ -85,7 +95,7 @@ export default (acisData, params) => {
 
     let p = {};
     p["date"] = date;
-    p["temps"] = valuesHourlyShifted.slice(left, right);
+    p["temps"] = valuesDailysShifted.slice(left, right);
 
     left += numOfHours;
     dailyData.push(p);
@@ -98,6 +108,6 @@ export default (acisData, params) => {
     hourlyData.push(p);
   });
 
-  console.log(dailyData, hourlyData);
+  // console.log(dailyData, hourlyData);
   return [dailyData, hourlyData];
 };
