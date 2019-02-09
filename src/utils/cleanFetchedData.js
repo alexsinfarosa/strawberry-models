@@ -1,4 +1,4 @@
-import { format, startOfDay, endOfDay } from "date-fns/esm";
+import { startOfDay, endOfDay } from "date-fns/esm";
 import {
   averageMissingValues,
   flatten,
@@ -7,107 +7,125 @@ import {
 } from "./utils";
 
 export default (acisData, params) => {
-  // tzo
-  const tzo = acisData.get("tzo");
-
   // current station
   const currentStn = acisData.get("currentStn");
 
   // dates starts from december 31st up to dateOfInterest + 5 days
-  let dates = currentStn.map(arr => arr[0]);
+  const dates = currentStn.map(arr => arr[0]);
 
-  const currentStnValues = averageMissingValues(
-    flatten(currentStn.map(arr => arr[1]))
-  );
+  let currentStnValues = {};
+  const elements = currentStn.map(arr => arr.slice(1));
+  params.eleNames.forEach((name, i) => {
+    const arr = averageMissingValues(flatten(elements.map(arr => arr[i])));
 
-  let replaced = currentStnValues;
+    // shifting data from 00:00 to 23:00 -> 01:00 to 24:00
+    currentStnValues[name] = arr.slice(0, -1);
+  });
 
   // sister station
   const sisterStn = acisData.get("sisterStn");
+  let sisterStnValues = {};
   if (sisterStn) {
-    // a station can have not data at all and return an error
-    const sisterStnValues = flatten(sisterStn.map(arr => arr[1]));
+    const elements = sisterStn.map(arr => arr.slice(1));
+    params.eleNames.forEach((name, i) => {
+      const arr = flatten(elements.map(arr => arr[i]));
 
-    // replace current station values with sister station's
-    replaced = replaced.map((t, i) => (t === "M" ? sisterStnValues[i] : t));
+      // shifting data from 00:00 to 23:00 -> 01:00 to 24:00
+      sisterStnValues[name] = arr.slice(0, -1);
+    });
   }
 
-  // if date of interest is in current year
-  if (params.isThisYear) {
-    const forecast = acisData.get("forecast");
-    const forecastValues = flatten(forecast.map(arr => arr[1]));
-
-    // replace missing values with forecast data
-    replaced = replaced.map((t, i) =>
-      t === "M" ? forecastValues[i].toString() : t
+  let replacedMissingValuesWithSisterStn = {};
+  params.eleNames.forEach(name => {
+    replacedMissingValuesWithSisterStn[name] = currentStnValues[name].map(
+      (value, i) => (value === "M" ? sisterStnValues[name][i] : value)
     );
+  });
+
+  // if date of interest is in current year get forecast data
+  let forecastValues = {};
+  let replacedMissingValuesWithForecast = {};
+  if (params.isThisYear) {
+    const tempForecast = acisData.get("tempForecast");
+    const rhumForecast = acisData.get("rhumForecast");
+
+    forecastValues["temp"] = flatten(tempForecast.map(arr => arr[1]));
+    forecastValues["rhum"] = flatten(rhumForecast.map(arr => arr[1]));
+
+    replacedMissingValuesWithForecast = {
+      ...replacedMissingValuesWithSisterStn
+    };
+    Object.keys(forecastValues).forEach(key => {
+      const arr = replacedMissingValuesWithSisterStn[key].map((value, i) =>
+        value === "M" ? forecastValues[key][i].toString() : value
+      );
+
+      // shifting data from 00:00 to 23:00 -> 01:00 to 24:00
+      replacedMissingValuesWithForecast[key] = arr.slice(0, -1);
+    });
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////
-  // transforming data to local time
-  // ////////////////////////////////////////////////////////////////////////////////////
+  // Checking if current year
+  const cleanedHourlyData = params.isThisYear
+    ? replacedMissingValuesWithForecast
+    : replacedMissingValuesWithSisterStn;
 
-  // dates go from yyyy-01-01 to dateOfInterest (yyyy-mm-dd)
-  dates = dates.slice(1); // from Jan 1st
-
-  // hourlyDates go from yyyy-01-01 00:00 to dateOfInterest (yyyy-mm-dd 23:00)
+  // hourlyDates go from yyyy-12-31 01:00 to dateOfInterest + 5 days (yyyy-mm-dd 23:00)
   const hourlyDates = dates
     .map(date => dailyToHourlyDates(date))
-    .reduce((acc, results) => [...acc, ...results], []);
-
-  // array of indeces where the hour must be shifted
-  const arrOFIndeces = hourlyDates.map((hour, i) => {
-    const tzoFromDate = parseInt(format(new Date(hour), "Z"), 10);
-    return tzoFromDate !== tzo ? i : null;
-  });
-
-  // removing null values
-  const indices = arrOFIndeces.filter(d => d);
-
-  // generating the array of objects
+    .reduce((acc, res) => [...acc, ...res], [])
+    .slice(1);
 
   let hourlyData = [];
-  let dailyData = [];
-
-  // values go from yyyy-01-01 00:00 to dateOfInterest current hour
-  const valuesHourly = [replaced[23], ...replaced.slice(24, -1)];
-
-  // the valuesShifted array has the hour shifted
-  const valuesHourlyShifted = valuesHourly.map((v, i) =>
-    v in indices ? valuesHourly[i - 1] : v
-  );
-
-  let left = 0;
-  let right = 0;
-  // values go from yyyy-01-01 00:00 to dateOfInterest current hour
-  const valuesDaily = [...replaced.slice(24)];
-
-  // the valuesShifted array has the hour shifted
-  const valuesDailysShifted = valuesDaily.map((v, i) =>
-    v in indices ? valuesDaily[i - 1] : v
-  );
-
-  dates.forEach((date, i) => {
-    const numOfHours = dailyToHourlyDatesLST(startOfDay(date), endOfDay(date))
-      .length;
-
-    right = left + numOfHours;
-
-    let p = {};
-    p["date"] = date;
-    p["temps"] = valuesDailysShifted.slice(left, right);
-
-    left += numOfHours;
-    dailyData.push(p);
-  });
-
   hourlyDates.forEach((hour, i) => {
     let p = {};
     p["date"] = new Date(hour);
-    p["temp"] = valuesHourlyShifted[i];
+    params.eleNames.forEach(name => {
+      p[name] = cleanedHourlyData[name][i];
+    });
     hourlyData.push(p);
   });
 
-  // console.log(dailyData, hourlyData);
-  return [dailyData, hourlyData];
+  // Daily Data -----------------------------------------------------------------------
+  let dailyData = [];
+  // left needs to start from 23 because December 31 has only 23 hours. The first hour
+  // was removed when shifted left.
+  let left = 23;
+  let right = 0;
+  dates.forEach((date, i) => {
+    if (i > 0) {
+      // we need to start from jannuary 1st
+      const numOfHours = dailyToHourlyDatesLST(startOfDay(date), endOfDay(date))
+        .length;
+
+      right = left + numOfHours;
+
+      let p = {};
+      p["date"] = date;
+      params.eleNames.forEach(name => {
+        p[name] = cleanedHourlyData[name].slice(left, right);
+      });
+
+      left += numOfHours;
+      dailyData.push(p);
+    }
+  });
+
+  // let test = {
+  //   currentStnValues,
+  //   sisterStnValues,
+  //   replacedMissingValuesWithSisterStn,
+  //   forecastValues,
+  //   cleanedHourlyData,
+  //   hourlyDates,
+  //   hourlyData,
+  //   dailyData
+  // };
+
+  let results = {
+    hourlyData,
+    dailyData
+  };
+  console.log(results);
+  return results;
 };

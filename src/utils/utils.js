@@ -190,7 +190,7 @@ export const unflatten = array => {
 
 // Convert Fahrenheit to Celcius
 export const fahrenheitToCelcius = (t, missing) =>
-  t === missing ? t : ((t - 32) * 5 / 9).toFixed(1);
+  t === missing ? t : (((t - 32) * 5) / 9).toFixed(1);
 
 // Convert Celcius to Fahrenheit
 export const celciusToFahrenheit = (t, missing) =>

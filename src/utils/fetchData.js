@@ -76,16 +76,10 @@ export default async params => {
 
   if (params.isThisYear) {
     // get forecast hourly data
-    const temperatureForecastData = await fetchHourlyForcestData(
-      "temp",
-      params
-    );
-    const relativeHumidityForecastData = await fetchHourlyForcestData(
-      "rhum",
-      params
-    );
-    results.set("forecast", temperatureForecastData.data);
-    results.set("forecastRelativeHumidity", relativeHumidityForecastData.data);
+    const tempForecast = await fetchHourlyForcestData("temp", params);
+    const rhumForecast = await fetchHourlyForcestData("rhum", params);
+    results.set("tempForecast", tempForecast.data);
+    results.set("rhumForecast", rhumForecast.data);
   }
 
   results.set("currentStn", currentStation.data);

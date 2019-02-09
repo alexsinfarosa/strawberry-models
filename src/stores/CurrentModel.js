@@ -14,11 +14,11 @@ export default class CurrentModel {
   }
 
   get dailyData() {
-    return this.data[0];
+    return this.data.dailyData;
   }
 
   get hourlyData() {
-    return this.data[1];
+    return this.data.hourlyData;
   }
 
   // current model ---------------------------------------------------------------

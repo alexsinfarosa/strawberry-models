@@ -105,18 +105,18 @@ export default class ParamsStore {
 
   //   localstorage ------------------------------------------------------------------------
   writeToLocalstorage = json => {
-    localStorage.setItem("newa-blueberry-maggot-model", JSON.stringify(json));
+    localStorage.setItem("newa-strawberry-models", JSON.stringify(json));
   };
 
   readFromLocalstorage = () => {
-    const localStorageRef = localStorage.getItem("newa-blueberry-maggot-model");
+    const localStorageRef = localStorage.getItem("newa-strawberry-models");
     if (localStorageRef) {
       const params = JSON.parse(localStorageRef);
 
       if (Object.keys(params).length !== 0) {
         this.postalCode = params.postalCode;
         this.stationID = params.stationID;
-        this.dateOfInterest = new Date("04/15/2018 15:15");
+        this.dateOfInterest = new Date("12/10/2018 15:15");
       }
     }
   };
@@ -140,7 +140,7 @@ export default class ParamsStore {
           {
             vX: vXDef[this.station.network]["temp"],
             prec: 1,
-            units: "degC"
+            units: "degF"
           },
           { vX: vXDef[this.station.network]["rhum"], prec: 0 },
           { vX: vXDef[this.station.network]["lwet"], prec: 0 },
