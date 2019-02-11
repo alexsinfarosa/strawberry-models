@@ -225,11 +225,11 @@ class GDDTable extends Component {
                         className={classes.tableCell}
                         numeric
                         style={{
-                          fontSize: isToday ? "1.1rem" : null,
+                          fontSize: isToday ? "1.2rem" : "1.1rem",
                           fontWeight: isToday ? 700 : 400,
                           background: botrytisColor(o.botrytis),
                           letterSpacing: 1,
-                          color: o.botrytis === "N/A" ? "black" : "#fff",
+                          color: o.botrytis === "N/A" ? "black" : "black",
                           borderRight: "1px solid #E0E0E0"
                         }}
                       >
@@ -240,11 +240,11 @@ class GDDTable extends Component {
                         className={classes.tableCell}
                         numeric
                         style={{
-                          fontSize: isToday ? "1.1rem" : null,
+                          fontSize: isToday ? "1.2rem" : "1.1rem",
                           fontWeight: isToday ? 700 : 400,
                           background: anthracnoseColor(o.anthracnose),
                           letterSpacing: 1,
-                          color: o.anthracnose === "N/A" ? "black" : "#fff"
+                          color: o.anthracnose === "N/A" ? "black" : "black"
                         }}
                       >
                         {o.anthracnose}
