@@ -25,89 +25,89 @@ export default class CurrentModel {
   get modelData() {
     let missingDays = [];
     return this.dailyData.map(obj => {
-      // const countMissingValues = obj.temp.filter(t => t === "M").length;
-      const countMissingValues = 2; // TODO: countMissingValues should be calculated...
-
       const { date, temp, rhum, lwet, pcpn } = obj;
+
+      // For now I check the missing values only on the temp array. Maybe we should check it for every array
+      const countMissingValues = temp.filter(t => t === "M").length;
 
       let p = {};
       p["date"] = date;
 
-      let atRisk = [];
-      if (lwet.length > 0) {
-        lwet.forEach((lw, i) => {
-          let o = {};
-          if ((lw === 0 && pcpn[i] > 0) || lw >= 1) {
-            o["lw"] = +lw;
-            o["pcpn"] = +pcpn[i];
-            o["index"] = i;
-            o["temp"] = +temp[i];
-            atRisk.push(o);
-          }
-        });
-      } else {
-        rhum.forEach((rh, j) => {
-          let o = {};
-          if (+rh >= 90) {
-            o["rhum"] = +rh;
-            o["index"] = j;
-            o["temp"] = +temp[j];
-            atRisk.push(o);
-          }
-        });
-      }
-
-      p["atRisk"] = atRisk;
-
-      let indeces = [];
-      let arr = [];
-      p.atRisk.forEach((obj, i) => {
-        if (i === 0) {
-          arr.push(obj);
-        } else {
-          if (obj.index - p.atRisk[i - 1].index >= 4) {
-            indeces.push(arr);
-            arr = [];
-            arr.push(obj);
-          } else {
-            arr.push(obj);
-            if (i === p.atRisk.length - 1) {
-              indeces.push(arr);
-            }
-          }
-        }
-      });
-
-      p["indeces"] = indeces;
-
-      let countLeafWetnesHoursAndAvgTemps = [];
-      indeces.forEach(arr => {
-        let p = {};
-        p["w"] = arr.length;
-        p["avgT"] =
-          [...arr.map(o => o.temp)].reduce((acc, res) => acc + res, 0) /
-          arr.length;
-        countLeafWetnesHoursAndAvgTemps.push(p);
-      });
-
-      p["countLeafWetnesHoursAndAvgTemps"] = countLeafWetnesHoursAndAvgTemps;
-
-      let botrytis = 0;
-      let anthracnose = 0;
-      countLeafWetnesHoursAndAvgTemps.forEach(arr => {
-        const w = arr.w;
-        const t = arr.avgT;
-        botrytis += botrytisIndex(w, t);
-        anthracnose += anthracnoseIndex(w, t);
-      });
-
-      if (countMissingValues < 5) {
-        p["botrytis"] = botrytis.toFixed(2);
-        p["anthracnose"] = anthracnose.toFixed(2);
-      } else {
+      if (countMissingValues > 5) {
         missingDays.push(date);
         p["botrytis"] = "N/A";
         p["anthracnose"] = "N/A";
+      } else {
+        let atRisk = [];
+        if (lwet.length > 0) {
+          lwet.forEach((lw, i) => {
+            let o = {};
+            if ((lw === 0 && pcpn[i] > 0) || lw >= 1) {
+              o["lw"] = +lw;
+              o["pcpn"] = +pcpn[i];
+              o["index"] = i;
+              o["temp"] = +temp[i];
+              atRisk.push(o);
+            }
+          });
+        } else {
+          rhum.forEach((rh, j) => {
+            let o = {};
+            if (+rh >= 90) {
+              o["rhum"] = +rh;
+              o["index"] = j;
+              o["temp"] = +temp[j];
+              atRisk.push(o);
+            }
+          });
+        }
+
+        p["atRisk"] = atRisk;
+
+        let indeces = [];
+        let arr = [];
+        p.atRisk.forEach((obj, i) => {
+          if (i === 0) {
+            arr.push(obj);
+          } else {
+            if (obj.index - p.atRisk[i - 1].index >= 4) {
+              indeces.push(arr);
+              arr = [];
+              arr.push(obj);
+            } else {
+              arr.push(obj);
+              if (i === p.atRisk.length - 1) {
+                indeces.push(arr);
+              }
+            }
+          }
+        });
+
+        p["indeces"] = indeces;
+
+        let countLeafWetnesHoursAndAvgTemps = [];
+        indeces.forEach(arr => {
+          let p = {};
+          p["w"] = arr.length;
+          p["avgT"] =
+            [...arr.map(o => o.temp)].reduce((acc, res) => acc + res, 0) /
+            arr.length;
+          countLeafWetnesHoursAndAvgTemps.push(p);
+        });
+
+        p["countLeafWetnesHoursAndAvgTemps"] = countLeafWetnesHoursAndAvgTemps;
+
+        let botrytis = 0;
+        let anthracnose = 0;
+        countLeafWetnesHoursAndAvgTemps.forEach(arr => {
+          const w = arr.w;
+          const t = arr.avgT;
+          botrytis += botrytisIndex(w, t);
+          anthracnose += anthracnoseIndex(w, t);
+        });
+
+        p["botrytis"] = botrytis.toFixed(2);
+        p["anthracnose"] = anthracnose.toFixed(2);
       }
 
       // console.log(p);
