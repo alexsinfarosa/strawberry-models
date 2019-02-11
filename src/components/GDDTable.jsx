@@ -161,7 +161,6 @@ class GDDTable extends Component {
 
               <TableBody>
                 {dataForTable.map(o => {
-                  console.log(o);
                   const isToday = isSameDay(new Date(dateOfInterest), o.date);
                   const formattedDate = format(o.date, "YYYY-MM-DD");
                   const formattedToday = format(new Date(), "YYYY-MM-DD");

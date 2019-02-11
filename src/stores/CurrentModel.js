@@ -24,17 +24,47 @@ export default class CurrentModel {
   get modelData() {
     let missingDays = [];
     return this.dailyData.map(obj => {
-      const { date, temp, rhum, lwet, pcpn } = obj;
       // const countMissingValues = obj.temp.filter(t => t === "M").length;
-      const countMissingValues = 2;
+      const countMissingValues = 2; // TODO: countMissingValues should be calculated...
+
+      const { date, temp, rhum, lwet, pcpn } = obj;
+
       let p = {};
+      p["date"] = date;
+
+      let W, T;
+      let atRisk = [];
+      if (lwet.length > 0) {
+        lwet.map((lw, i) => {
+          let o = {};
+          if ((lw === 0 && pcpn[i] > 0) || lw >= 1) {
+            o["lw"] = +lw;
+            o["pcpn"] = +pcpn[i];
+            o["index"] = i;
+            o["temp"] = +temp[i];
+            atRisk.push(o);
+          }
+        });
+      } else {
+        rhum.map((rh, j) => {
+          let o = {};
+          if (+rh >= 90) {
+            o["rhum"] = +rh;
+            o["index"] = j;
+            o["temp"] = +temp[j];
+            atRisk.push(o);
+          }
+        });
+      }
+
+      p["atRisk"] = atRisk;
+      console.log(p);
+
       if (countMissingValues < 5) {
-        p["date"] = date;
         p["botrytis"] = 0.6;
         p["anthracnose"] = 0.7;
       } else {
         missingDays.push(date);
-        p["date"] = date;
         p["botrytis"] = "N/A";
         p["anthracnose"] = "N/A";
       }
