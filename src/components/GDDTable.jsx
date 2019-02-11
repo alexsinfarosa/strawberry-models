@@ -161,6 +161,7 @@ class GDDTable extends Component {
 
               <TableBody>
                 {dataForTable.map(o => {
+                  console.log(o);
                   const isToday = isSameDay(new Date(dateOfInterest), o.date);
                   const formattedDate = format(o.date, "YYYY-MM-DD");
                   const formattedToday = format(new Date(), "YYYY-MM-DD");
@@ -195,12 +196,12 @@ class GDDTable extends Component {
                         style={{
                           fontSize: isToday ? "1.1rem" : null,
                           fontWeight: isToday ? 700 : 400,
-                          background: botrytisColor(o.cdd),
+                          background: botrytisColor(o.botrytis),
                           letterSpacing: 1,
-                          color: o.cdd === "N/A" ? "black" : "#fff"
+                          color: o.botrytis === "N/A" ? "black" : "#fff"
                         }}
                       >
-                        'B'
+                        {o.botrytis}
                       </TableCell>
 
                       <TableCell
@@ -209,12 +210,12 @@ class GDDTable extends Component {
                         style={{
                           fontSize: isToday ? "1.1rem" : null,
                           fontWeight: isToday ? 700 : 400,
-                          background: anthracnoseColor(o.cdd),
+                          background: anthracnoseColor(o.anthracnose),
                           letterSpacing: 1,
-                          color: o.cdd === "N/A" ? "black" : "#fff"
+                          color: o.anthracnose === "N/A" ? "black" : "#fff"
                         }}
                       >
-                        "A"
+                        {o.anthracnose}
                       </TableCell>
                     </TableRow>
                   );

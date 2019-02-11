@@ -1,5 +1,4 @@
 import { decorate, computed } from "mobx";
-import { baskervilleEmin } from "../utils/utils";
 import { format } from "date-fns/esm";
 
 export default class CurrentModel {
@@ -23,42 +22,21 @@ export default class CurrentModel {
 
   // current model ---------------------------------------------------------------
   get modelData() {
-    const base = 50;
-    let cdd = 0;
     let missingDays = [];
     return this.dailyData.map(obj => {
-      const { date, temps } = obj;
-      const countMissingValues = temps.filter(t => t === "M").length;
-      // console.log(date, temps, countMissingValues);
+      const { date, temp, rhum, lwet, pcpn } = obj;
+      // const countMissingValues = obj.temp.filter(t => t === "M").length;
+      const countMissingValues = 2;
       let p = {};
-
       if (countMissingValues < 5) {
-        const tempsFiltered = temps.filter(t => t !== "M");
-        const min = Math.min(...tempsFiltered);
-        const max = Math.max(...tempsFiltered);
-        const avg = (min + max) / 2;
-
-        // calculate degree day
-        // const dd = avg - base > 0 ? avg - base : 0;
-        const dd = baskervilleEmin(min, max, base);
-
-        // cumulative degree day
-        cdd += dd;
-
         p["date"] = date;
-        p["min"] = min.toFixed(0);
-        p["max"] = max.toFixed(0);
-        p["avg"] = avg.toFixed(0);
-        p["dd"] = dd.toFixed(0);
-        p["cdd"] = cdd.toFixed(0);
+        p["botrytis"] = 0.6;
+        p["anthracnose"] = 0.7;
       } else {
         missingDays.push(date);
         p["date"] = date;
-        p["min"] = "N/A";
-        p["max"] = "N/A";
-        p["avg"] = "N/A";
-        p["dd"] = "N/A";
-        p["cdd"] = "N/A";
+        p["botrytis"] = "N/A";
+        p["anthracnose"] = "N/A";
       }
       // console.log(p);
       return { p, missingDays };

@@ -159,6 +159,9 @@ export default class ParamsStore {
   }
 
   get isSeason() {
+    if (!isSameYear(new Date(), this.dateOfInterest)) {
+      return true;
+    }
     return (
       isAfter(
         this.dateOfInterest,
