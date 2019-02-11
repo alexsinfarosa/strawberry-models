@@ -127,6 +127,6 @@ export default (acisData, params) => {
     hourlyData,
     dailyData
   };
-  console.log(results);
+  // console.log(results);
   return results;
 };

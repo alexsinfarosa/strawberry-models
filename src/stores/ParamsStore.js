@@ -116,7 +116,7 @@ export default class ParamsStore {
       if (Object.keys(params).length !== 0) {
         this.postalCode = params.postalCode;
         this.stationID = params.stationID;
-        this.dateOfInterest = new Date("12/10/2018 15:15");
+        this.dateOfInterest = new Date();
       }
     }
   };
@@ -140,7 +140,7 @@ export default class ParamsStore {
           {
             vX: vXDef[this.station.network]["temp"],
             prec: 1,
-            units: "degF"
+            units: "degC"
           },
           { vX: vXDef[this.station.network]["rhum"], prec: 0 },
           { vX: vXDef[this.station.network]["lwet"], prec: 0 },

@@ -253,7 +253,7 @@ export const baskervilleEmin = (min, max, base) => {
 // Berries model ----------------------------------------------------------------------------
 export const botrytisIndex = (W, T) => {
   const i = -4.268 + 0.0294 * W * T - 0.0901 * W - 0.0000235 * W * T ** 3;
-  return (1 / (1 + Math.exp(-i))).toFixed(2);
+  return 1 / (1 + Math.exp(-i));
 };
 
 export const anthracnoseIndex = (W, T) => {
@@ -263,5 +263,5 @@ export const anthracnoseIndex = (W, T) => {
     0.069 * W * T +
     0.005 * W * T ** 2 -
     0.000093 * W * T ** 3;
-  return (1 / (1 + Math.exp(-i))).toFixed(2);
+  return 1 / (1 + Math.exp(-i));
 };

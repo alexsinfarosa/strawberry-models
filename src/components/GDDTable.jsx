@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 
+import { CSVLink } from "react-csv";
+
 // material-ui
 import withRoot from "../withRoot";
 import { withStyles } from "@material-ui/core/styles";
@@ -75,9 +77,18 @@ class GDDTable extends Component {
   };
   render() {
     const { classes } = this.props;
-    const { isLoading, dateOfInterest } = this.props.appStore.paramsStore;
+    const {
+      isLoading,
+      dateOfInterest,
+      station
+    } = this.props.appStore.paramsStore;
 
-    const { dataForTable, missingDays } = this.props.appStore.currentModel;
+    const {
+      dataForTable,
+      missingDays,
+      CSVData,
+      setCSVData
+    } = this.props.appStore.currentModel;
 
     const botrytisColor = d => {
       if (d < 0.5) return "#44AA51";
@@ -93,13 +104,30 @@ class GDDTable extends Component {
 
     return (
       <div className={classes.root}>
-        <Typography
-          variant="subheading"
-          gutterBottom
-          style={{ letterSpacing: 1 }}
-        >
-          PREDICTIONS
-        </Typography>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            variant="subheading"
+            gutterBottom
+            style={{ letterSpacing: 1 }}
+          >
+            PREDICTIONS
+          </Typography>
+          <CSVLink
+            data={CSVData.slice()}
+            filename={`StrawberryFruitRot${station.name}(${station.state}).csv`}
+            target="_blank"
+            onClick={e => setCSVData()}
+            style={{ textDecoration: "none" }}
+          >
+            <Typography
+              variant="subheading"
+              gutterBottom
+              style={{ letterSpacing: 1 }}
+            >
+              Download CSV
+            </Typography>
+          </CSVLink>
+        </div>
         <Paper>
           {isLoading ? (
             <div
@@ -197,7 +225,8 @@ class GDDTable extends Component {
                           fontWeight: isToday ? 700 : 400,
                           background: botrytisColor(o.botrytis),
                           letterSpacing: 1,
-                          color: o.botrytis === "N/A" ? "black" : "#fff"
+                          color: o.botrytis === "N/A" ? "black" : "#fff",
+                          borderRight: "1px solid #E0E0E0"
                         }}
                       >
                         {o.botrytis}
