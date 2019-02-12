@@ -2,15 +2,15 @@
 
 ## Handling Data
 
-### 1. Obtain data
+### 1. Obtain Data
 
 The data is obtained from ACIS once all necessary parameters are set. Some of those parameters are provided by the user, such as selecting the station and entering a date.
 
-### 2. Average missing values (M's)
+### 2. Average Missing Values (M's)
 
 Once the data is received, it is analyzed for missing values (M). In the following example, we will consider only temperature (˚C) data, for simplicity. However, the same logic applies to any weather data parameter, such as relative humidity, leaf wetness etc.
 
-The Table below shows temperature hourly data for an arbitrary day.
+The following table shows the hourly temperature for an arbitrary day.
 
 | Hour  | Temp (˚C) |
 | :---: | :-------: |
@@ -39,12 +39,12 @@ The Table below shows temperature hourly data for an arbitrary day.
 | 22:00 |   **M**   |
 | 23:00 |    18     |
 
-As shown the table above contains missing values. Those will be replaced according to the following rules:
+As evidenced above, the table contains missing values. Those will be replaced according to the following rules:
 
 - Single missing values are replaced by averaging its contiguous values. Hence, missing value (M) at hour 14:00 will be replaced with (23+24)/2 = 23.5
 - Two consecutive missing values are replaced with the weighted mean of the preceding and following values, In this case missing values at hour 05:00 will be replaced with the weigthed mean (18+18+16)/3 = 17.3, and missing value at hour 06:00 will be replaced with weigthed mean (16+16+18)/3 = 16.6
 
-Applying the rules above we obtain the following:
+Applying the above rules, we obtain the following:
 
 | Hour  | Temp (˚C) |
 | :---: | :-------: |
@@ -73,18 +73,18 @@ Applying the rules above we obtain the following:
 | 22:00 |   **M**   |
 | 23:00 |    18     |
 
-### 3. Replace missing values with sister station data
+### 3. Replace Missing Values with Sister Station Data
 
-At this point the data might still have missing values. To fix that, we replace those missing values with the sister station's available data.
+At this point, it is possible that the dataset still contains missing values. To fix this, we replace those missing values with the sister station's available data.
 
-After this step is completed, two scenarios might emerge. The first scenario is the replacement of all remaining missing values, hence in our case the temperature data for that day will no longer have any missing values.
+After this step has been completed, two possibilties emerge. The first possible outcome is that all of the missing values are replaced. Hence, in our case, the temperature data for the selected day will no longer have missing values.
 
-The second scenario, is still the presence of missing values. The cause of that could be that the sister station had missing values as well at the same point in time (day and hour) and hence did not provide a valid alternative.
+The second possibility is the persistence of missing values. This could likely be attributed to the sister station also containing missing values for the same points in time (day, hour) as needed for our data.
 
-Another step we take to replace those remaining missing values is to replace them with forecast data. However, it is done only if the user has chosen a date in the current year. If the date selected by the user is not in the current year, the remaining missing values are not replaced with forecast data.
+Another solution to address the missing values is to replace those fields with forecast data. However, it is done only if the user has selected a date in the current year. If the date selected by the user is not in the current year, the remaining missing values are not replaced with forecast data.
 
-### 4. Handling 5 or more missing values in a day
+### 4. Handling Five or More Missing Values in a Day
 
-Even after all those steps, the data temperature might still contain missing values. At this point if the numer of missing value is greater than 5, we discard the entire day. The date in question is saved and presented to the user at the right time, to inform him/her of the missing data for that particular date.
+Despite all of the aforementioned steps, it is possible for the data to contain missing values. Under these circumstances, if the number of missing values is greater than five, we discard the entire day. The date in question is saved and presented to the user at the right time, in order to inform the user of the missing data for that particular date.
 
 
