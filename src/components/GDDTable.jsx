@@ -49,9 +49,9 @@ const styles = theme => ({
   },
   missingDays: {
     width: "100%",
-    maxWidth: 1200,
+    maxWidth: 700,
     margin: "0 auto",
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit * 4
   },
   segment: {
     width: 110,
@@ -229,7 +229,8 @@ class GDDTable extends Component {
                           background: botrytisColor(o.botrytis),
                           letterSpacing: 1,
                           color: o.botrytis === "N/A" ? "black" : "black",
-                          borderRight: "1px solid #E0E0E0"
+                          borderRight: "1px solid #E0E0E0",
+                          borderLeft: "1px solid #E0E0E0"
                         }}
                       >
                         {o.botrytis}
