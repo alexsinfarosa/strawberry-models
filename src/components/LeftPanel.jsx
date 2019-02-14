@@ -212,7 +212,7 @@ class LeftPanel extends Component {
             >
               <Typography variant="caption">LOW</Typography>
             </div>
-            <Typography variant="caption">&lt;0.5</Typography>
+            <Typography variant="caption">&lt;0.50</Typography>
           </div>
           <div className={classes.styledBtn}>
             <div
@@ -221,7 +221,7 @@ class LeftPanel extends Component {
             >
               <Typography variant="caption">MODERATE</Typography>
             </div>
-            <Typography variant="caption">&ge;0.5 and &lt;0.7</Typography>
+            <Typography variant="caption">&ge;0.50 and &lt;0.70</Typography>
           </div>
           <div className={classes.styledBtn}>
             <div
@@ -230,7 +230,7 @@ class LeftPanel extends Component {
             >
               <Typography variant="caption">HIGH</Typography>
             </div>
-            <Typography variant="caption">&ge;0.7</Typography>
+            <Typography variant="caption">&ge;0.70</Typography>
           </div>
 
           <br />
@@ -254,7 +254,7 @@ class LeftPanel extends Component {
             >
               <Typography variant="caption">MODERATE</Typography>
             </div>
-            <Typography variant="caption">&ge;0.15 and &lt;0.5</Typography>
+            <Typography variant="caption">&ge;0.15 and &lt;0.50</Typography>
           </div>
           <div className={classes.styledBtn}>
             <div
@@ -263,7 +263,7 @@ class LeftPanel extends Component {
             >
               <Typography variant="caption">HIGH</Typography>
             </div>
-            <Typography variant="caption">&ge;0.5</Typography>
+            <Typography variant="caption">&ge;0.50</Typography>
           </div>
         </form>
       </Fragment>

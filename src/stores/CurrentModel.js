@@ -42,7 +42,7 @@ export default class CurrentModel {
         if (lwet.length > 0) {
           lwet.forEach((lw, i) => {
             let o = {};
-            if ((lw === 0 && pcpn[i] > 0) || lw >= 1) {
+            if (pcpn[i] > 0 || lw >= 1) {
               o["lw"] = +lw;
               o["pcpn"] = +pcpn[i];
               o["index"] = i;
@@ -63,14 +63,14 @@ export default class CurrentModel {
         }
 
         p["atRisk"] = atRisk;
-
+        const dryHours = 4;
         let indeces = [];
         let arr = [];
         p.atRisk.forEach((obj, i) => {
           if (i === 0) {
             arr.push(obj);
           } else {
-            if (obj.index - p.atRisk[i - 1].index >= 4) {
+            if (obj.index - p.atRisk[i - 1].index >= dryHours) {
               indeces.push(arr);
               arr = [];
               arr.push(obj);
@@ -110,7 +110,7 @@ export default class CurrentModel {
         p["anthracnose"] = anthracnose.toFixed(2);
       }
 
-      // console.log(p);
+      // console.log(p, missingDays);
       return { p, missingDays };
     });
   }
@@ -137,11 +137,21 @@ export default class CurrentModel {
   setCSVData = () => {
     this.CSVData = [];
     // console.log(this.CSVData.length);
-    this.modelData.forEach(obj => {
+    this.modelData.forEach((obj, i) => {
+      // const patchedDay = format(, "YYYY-MM-DD");
+
       const date = obj["p"].date;
       const anthracnose = obj["p"].anthracnose;
       const botrytis = obj["p"].botrytis;
-      this.CSVData.push({ date, anthracnose, botrytis });
+      const patchedDay = obj["missingDays"].find(
+        mDay => format(mDay, "YYYY-MM-DD") === obj["p"].date
+      );
+      this.CSVData.push({
+        date,
+        anthracnose,
+        botrytis,
+        patchedDay
+      });
     });
   };
 }

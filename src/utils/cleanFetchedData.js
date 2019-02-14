@@ -112,21 +112,17 @@ export default (acisData, params) => {
     }
   });
 
-  // let test = {
-  //   currentStnValues,
-  //   sisterStnValues,
-  //   replacedMissingValuesWithSisterStn,
-  //   forecastValues,
-  //   cleanedHourlyData,
-  //   hourlyDates,
-  //   hourlyData,
-  //   dailyData
-  // };
-
   let results = {
+    currentStnValues,
+    sisterStnValues,
+    replacedMissingValuesWithSisterStn,
+    forecastValues,
+    cleanedHourlyData,
+    hourlyDates,
     hourlyData,
     dailyData
   };
+
   // console.log(results);
   return results;
 };
