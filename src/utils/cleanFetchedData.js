@@ -91,7 +91,7 @@ export default (acisData, params) => {
   // left needs to start from 23 because December 31 has only 23 hours. The first hour
   // was removed when shifted left.
   let left = 23;
-  left = 35; // since we need to have a day from noon to noon
+  left = 36; // since we need to have a day from 13:00 to 12:00 of the day after
   let right = 0;
   dates.forEach((date, i) => {
     // 1 > 0 because we need to start from jannuary 1st
@@ -123,6 +123,6 @@ export default (acisData, params) => {
     dailyData
   };
 
-  // console.log(results);
+  console.log(results);
   return results;
 };
