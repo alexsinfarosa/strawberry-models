@@ -143,9 +143,11 @@ export default class CurrentModel {
       const date = obj["p"].date;
       const anthracnose = obj["p"].anthracnose;
       const botrytis = obj["p"].botrytis;
+
       const patchedDay = obj["missingDays"].find(
         mDay => format(mDay, "YYYY-MM-DD") === obj["p"].date
       );
+
       this.CSVData.push({
         date,
         anthracnose,

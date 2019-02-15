@@ -74,7 +74,7 @@ export default async params => {
   sisParams.sid = sisterStationIdAndNetwork;
   const sisterStation = await fetchSisterStationHourlyData(sisParams);
 
-  if (params.isThisYear) {
+  if (params.isYearAfter2017) {
     // get forecast hourly data
     const tempForecast = await fetchHourlyForcestData("temp", params);
     const rhumForecast = await fetchHourlyForcestData("rhum", params);
@@ -87,7 +87,7 @@ export default async params => {
   results.set("sisterStn", sisterStation.data);
 
   // clean data
-  // console.log(results, params);
+  console.log(results, params);
   const cleaned = cleanFetchedData(results, params);
 
   // console.log(cleaned);

@@ -153,7 +153,8 @@ export default class ParamsStore {
           startOfHour(this.dateOfInterest),
           "YYYY-MM-DD HH:00"
         ),
-        isThisYear: isSameYear(new Date(), this.dateOfInterest)
+        isThisYear: isSameYear(new Date(), this.dateOfInterest),
+        isYearAfter2017: getYear(this.dateOfInterest) > 2017
       };
     }
   }

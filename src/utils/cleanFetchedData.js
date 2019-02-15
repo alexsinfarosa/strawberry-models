@@ -45,7 +45,8 @@ export default (acisData, params) => {
   // if date of interest is in current year get forecast data
   let forecastValues = {};
   let replacedMissingValuesWithForecast = {};
-  if (params.isThisYear) {
+
+  if (params.isYearAfter2017) {
     const tempForecast = acisData.get("tempForecast");
     const rhumForecast = acisData.get("rhumForecast");
 
@@ -66,7 +67,7 @@ export default (acisData, params) => {
   }
 
   // Checking if current year
-  const cleanedHourlyData = params.isThisYear
+  const cleanedHourlyData = params.isYearAfter2017
     ? replacedMissingValuesWithForecast
     : replacedMissingValuesWithSisterStn;
 
