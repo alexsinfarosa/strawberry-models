@@ -86,7 +86,7 @@ export default (acisData, params) => {
     hourlyData.push(p);
   });
 
-  // Daily Data -----------------------------------------------------------------------
+  // Daily Data -----------------------------------------------------------------
   let dailyData = [];
   // left needs to start from 23 because December 31 has only 23 hours. The first hour
   // was removed when shifted left.

@@ -158,7 +158,7 @@ class GDDTable extends Component {
                     <div>DATE</div>
                     <br />
                     <small>
-                      (A single day goes from 12:00 pm to 11:00 am of next day)
+                      A single day goes from 13:00 to 12:00 of next day
                     </small>
                   </TableCell>
                   <TableCell
