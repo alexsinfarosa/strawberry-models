@@ -82,21 +82,21 @@ class ManagementTable extends Component {
                         style={{
                           textAlign: "center",
                           margin: 0,
-                          padding: 0
-                          // fontSize: 16
+                          padding: 0,
+                          fontSize: 16
                         }}
                       >
-                        DISEASE
+                        Disease
                       </TableCell>
                       <TableCell
                         style={{
                           textAlign: "center",
-                          borderLeft: "1px solid #E0E0E0"
-                          // fontSize: 16
+                          borderLeft: "1px solid #E0E0E0",
+                          fontSize: 16
                         }}
                         // colSpan={2}
                       >
-                        DISEASE MANAGEMENT
+                        Disease Management
                       </TableCell>
                     </TableRow>
                   </TableHead>

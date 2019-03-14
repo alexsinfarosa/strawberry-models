@@ -34,11 +34,11 @@ const styles = theme => ({
     }
   },
   tableCell: {
-    fontSize: "0.8rem",
+    fontSize: "1rem",
     padding: "0 10px",
     textAlign: "center",
     "@media (min-width: 576px)": {
-      fontSize: "0.8rem"
+      fontSize: "1rem"
     }
   },
   tableHeader: {
@@ -152,10 +152,11 @@ class GDDTable extends Component {
                       textAlign: "center",
                       margin: 0,
                       padding: 0,
-                      borderRight: "1px solid #E0E0E0"
+                      borderRight: "1px solid #E0E0E0",
+                      fontSize: 16
                     }}
                   >
-                    <div>DATE</div>
+                    <div>Date</div>
                     <br />
                     <small>
                       A single day goes from 13:00 to 12:00 of next day
@@ -165,11 +166,12 @@ class GDDTable extends Component {
                     style={{
                       textAlign: "center",
                       borderLeft: "1px solid #E0E0E0",
-                      borderRight: "1px solid #E0E0E0"
+                      borderRight: "1px solid #E0E0E0",
+                      fontSize: 16
                     }}
                     colSpan={2}
                   >
-                    INFECTION RISK LEVELS
+                    Infection Risk Levels
                   </TableCell>
                 </TableRow>
 
@@ -177,15 +179,19 @@ class GDDTable extends Component {
                   <TableCell
                     className={classes.tableCell}
                     style={{
-                      borderRight: "1px solid #E0E0E0"
+                      borderRight: "1px solid #E0E0E0",
+                      fontSize: 16
                     }}
                   >
-                    BOTRYTIS
+                    Botrytis
                   </TableCell>
 
-                  <TableCell className={classes.tableCell} colSpan={20}>
-                    {/* FIX colSpan={20} */}
-                    ANTHRACNOSE
+                  <TableCell
+                    className={classes.tableCell}
+                    colSpan={20}
+                    style={{ fontSize: 16 }}
+                  >
+                    Anthracnose
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -211,7 +217,7 @@ class GDDTable extends Component {
                       <TableCell
                         className={classes.tableCell}
                         style={{
-                          fontSize: isToday ? "1.1rem" : null,
+                          fontSize: isToday ? "1.3rem" : null,
                           fontWeight: isToday ? 700 : null
                         }}
                       >

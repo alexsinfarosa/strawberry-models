@@ -186,6 +186,7 @@ class App extends Component {
                   <Typography
                     variant="display1"
                     align="center"
+                    color="inherit"
                     gutterBottom
                     style={{ marginTop: 16, marginBottom: 32 }}
                   >
