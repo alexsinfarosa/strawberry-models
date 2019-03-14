@@ -35,6 +35,11 @@ class Disclaimer extends Component {
           observations of plant growth stage, pest presence, and disease
           occurrence determined through scouting or insect pheromone traps.
         </Typography>
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div />
+          <div />
+        </div>
       </div>
     );
   }
