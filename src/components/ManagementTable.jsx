@@ -33,8 +33,10 @@ const styles = theme => ({
     fontSize: "0.8rem",
     padding: "0 10px",
     textAlign: "center",
+    color: "black",
     "@media (min-width: 576px)": {
-      fontSize: "0.8rem"
+      fontSize: "0.8rem",
+      color: "black"
     }
   },
   tableHeader: {
@@ -64,12 +66,8 @@ class ManagementTable extends Component {
       <div className={classes.root}>
         {true ? (
           <div>
-            <Typography
-              variant="subheading"
-              gutterBottom
-              style={{ letterSpacing: 1 }}
-            >
-              MANAGEMENT
+            <Typography variant="title" gutterBottom>
+              Management
             </Typography>
             <Fragment>
               <Paper>
@@ -92,7 +90,8 @@ class ManagementTable extends Component {
                         style={{
                           textAlign: "center",
                           borderLeft: "1px solid #E0E0E0",
-                          fontSize: 16
+                          fontSize: 16,
+                          color: "black"
                         }}
                         // colSpan={2}
                       >
@@ -111,7 +110,7 @@ class ManagementTable extends Component {
                       >
                         Botrytis
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{ color: "black", fontSize: "0.9rem" }}>
                         Disease management messages will appear here when the
                         strawberry diseases model is in NEWA
                       </TableCell>
@@ -127,7 +126,7 @@ class ManagementTable extends Component {
                       >
                         Anthracnose
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{ color: "black", fontSize: "0.9rem" }}>
                         Disease management messages will appear here when the
                         strawberry diseases model is in NEWA
                       </TableCell>

@@ -105,12 +105,8 @@ class GDDTable extends Component {
     return (
       <div className={classes.root}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="subheading"
-            gutterBottom
-            style={{ letterSpacing: 1 }}
-          >
-            PREDICTIONS
+          <Typography variant="title" gutterBottom>
+            Predictions
           </Typography>
           <CSVLink
             data={CSVData.slice()}
@@ -153,7 +149,8 @@ class GDDTable extends Component {
                       margin: 0,
                       padding: 0,
                       borderRight: "1px solid #E0E0E0",
-                      fontSize: 16
+                      fontSize: 16,
+                      color: "black"
                     }}
                   >
                     <div>Date</div>
@@ -167,7 +164,8 @@ class GDDTable extends Component {
                       textAlign: "center",
                       borderLeft: "1px solid #E0E0E0",
                       borderRight: "1px solid #E0E0E0",
-                      fontSize: 16
+                      fontSize: 16,
+                      color: "black"
                     }}
                     colSpan={2}
                   >
@@ -180,7 +178,8 @@ class GDDTable extends Component {
                     className={classes.tableCell}
                     style={{
                       borderRight: "1px solid #E0E0E0",
-                      fontSize: 16
+                      fontSize: 16,
+                      color: "black"
                     }}
                   >
                     Botrytis
@@ -189,7 +188,7 @@ class GDDTable extends Component {
                   <TableCell
                     className={classes.tableCell}
                     colSpan={20}
-                    style={{ fontSize: 16 }}
+                    style={{ fontSize: 16, color: "black" }}
                   >
                     Anthracnose
                   </TableCell>

@@ -46,10 +46,10 @@ export default class ParamsStore {
     );
   }
 
-  // logic --------------------------------------------------------------------------------
+  // logic ------------------------------------------------------
   isLoading = false;
 
-  //   state ------------------------------------------------------------------------------
+  //   state -------------------------------------------------------
   postalCode = "ALL";
   setPostalCode = e => {
     this.postalCode = e.target.value;
@@ -59,7 +59,7 @@ export default class ParamsStore {
     return allStates.find(state => state.postalCode === this.postalCode);
   }
 
-  //   station -----------------------------------------------------------------------------
+  //   station -------------------------------------------------------
   stationID = "";
   setStationID = e => {
     this.stationID = e.target.value;
@@ -96,14 +96,14 @@ export default class ParamsStore {
     this.stationID = station.id;
   };
 
-  //   date of interest -------------------------------------------------------------------
+  //   date of interest ----------------------------------------------
   dateOfInterest = new Date();
   get sdate() {
     return `${getYear(this.dateOfInterest) - 1}-12-31`;
   }
   setDateOfInterest = d => (this.dateOfInterest = d);
 
-  //   localstorage ------------------------------------------------------------------------
+  //   localstorage ----------------------------------------------------
   writeToLocalstorage = json => {
     localStorage.setItem("newa-strawberry-models", JSON.stringify(json));
   };
@@ -121,7 +121,7 @@ export default class ParamsStore {
     }
   };
 
-  // params ----------------------------------------------------------------------------------
+  // params ------------------------------------------------------
   get asJson() {
     return {
       postalCode: this.postalCode,
@@ -166,16 +166,16 @@ export default class ParamsStore {
     return (
       isAfter(
         this.dateOfInterest,
-        new Date(`${getYear(this.dateOfInterest)}-03-01`)
+        new Date(`${getYear(this.dateOfInterest)}-03-16`)
       ) &&
       isBefore(
         this.dateOfInterest,
-        new Date(`${getYear(this.dateOfInterest)}-10-01`)
+        new Date(`${getYear(this.dateOfInterest)}-10-31`)
       )
     );
   }
 
-  // data model --------------------------------------------------------------------------------
+  // data model ----------------------------------------------------------
   data = [];
   missingDays = [];
   loadData = params => {

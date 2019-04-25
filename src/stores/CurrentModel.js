@@ -24,9 +24,9 @@ export default class CurrentModel {
   // current model ---------------------------------------------------------------
   get modelData() {
     let missingDays = [];
+    console.log(this.dailyData.slice());
     return this.dailyData.map(obj => {
       const { date, temp, rhum, lwet, pcpn } = obj;
-
       // For now I check the missing values only on the temp array. Maybe we should check it for every array
       const countMissingValues = temp.filter(t => t === "M").length;
 
@@ -42,7 +42,7 @@ export default class CurrentModel {
         if (lwet.length > 0) {
           lwet.forEach((lw, i) => {
             let o = {};
-            if (pcpn[i] > 0 || lw >= 1) {
+            if ((lw === 0 && pcpn[i] >= 0.01) || lw >= 1) {
               o["lw"] = +lw;
               o["pcpn"] = +pcpn[i];
               o["index"] = i;
@@ -53,7 +53,7 @@ export default class CurrentModel {
         } else {
           rhum.forEach((rh, j) => {
             let o = {};
-            if (+rh >= 90) {
+            if ((+rh < 90 && pcpn[j] >= 0.01) || +rh >= 90) {
               o["rhum"] = +rh;
               o["index"] = j;
               o["temp"] = +temp[j];
@@ -61,12 +61,14 @@ export default class CurrentModel {
             }
           });
         }
+        console.log(date, atRisk);
 
         p["atRisk"] = atRisk;
         const dryHours = 4;
         let indeces = [];
         let arr = [];
         p.atRisk.forEach((obj, i) => {
+          // console.log(obj, i);
           if (i === 0) {
             arr.push(obj);
           } else {
@@ -82,7 +84,7 @@ export default class CurrentModel {
             }
           }
         });
-
+        console.log(indeces);
         p["indeces"] = indeces;
 
         let countLeafWetnesHoursAndAvgTemps = [];
