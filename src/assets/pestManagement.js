@@ -1,7 +1,7 @@
 export const pestManagement = [
   {
     stage: "Dormant message",
-    date: "October 1st - February 28/29",
+    date: "Jannuary 1st - February 15th",
     dd: 0,
     status: "Blueberry maggot is overwintering as pupae in the soil.",
     management:

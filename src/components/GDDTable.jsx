@@ -154,10 +154,6 @@ class GDDTable extends Component {
                     }}
                   >
                     <div>Date</div>
-                    <br />
-                    <small>
-                      A single day goes from 13:00 to 12:00 of next day
-                    </small>
                   </TableCell>
                   <TableCell
                     style={{

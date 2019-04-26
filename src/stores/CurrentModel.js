@@ -41,7 +41,7 @@ export default class CurrentModel {
         if (lwet.length > 0) {
           lwet.forEach((lw, i) => {
             let o = {};
-            if ((lw === 0 && pcpn[i] >= 0.01) || lw >= 1) {
+            if ((+lw === 0 && +pcpn[i] >= 0.01) || +lw >= 1) {
               o["lw"] = +lw;
               o["pcpn"] = +pcpn[i];
               o["index"] = i;
@@ -52,7 +52,7 @@ export default class CurrentModel {
         } else {
           rhum.forEach((rh, j) => {
             let o = {};
-            if ((+rh < 90 && pcpn[j] >= 0.01) || +rh >= 90) {
+            if ((+rh < 90 && +pcpn[j] >= 0.01) || +rh >= 90) {
               o["rhum"] = +rh;
               o["index"] = j;
               o["temp"] = +temp[j];
@@ -66,39 +66,23 @@ export default class CurrentModel {
         const dryHours = 4;
         let indeces = [];
         let arr = [];
-        let combinedWetEvents = [];
-        let continuousWetEvents = [];
         p.atRisk.forEach((obj, i) => {
           // console.log(p.date, obj, i);
           if (i === 0) {
             arr.push(obj);
           } else {
-            if (obj.index - p.atRisk[i - 1].index > dryHours) {
+            if (obj.index - p.atRisk[i - 1].index <= dryHours) {
+              arr.push(obj);
+              if (i === p.atRisk.length - 1) indeces.push(arr);
+            } else {
               indeces.push(arr);
               arr = [];
               arr.push(obj);
-            } else {
-              arr.push(obj);
-              if (i === p.atRisk.length - 1) {
-                indeces.push(arr);
-              }
             }
           }
         });
-        console.log(arr);
 
-        // p.atRisk.forEach((obj, i) => {
-        //   // console.log(p.date, obj, i);
-        //   if (i === 0) {
-        //     arr.push(obj);
-        //   } else {
-        //     if (obj.index - p.atRisk[i - 1].index < 4) {
-        //       combinedWetEvents.push(obj);
-        //     }
-        //   }
-        // });
-
-        console.log(indeces);
+        // console.log(indeces);
         p["indeces"] = indeces;
 
         let countLeafWetnesHoursAndAvgTemps = [];
@@ -112,15 +96,24 @@ export default class CurrentModel {
         });
 
         p["countLeafWetnesHoursAndAvgTemps"] = countLeafWetnesHoursAndAvgTemps;
-
+        // console.log(p.date, countLeafWetnesHoursAndAvgTemps);
         let botrytis = 0;
         let anthracnose = 0;
-        countLeafWetnesHoursAndAvgTemps.forEach(arr => {
-          const w = arr.w;
-          const t = arr.avgT;
-          botrytis += botrytisIndex(w, t);
-          anthracnose += anthracnoseIndex(w, t);
-        });
+
+        if (countLeafWetnesHoursAndAvgTemps.length > 1) {
+          const wMax = Math.max(
+            ...countLeafWetnesHoursAndAvgTemps.map(d => d.w)
+          );
+          const obj = countLeafWetnesHoursAndAvgTemps.find(d => d.w === wMax);
+          botrytis = botrytisIndex(obj.w, obj.avgT);
+          anthracnose = anthracnoseIndex(obj.w, obj.avgT);
+        }
+
+        if (countLeafWetnesHoursAndAvgTemps.length === 1) {
+          const obj = countLeafWetnesHoursAndAvgTemps[0];
+          botrytis = botrytisIndex(obj.w, obj.avgT);
+          anthracnose = anthracnoseIndex(obj.w, obj.avgT);
+        }
 
         p["botrytis"] = botrytis.toFixed(2);
         p["anthracnose"] = anthracnose.toFixed(2);
