@@ -38,10 +38,17 @@ class Acknowledgment extends Component {
             </a>
             , and Dr. Kerik Cox, Plant Pathology and Plant-Microbe Biology, at
             Cornell University, with input from Dr. Natália Perez, University of
-            Florida. Please contact{" "}
-            <a href="mailto:kdc33@cornell.edu">Dr. Cox </a>with any questions
-            regarding the scientific content and recommendations delivered in
-            tool outputs.
+            Florida.
+          </Typography>
+
+          <Typography
+            component="p"
+            style={{ lineHeight: "1.8em" }}
+            gutterBottom
+          >
+            Please contact <a href="mailto:kdc33@cornell.edu">Dr. Cox </a>with
+            any questions regarding the scientific content and recommendations
+            delivered in tool outputs.
           </Typography>
 
           <br />
@@ -57,9 +64,17 @@ class Acknowledgment extends Component {
             Wilson, L.L., Madden, L.V. and Ellis, M.A. 1990. Influence of
             temperature and wetness duration on infection of immature and mature
             strawberry fruit by Colletotrichum acutatum. Phytopathology
-            80:111-116. MacKenzie, S. J., and N. A. Peres. 2012. Use of leaf
-            wetness and temperature to time fungicide applications to control
-            Botrytis fruit rot of strawberry in Florida. Plant Dis. 96: 529-536.
+            80:111-116.
+          </Typography>
+
+          <Typography
+            component="p"
+            style={{ lineHeight: "1.8em" }}
+            gutterBottom
+          >
+            MacKenzie, S. J., and N. A. Peres. 2012. Use of leaf wetness and
+            temperature to time fungicide applications to control Botrytis fruit
+            rot of strawberry in Florida. Plant Dis. 96: 529-536.
           </Typography>
 
           <br />
@@ -74,10 +89,17 @@ class Acknowledgment extends Component {
             Bulger, M. A., Ellis, M. A., and Madden, L. V. 1987. Influence of
             temperature and wetness duration on infection of strawberry flowers
             by Botrytis cinerea and disease incidence of fruit originating from
-            infected flowers. Phytopathology 77:1225-1230. MacKenzie, S. J., and
-            N. A. Peres. 2012. Use of leaf wetness and temperature to time
-            fungicide applications to control anthracnose rot of strawberry in
-            Florida. Plant Disease 96: 522-528.
+            infected flowers. Phytopathology 77:1225-1230.
+          </Typography>
+
+          <Typography
+            component="p"
+            style={{ lineHeight: "1.8em" }}
+            gutterBottom
+          >
+            MacKenzie, S. J., and N. A. Peres. 2012. Use of leaf wetness and
+            temperature to time fungicide applications to control anthracnose
+            rot of strawberry in Florida. Plant Disease 96: 522-528.
           </Typography>
         </Paper>
       </div>
