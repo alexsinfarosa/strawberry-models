@@ -81,7 +81,7 @@ export default class CurrentModel {
             }
           }
         });
-
+        console.log(arr);
         // console.log(indeces);
         p["indeces"] = indeces;
 
@@ -91,6 +91,9 @@ export default class CurrentModel {
           p["w"] = arr.length;
           p["avgT"] =
             [...arr.map(o => o.temp)].reduce((acc, res) => acc + res, 0) /
+            arr.length;
+          p["pcpn"] =
+            [...arr.map(o => o.pcpn)].reduce((acc, res) => acc + res, 0) /
             arr.length;
           countLeafWetnesHoursAndAvgTemps.push(p);
         });

@@ -41,7 +41,7 @@ const styles = theme => ({
     textAlign: "center",
     margin: 0,
     padding: 0,
-    borderRight: "1px solid #E0E0E0",
+    // borderRight: "1px solid #E0E0E0",
     fontSize: 16,
     color: "black"
   },
@@ -391,20 +391,21 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
             <TableCell className={classes.header}>
               Temp during LW (avg °C)
             </TableCell>
-            <TableCell className={classes.header}>LW (hrs)</TableCell>
-            <TableCell className={classes.header}>RH ≥ 90% (hrs)</TableCell>
+            <TableCell className={classes.header}>
+              LW or RH ≥ 90% (hrs)
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {dataForTable.map(o => {
-            console.log(o.countLeafWetnesHoursAndAvgTemps);
             const isToday = isSameDay(new Date(dateOfInterest), o.date);
             const formattedDate = format(o.date, "YYYY-MM-DD");
             const formattedToday = format(new Date(), "YYYY-MM-DD");
 
+            let pcpn = "-";
             let lw = "-";
             let avgT = "-";
-            let rh = "-";
+
             if (o.countLeafWetnesHoursAndAvgTemps.length !== 0) {
               lw = o.countLeafWetnesHoursAndAvgTemps
                 .map(o => o.w)
@@ -412,12 +413,10 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
               avgT = o.countLeafWetnesHoursAndAvgTemps
                 .map(o => o.avgT)
                 .reduce((tot, val) => tot + val, 0);
-              rh = o.countLeafWetnesHoursAndAvgTemps
-              .map(o => o.rh)
-              .reduce((tot, val) => tot + val, 0);
+              pcpn = o.countLeafWetnesHoursAndAvgTemps
+                .map(o => o.pcpn)
+                .reduce((tot, val) => tot + val, 0);
             }
-
-            console.log(lw, avgT);
 
             return (
               <TableRow hover key={o.date}>
@@ -435,7 +434,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                 <TableCell
                   className={classes.tableCell}
                   style={{
-                    fontSize: isToday ? "1.3rem" : null,
+                    // fontSize: isToday ? "1.3rem" : null,
                     fontWeight: isToday ? 700 : null
                   }}
                 >
@@ -443,17 +442,23 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     ? "Today"
                     : format(o.date, "MMMM Do")}
                 </TableCell>
-                <TableCell className={classes.tableCell}>PCPN</TableCell>
-                <TableCell className={classes.tableCell}>
-                  {avgT === '-' ? '-' : avgT.toFixed(1)}
+                <TableCell className={classes.tableCell}                   style={{
+                    // fontSize: isToday ? "1.3rem" : null,
+                    fontWeight: isToday ? 700 : null
+                  }}>
+                  {pcpn === "-" ? "-" : pcpn.toFixed(1)}
                 </TableCell>
-
-                <TableCell className={classes.tableCell}>
-                  {lw === '-' ? '-' : lw.toFixed(1)}
+                <TableCell className={classes.tableCell}                   style={{
+                    // fontSize: isToday ? "1.3rem" : null,
+                    fontWeight: isToday ? 700 : null
+                  }}>
+                  {avgT === "-" ? "-" : avgT.toFixed(1)}
                 </TableCell>
-
-                <TableCell className={classes.tableCell}>
-                  {rh === '-' ? '-' : rh.toFixed(1)}
+                <TableCell className={classes.tableCell}                   style={{
+                    // fontSize: isToday ? "1.3rem" : null,
+                    fontWeight: isToday ? 700 : null
+                  }}>
+                  {lw === "-" ? "-" : lw.toFixed(0)}
                 </TableCell>
               </TableRow>
             );
