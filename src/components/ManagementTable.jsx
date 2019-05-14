@@ -11,6 +11,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Switch from "@material-ui/core/Switch";
 
 import isWithinInterval from "date-fns/isWithinInterval";
 import { format, isSameDay, differenceInDays } from "date-fns/esm";
@@ -56,6 +57,13 @@ const styles = theme => ({
 });
 
 class ManagementTable extends Component {
+  state = {
+    hasBloomed: false
+  };
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
+
   timeColor = date => {
     const formattedDate = format(date, "YYYY-MM-DD");
     const formattedToday = format(new Date(), "YYYY-MM-DD");
@@ -68,7 +76,6 @@ class ManagementTable extends Component {
     const { classes } = this.props;
     const { dateOfInterest } = this.props.appStore.paramsStore;
     const { dataForTable } = this.props.appStore.currentModel;
-    console.log(dataForTable);
     const year = dateOfInterest.getFullYear();
 
     const isDormant = isWithinInterval(dateOfInterest, {
@@ -89,7 +96,14 @@ class ManagementTable extends Component {
     return (
       <div className={classes.root}>
         {isDormant && <DormantMsg classes={classes} />}
-        {isPrebloom && <PrebloomMsg classes={classes} />}
+        {(isPrebloom || isBloom) && (
+          <PrebloomMsg
+            classes={classes}
+            hasBloomed={this.state.hasBloomed}
+            handleChange={this.handleChange}
+            isBloom={isBloom}
+          />
+        )}
         {isBloom && (
           <AnotherTable
             classes={classes}
@@ -108,6 +122,7 @@ const DormantMsg = ({ classes }) => (
     <Typography variant="display1" component="h3" gutterBottom>
       Dormant
     </Typography>
+
     <br />
     <Typography variant="subheading" gutterBottom>
       Infection risk model results will display beginning February 15. To see
@@ -149,15 +164,26 @@ const DormantMsg = ({ classes }) => (
   </Paper>
 );
 
-const PrebloomMsg = ({ classes }) => (
+const PrebloomMsg = ({ classes, hasBloomed, handleChange, isBloom }) => (
   <Paper elevetion={2} className={classes.paper}>
-    <Typography variant="display1" component="h3" gutterBottom>
-      Has Bloom Begun? YES or NO
-    </Typography>
+    <div>
+      <Typography variant="display1" component="h3" gutterBottom>
+        Has Bloom Begun?
+      </Typography>
+      <div>
+        No
+        <Switch
+          checked={hasBloomed}
+          onChange={handleChange("hasBloomed")}
+          value="hasBloomed"
+        />
+        Yes
+      </div>
+    </div>
     <br />
 
     {/* NO */}
-    {false && (
+    {!hasBloomed && (
       <div>
         <Typography variant="title" component="h3" gutterBottom>
           Strawberry Botrytis and Anthracnose Infection Risk Model
@@ -198,7 +224,7 @@ const PrebloomMsg = ({ classes }) => (
       </div>
     )}
 
-    {true && (
+    {(hasBloomed || isBloom) && (
       <Table style={{ marginBottom: 64 }}>
         <TableHead>
           <TableHead>
@@ -401,23 +427,6 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
             const isToday = isSameDay(new Date(dateOfInterest), o.date);
             const formattedDate = format(o.date, "YYYY-MM-DD");
             const formattedToday = format(new Date(), "YYYY-MM-DD");
-
-            let pcpn = "-";
-            let lw = "-";
-            let avgT = "-";
-
-            if (o.countLeafWetnesHoursAndAvgTemps.length !== 0) {
-              lw = o.countLeafWetnesHoursAndAvgTemps
-                .map(o => o.w)
-                .reduce((tot, val) => tot + val, 0);
-              avgT = o.countLeafWetnesHoursAndAvgTemps
-                .map(o => o.avgT)
-                .reduce((tot, val) => tot + val, 0);
-              pcpn = o.countLeafWetnesHoursAndAvgTemps
-                .map(o => o.pcpn)
-                .reduce((tot, val) => tot + val, 0);
-            }
-
             return (
               <TableRow hover key={o.date}>
                 <TableCell
@@ -449,7 +458,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {pcpn === "-" ? "-" : pcpn.toFixed(1)}
+                  {o.obj === null ? "-" : o.obj.pcpn.toFixed(1)}
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
@@ -458,7 +467,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {avgT === "-" ? "-" : avgT.toFixed(1)}
+                  {o.obj === null ? "-" : o.obj.avgT.toFixed(1)}
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
@@ -467,7 +476,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {lw === "-" ? "-" : lw.toFixed(0)}
+                  {o.obj === null ? "-" : o.obj.w.toFixed(0)}
                 </TableCell>
               </TableRow>
             );

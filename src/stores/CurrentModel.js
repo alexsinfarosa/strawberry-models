@@ -81,7 +81,7 @@ export default class CurrentModel {
             }
           }
         });
-        console.log(arr);
+        // console.log(arr);
         // console.log(indeces);
         p["indeces"] = indeces;
 
@@ -102,22 +102,23 @@ export default class CurrentModel {
         // console.log(p.date, countLeafWetnesHoursAndAvgTemps);
         let botrytis = 0;
         let anthracnose = 0;
-
+        let obj = null;
         if (countLeafWetnesHoursAndAvgTemps.length > 1) {
           const wMax = Math.max(
             ...countLeafWetnesHoursAndAvgTemps.map(d => d.w)
           );
-          const obj = countLeafWetnesHoursAndAvgTemps.find(d => d.w === wMax);
+          obj = countLeafWetnesHoursAndAvgTemps.find(d => d.w === wMax);
           botrytis = botrytisIndex(obj.w, obj.avgT);
           anthracnose = anthracnoseIndex(obj.w, obj.avgT);
         }
 
         if (countLeafWetnesHoursAndAvgTemps.length === 1) {
-          const obj = countLeafWetnesHoursAndAvgTemps[0];
+          obj = countLeafWetnesHoursAndAvgTemps[0];
           botrytis = botrytisIndex(obj.w, obj.avgT);
           anthracnose = anthracnoseIndex(obj.w, obj.avgT);
         }
 
+        p["obj"] = obj;
         p["botrytis"] = botrytis.toFixed(2);
         p["anthracnose"] = anthracnose.toFixed(2);
       }

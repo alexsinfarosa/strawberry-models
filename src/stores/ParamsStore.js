@@ -116,7 +116,7 @@ export default class ParamsStore {
       if (Object.keys(params).length !== 0) {
         this.postalCode = params.postalCode;
         this.stationID = params.stationID;
-        this.dateOfInterest = new Date();
+        this.dateOfInterest = new Date("2019/03/01");
       }
     }
   };
