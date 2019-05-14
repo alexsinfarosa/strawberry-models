@@ -81,7 +81,7 @@ class ManagementTable extends Component {
       end: new Date(`${year}-03-15`)
     });
 
-    const isbloom = isWithinInterval(dateOfInterest, {
+    const isBloom = isWithinInterval(dateOfInterest, {
       start: new Date(`${year}-03-16`),
       end: new Date(`${year}-10-31`)
     });
@@ -89,8 +89,8 @@ class ManagementTable extends Component {
     return (
       <div className={classes.root}>
         {isDormant && <DormantMsg classes={classes} />}
-        {false && <PrebloomMsg classes={classes} />}
-        {true && (
+        {isPrebloom && <PrebloomMsg classes={classes} />}
+        {isBloom && (
           <AnotherTable
             classes={classes}
             dateOfInterest={dateOfInterest}
@@ -442,22 +442,31 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     ? "Today"
                     : format(o.date, "MMMM Do")}
                 </TableCell>
-                <TableCell className={classes.tableCell}                   style={{
+                <TableCell
+                  className={classes.tableCell}
+                  style={{
                     // fontSize: isToday ? "1.3rem" : null,
                     fontWeight: isToday ? 700 : null
-                  }}>
+                  }}
+                >
                   {pcpn === "-" ? "-" : pcpn.toFixed(1)}
                 </TableCell>
-                <TableCell className={classes.tableCell}                   style={{
+                <TableCell
+                  className={classes.tableCell}
+                  style={{
                     // fontSize: isToday ? "1.3rem" : null,
                     fontWeight: isToday ? 700 : null
-                  }}>
+                  }}
+                >
                   {avgT === "-" ? "-" : avgT.toFixed(1)}
                 </TableCell>
-                <TableCell className={classes.tableCell}                   style={{
+                <TableCell
+                  className={classes.tableCell}
+                  style={{
                     // fontSize: isToday ? "1.3rem" : null,
                     fontWeight: isToday ? 700 : null
-                  }}>
+                  }}
+                >
                   {lw === "-" ? "-" : lw.toFixed(0)}
                 </TableCell>
               </TableRow>

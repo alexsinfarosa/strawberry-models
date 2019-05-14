@@ -116,7 +116,7 @@ export default class ParamsStore {
       if (Object.keys(params).length !== 0) {
         this.postalCode = params.postalCode;
         this.stationID = params.stationID;
-        this.dateOfInterest = new Date("07/22/2018");
+        this.dateOfInterest = new Date();
       }
     }
   };
@@ -166,7 +166,7 @@ export default class ParamsStore {
     return (
       isAfter(
         this.dateOfInterest,
-        new Date(`${getYear(this.dateOfInterest)}-03-16`)
+        new Date(`${getYear(this.dateOfInterest)}-01-01`)
       ) &&
       isBefore(
         this.dateOfInterest,
