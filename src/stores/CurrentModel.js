@@ -1,6 +1,6 @@
 import { decorate, computed, observable, action } from "mobx";
-import { format } from "date-fns/esm";
-import { botrytisIndex, anthracnoseIndex } from "../utils/utils";
+import { format, isAfter } from "date-fns/esm";
+import { botrytisIndex, anthracnoseIndex, rhAdjustment } from "../utils/utils";
 
 export default class CurrentModel {
   paramsStore;
@@ -31,6 +31,8 @@ export default class CurrentModel {
 
       let p = {};
       p["date"] = date;
+      const notForecast = isAfter(new Date(), new Date(date));
+      // console.log(date, notForecast);
 
       if (countMissingValues > 5) {
         missingDays.push(date);
@@ -38,7 +40,7 @@ export default class CurrentModel {
         p["anthracnose"] = "N/A";
       } else {
         let atRisk = [];
-        if (lwet.length > 0) {
+        if (notForecast) {
           lwet.forEach((lw, i) => {
             let o = {};
             if ((+lw === 0 && +pcpn[i] >= 0.01) || +lw >= 1) {
@@ -53,7 +55,7 @@ export default class CurrentModel {
           rhum.forEach((rh, j) => {
             let o = {};
             if ((+rh < 90 && +pcpn[j] >= 0.01) || +rh >= 90) {
-              o["rhum"] = +rh;
+              o["rhum"] = rhAdjustment(+rh);
               o["index"] = j;
               o["temp"] = +temp[j];
               atRisk.push(o);

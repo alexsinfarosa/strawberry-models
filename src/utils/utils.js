@@ -265,3 +265,13 @@ export const anthracnoseIndex = (W, T) => {
     0.000093 * W * T ** 3;
   return 1 / (1 + Math.exp(-i));
 };
+
+// Returns rh array containing new values.
+// The new values are calculated according to the equation below.
+export const rhAdjustment = rh => {
+  if (rh !== "M") {
+    return Math.round(parseFloat(rh) / (0.0047 * parseFloat(rh) + 0.53));
+  } else {
+    return rh;
+  }
+};

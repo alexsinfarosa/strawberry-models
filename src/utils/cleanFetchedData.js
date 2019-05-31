@@ -30,7 +30,6 @@ export default (acisData, params) => {
     const elements = sisterStn.map(arr => arr.slice(1));
     params.eleNames.forEach((name, i) => {
       const arr = flatten(elements.map(arr => arr[i]));
-
       // shifting data from 00:00 to 23:00 -> 01:00 to 24:00
       sisterStnValues[name] = arr.slice(0, -1);
     });
@@ -51,19 +50,23 @@ export default (acisData, params) => {
     const tempForecast = acisData.get("tempForecast");
     const rhumForecast = acisData.get("rhumForecast");
 
-    forecastValues["temp"] = flatten(tempForecast.map(arr => arr[1]));
-    forecastValues["rhum"] = flatten(rhumForecast.map(arr => arr[1]));
+    const forecastValuesTemp = flatten(tempForecast.map(arr => arr[1]));
+    const forecastValuesRhum = flatten(rhumForecast.map(arr => arr[1]));
+
+    forecastValues["temp"] = forecastValuesTemp;
+    forecastValues["rhum"] = forecastValuesRhum;
 
     replacedMissingValuesWithForecast = {
       ...replacedMissingValuesWithSisterStn
     };
+    // console.log(replacedMissingValuesWithSisterStn);
     Object.keys(forecastValues).forEach(key => {
       const arr = replacedMissingValuesWithSisterStn[key].map((value, i) =>
         value === "M" ? forecastValues[key][i].toString() : value
       );
 
       // shifting data from 00:00 to 23:00 -> 01:00 to 24:00
-      replacedMissingValuesWithForecast[key] = arr.slice(0, -1);
+      replacedMissingValuesWithForecast[key] = arr;
     });
   }
 
@@ -87,6 +90,7 @@ export default (acisData, params) => {
     });
     hourlyData.push(p);
   });
+  // console.log(hourlyData);
 
   // Daily Data ----------------------------------------
   let dailyData = [];
@@ -124,6 +128,6 @@ export default (acisData, params) => {
     dailyData
   };
 
-  // console.log(results.dailyData[203]);
+  // console.log(results);
   return results;
 };

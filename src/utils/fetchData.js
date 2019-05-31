@@ -48,7 +48,10 @@ const fetchHourlyForcestData = (variable, params) => {
         params.sdate
       }/${plusFiveDays}`
     )
-    .then(res => res.data)
+    .then(res => {
+      // console.log(res.data);
+      return res.data;
+    })
     .catch(err =>
       console.log(
         `Failed to load hourly ${variable.toUpperCase} forecast data`,
@@ -78,6 +81,9 @@ export default async params => {
     // get forecast hourly data
     const tempForecast = await fetchHourlyForcestData("temp", params);
     const rhumForecast = await fetchHourlyForcestData("rhum", params);
+    const pcpnForecast = await fetchHourlyForcestData("pcpn", params);
+    console.log(pcpnForecast);
+
     results.set("tempForecast", tempForecast.data);
     results.set("rhumForecast", rhumForecast.data);
   }
@@ -90,6 +96,5 @@ export default async params => {
   // console.log(results, params);
   const cleaned = cleanFetchedData(results, params);
 
-  // console.log(cleaned);
   return cleaned;
 };

@@ -227,120 +227,114 @@ const PrebloomMsg = ({ classes, hasBloomed, handleChange, isBloom }) => (
     {(hasBloomed || isBloom) && (
       <Table style={{ marginBottom: 64 }}>
         <TableHead>
-          <TableHead>
-            <TableRow style={{ background: "#D0CD94" }}>
-              <TableCell className={classes.em}>
-                Botrytis Fruit Rot or Gray Mold
-              </TableCell>
-              <TableCell className={classes.em}>Botrytis Management</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.cell}>
-                Lesions remain firm and brown while fruit is green. Lesions
-                expand and soften as fruit ripens. A powdery gray mass of spores
-                may cover infected berries.
-              </TableCell>
-              <TableCell className={classes.cell}>
-                Infections occur primarily Protect flowers when Infection Risk
-                is moderate or high. Monitor fields and harvests for gray mold.
-                Protect fruit if disease is present and Botrytis Infection Risk
-                is moderate or high. during bloom. from early
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.em}>
-                Botrytis Infection Risk Levels
-              </TableCell>
-              <TableCell />
-            </TableRow>
-            <TableRow>
-              <TableCell className={classes.em}>{`Low < 0.5`}</TableCell>
-              <TableCell className={classes.cell}>
-                No need for fungicides against Botrytis.
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell
-                className={classes.em}
-              >{`Moderate ≥ 0.5 and <0.7`}</TableCell>
-              <TableCell className={classes.cell}>
-                Take into account the susceptibility. If several factors
-                contribute to greater susceptibility, apply a fungicide if there
-                has been no application for 7-14 days.
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className={classes.em}>{`High ≥ 0.7`}</TableCell>
-              <TableCell className={classes.cell}>
-                If no fungicides have been applied in the last 7-14 days, apply
-                a highly effective fungicide as soon as possible.
-              </TableCell>
-            </TableRow>
-          </TableHead>
+          <TableRow style={{ background: "#D0CD94" }}>
+            <TableCell className={classes.em}>
+              Botrytis Fruit Rot or Gray Mold
+            </TableCell>
+            <TableCell className={classes.em}>Botrytis Management</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableHead>
+          <TableRow>
+            <TableCell className={classes.cell}>
+              Lesions remain firm and brown while fruit is green. Lesions expand
+              and soften as fruit ripens. A powdery gray mass of spores may
+              cover infected berries.
+            </TableCell>
+            <TableCell className={classes.cell}>
+              Infections occur primarily Protect flowers when Infection Risk is
+              moderate or high. Monitor fields and harvests for gray mold.
+              Protect fruit if disease is present and Botrytis Infection Risk is
+              moderate or high. during bloom. from early
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableHead>
+          <TableRow>
+            <TableCell className={classes.em}>
+              Botrytis Infection Risk Levels
+            </TableCell>
+            <TableCell />
+          </TableRow>
+          <TableRow>
+            <TableCell className={classes.em}>{`Low < 0.5`}</TableCell>
+            <TableCell className={classes.cell}>
+              No need for fungicides against Botrytis.
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              className={classes.em}
+            >{`Moderate ≥ 0.5 and <0.7`}</TableCell>
+            <TableCell className={classes.cell}>
+              Take into account the susceptibility. If several factors
+              contribute to greater susceptibility, apply a fungicide if there
+              has been no application for 7-14 days.
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className={classes.em}>{`High ≥ 0.7`}</TableCell>
+            <TableCell className={classes.cell}>
+              If no fungicides have been applied in the last 7-14 days, apply a
+              highly effective fungicide as soon as possible.
+            </TableCell>
+          </TableRow>
+        </TableHead>
 
-          {/* Anthracnose */}
-          <TableHead>
-            <TableRow style={{ background: "#92DCE5" }}>
-              <TableCell className={classes.em}>
-                Anthracnose Fruit Rot
-              </TableCell>
-              <TableCell className={classes.em}>
-                Anthracnose Management
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.cell}>
-                One or more circular, tan or light brown spots usually about 1/8
-                to 1/4 inch in diameter occur on both green and ripe fruit and
-                become sunken and darker. On ripe fruit, lesions may be sunken
-                and filled with pink slimy spore masses.
-              </TableCell>
-              <TableCell className={classes.cell}>
-                Open flowers and ripening and ripe fruit are most susceptible to
-                anthracnose. The disease is favored during warm, wet weather
-                conditions. Monitor fields and harvests for anthracnose and
-                quickly begin a management program once the disease is detected
-                and Anthracnose Infection Risk is moderate or high.
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.em}>
-                Anthracnose Infection Risk Levels
-              </TableCell>
-              <TableCell />
-            </TableRow>
-            <TableRow>
-              <TableCell className={classes.em}>{`Low < 0.15`}</TableCell>
-              <TableCell className={classes.cell}>
-                No need for fungicides against anthracnose.
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell
-                className={classes.em}
-              >{`Moderate ≥ 0.15 and <0.5`}</TableCell>
-              <TableCell className={classes.cell}>
-                Take into account the susceptibility. If several factors
-                contribute to greater susceptibility, apply a fungicide if there
-                has been no application for 7-14 days.
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className={classes.em}>{`High ≥ 0.5`}</TableCell>
-              <TableCell className={classes.cell}>
-                If no fungicides have been applied in the last 7-14 days, apply
-                a highly effective fungicide as soon as possible.
-              </TableCell>
-            </TableRow>
-          </TableHead>
+        {/* Anthracnose */}
+        <TableHead>
+          <TableRow style={{ background: "#92DCE5" }}>
+            <TableCell className={classes.em}>Anthracnose Fruit Rot</TableCell>
+            <TableCell className={classes.em}>Anthracnose Management</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableHead>
+          <TableRow>
+            <TableCell className={classes.cell}>
+              One or more circular, tan or light brown spots usually about 1/8
+              to 1/4 inch in diameter occur on both green and ripe fruit and
+              become sunken and darker. On ripe fruit, lesions may be sunken and
+              filled with pink slimy spore masses.
+            </TableCell>
+            <TableCell className={classes.cell}>
+              Open flowers and ripening and ripe fruit are most susceptible to
+              anthracnose. The disease is favored during warm, wet weather
+              conditions. Monitor fields and harvests for anthracnose and
+              quickly begin a management program once the disease is detected
+              and Anthracnose Infection Risk is moderate or high.
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableHead>
+          <TableRow>
+            <TableCell className={classes.em}>
+              Anthracnose Infection Risk Levels
+            </TableCell>
+            <TableCell />
+          </TableRow>
+          <TableRow>
+            <TableCell className={classes.em}>{`Low < 0.15`}</TableCell>
+            <TableCell className={classes.cell}>
+              No need for fungicides against anthracnose.
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell
+              className={classes.em}
+            >{`Moderate ≥ 0.15 and <0.5`}</TableCell>
+            <TableCell className={classes.cell}>
+              Take into account the susceptibility. If several factors
+              contribute to greater susceptibility, apply a fungicide if there
+              has been no application for 7-14 days.
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className={classes.em}>{`High ≥ 0.5`}</TableCell>
+            <TableCell className={classes.cell}>
+              If no fungicides have been applied in the last 7-14 days, apply a
+              highly effective fungicide as soon as possible.
+            </TableCell>
+          </TableRow>
         </TableHead>
       </Table>
     )}
@@ -407,6 +401,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
       <Typography variant="title" component="h3" gutterBottom align="center">
         Strawberry Disease Forecast Environmental Variables Summary
       </Typography>
+
       <Table>
         <TableHead>
           <TableRow>
