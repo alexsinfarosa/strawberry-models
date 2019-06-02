@@ -55,6 +55,8 @@ export default class CurrentModel {
           rhum.forEach((rh, j) => {
             let o = {};
             if ((+rh < 90 && +pcpn[j] >= 0.01) || +rh >= 90) {
+              o["lw"] = +lwet[j];
+              o["pcpn"] = +pcpn[j];
               o["rhum"] = rhAdjustment(+rh);
               o["index"] = j;
               o["temp"] = +temp[j];

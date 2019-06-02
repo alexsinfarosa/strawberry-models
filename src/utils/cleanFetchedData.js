@@ -3,7 +3,8 @@ import {
   averageMissingValues,
   flatten,
   dailyToHourlyDatesLST,
-  dailyToHourlyDates
+  dailyToHourlyDates,
+  rhAdjustment
 } from "./utils";
 
 export default (acisData, params) => {
@@ -49,16 +50,40 @@ export default (acisData, params) => {
   if (params.isYearAfter2017) {
     const tempForecast = acisData.get("tempForecast");
     const rhumForecast = acisData.get("rhumForecast");
+    const qpfForecast = acisData.get("qpfForecast");
+    const pop12Forecast = acisData.get("pop12Forecast");
 
     const forecastValuesTemp = flatten(tempForecast.map(arr => arr[1]));
     const forecastValuesRhum = flatten(rhumForecast.map(arr => arr[1]));
+    const forecastValuesQpf = flatten(qpfForecast.map(arr => arr[1]));
+    const forecastValuesPop12 = flatten(pop12Forecast.map(arr => arr[1]));
 
-    forecastValues["temp"] = forecastValuesTemp;
-    forecastValues["rhum"] = forecastValuesRhum;
+    const pcpnForecast = forecastValuesQpf.map((p, i) => {
+      if (p !== "M") {
+        return p < 0.6 ? 0 : forecastValuesPop12[i];
+      } else {
+        return p;
+      }
+    });
+    console.log(pcpnForecast);
+
+    const lwForecast = forecastValuesRhum.map((rh, i) => {
+      if (rh !== "M") {
+        return rhAdjustment(rh) >= 90 ? 60 : 0;
+      } else {
+        return rh;
+      }
+    });
+
+    forecastValues["temp"] = forecastValuesTemp.slice(0, -1);
+    forecastValues["rhum"] = forecastValuesRhum.slice(0, -1);
+    forecastValues["pcpn"] = pcpnForecast.slice(0, -1);
+    forecastValues["lwet"] = lwForecast.slice(0, -1);
 
     replacedMissingValuesWithForecast = {
       ...replacedMissingValuesWithSisterStn
     };
+
     // console.log(replacedMissingValuesWithSisterStn);
     Object.keys(forecastValues).forEach(key => {
       const arr = replacedMissingValuesWithSisterStn[key].map((value, i) =>
@@ -128,6 +153,6 @@ export default (acisData, params) => {
     dailyData
   };
 
-  // console.log(results);
+  console.log(results);
   return results;
 };

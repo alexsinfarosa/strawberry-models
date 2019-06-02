@@ -81,11 +81,15 @@ export default async params => {
     // get forecast hourly data
     const tempForecast = await fetchHourlyForcestData("temp", params);
     const rhumForecast = await fetchHourlyForcestData("rhum", params);
-    const pcpnForecast = await fetchHourlyForcestData("pcpn", params);
-    console.log(pcpnForecast);
+    const qpfForecast = await fetchHourlyForcestData("qpf", params);
+    const pop12Forecast = await fetchHourlyForcestData("pop12", params);
+
+    // console.log(qpfForecast, pop12Forecast);
 
     results.set("tempForecast", tempForecast.data);
     results.set("rhumForecast", rhumForecast.data);
+    results.set("qpfForecast", qpfForecast.data);
+    results.set("pop12Forecast", pop12Forecast.data);
   }
 
   results.set("currentStn", currentStation.data);
