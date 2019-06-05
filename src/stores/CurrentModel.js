@@ -43,7 +43,7 @@ export default class CurrentModel {
         if (notForecast) {
           lwet.forEach((lw, i) => {
             let o = {};
-            if ((+lw === 0 && +pcpn[i] >= 0.01) || +lw >= 1) {
+            if ((+lw === 0 && +pcpn[i] > 0) || +lw >= 1) {
               o["lw"] = +lw;
               o["pcpn"] = +pcpn[i];
               o["index"] = i;
@@ -54,9 +54,9 @@ export default class CurrentModel {
         } else {
           rhum.forEach((rh, j) => {
             let o = {};
-            if ((+rh < 90 && +pcpn[j] >= 0.01) || +rh >= 90) {
+            if ((+rh < 90 && +pcpn[j] > 0) || +rh >= 90) {
               o["lw"] = +lwet[j];
-              o["pcpn"] = +pcpn[j];
+              o["pcpn"] = pcpn[j] === "M" ? "-" : +pcpn[j];
               o["rhum"] = rhAdjustment(+rh);
               o["index"] = j;
               o["temp"] = +temp[j];
@@ -64,7 +64,7 @@ export default class CurrentModel {
             }
           });
         }
-        // console.log(date, atRisk);
+        // console.log(atRisk);
 
         p["atRisk"] = atRisk;
         const dryHours = 4;

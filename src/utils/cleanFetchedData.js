@@ -58,6 +58,35 @@ export default (acisData, params) => {
     const forecastValuesQpf = flatten(qpfForecast.map(arr => arr[1]));
     const forecastValuesPop12 = flatten(pop12Forecast.map(arr => arr[1]));
 
+    // filling missing values -------------------------------------------
+    console.log(forecastValuesQpf);
+
+    const indecesQpf = forecastValuesQpf
+      .map((v, i) => {
+        if (typeof v === "number") {
+          return i;
+        } else {
+          return null;
+        }
+      })
+      .filter(v => Boolean(v));
+
+    let forecastValuesQpfClean = [];
+    let index = 0;
+    indecesQpf.forEach((v, i) => {
+      const arr = forecastValuesQpf.slice(index, v);
+      index = v;
+      const countMissing = arr.map(v => v === "M").length;
+      const newValue = arr[0] / countMissing;
+      const newArr = new Array(countMissing).fill(newValue);
+
+      // console.log(countMissing, arr, newArr);
+      forecastValuesQpfClean.push(...newArr);
+    });
+
+    console.log(forecastValuesQpfClean);
+
+    // water amount -----------------------------------------------------
     const pcpnForecast = forecastValuesQpf.map((p, i) => {
       if (p !== "M") {
         return p < 0.6 ? 0 : forecastValuesPop12[i];
@@ -65,8 +94,8 @@ export default (acisData, params) => {
         return p;
       }
     });
-    console.log(pcpnForecast);
 
+    //
     const lwForecast = forecastValuesRhum.map((rh, i) => {
       if (rh !== "M") {
         return rhAdjustment(rh) >= 90 ? 60 : 0;
@@ -153,6 +182,6 @@ export default (acisData, params) => {
     dailyData
   };
 
-  console.log(results);
+  // console.log(results);
   return results;
 };
