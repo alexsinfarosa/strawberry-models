@@ -58,9 +58,8 @@ export default (acisData, params) => {
     const forecastValuesQpf = flatten(qpfForecast.map(arr => arr[1]));
     const forecastValuesPop12 = flatten(pop12Forecast.map(arr => arr[1]));
 
-    // filling missing values -------------------------------------------
-    console.log(forecastValuesQpf);
-
+    // filling missing values (amount of water) -------------
+    // console.log(forecastValuesQpf);
     const indecesQpf = forecastValuesQpf
       .map((v, i) => {
         if (typeof v === "number") {
@@ -72,31 +71,69 @@ export default (acisData, params) => {
       .filter(v => Boolean(v));
 
     let forecastValuesQpfClean = [];
-    let index = 0;
+    let indexQpf = 0;
+    let tempArrQpf = [];
     indecesQpf.forEach((v, i) => {
-      const arr = forecastValuesQpf.slice(index, v);
-      index = v;
-      const countMissing = arr.map(v => v === "M").length;
-      const newValue = arr[0] / countMissing;
+      if (v === indecesQpf[indecesQpf.length - 1]) {
+        tempArrQpf = forecastValuesQpf.slice(
+          indexQpf,
+          forecastValuesQpf.length
+        );
+      } else {
+        tempArrQpf = forecastValuesQpf.slice(indexQpf, v);
+      }
+      indexQpf = v;
+      const countMissing = tempArrQpf.map(v => v === "M").length;
+      const newValue = tempArrQpf[0] / countMissing;
       const newArr = new Array(countMissing).fill(newValue);
+      // console.log(i, arr, countMissing, newArr);
 
-      // console.log(countMissing, arr, newArr);
       forecastValuesQpfClean.push(...newArr);
     });
+    // console.log(forecastValuesQpfClean);
 
-    console.log(forecastValuesQpfClean);
+    // filling missing values (probability of precip) ----------
+    // console.log(forecastValuesPop12);
+    const indecesPop12 = forecastValuesPop12
+      .map((v, i) => {
+        if (typeof v === "number") {
+          return i;
+        } else {
+          return null;
+        }
+      })
+      .filter(v => Boolean(v));
+
+    let forecastValuesPop12Clean = [];
+    let indexPop12 = 0;
+    let tempArrPop12 = [];
+    indecesPop12.forEach((v, i) => {
+      if (v === indecesPop12[indecesPop12.length - 1]) {
+        tempArrPop12 = forecastValuesPop12.slice(
+          indexPop12,
+          forecastValuesPop12.length
+        );
+      } else {
+        tempArrPop12 = forecastValuesPop12.slice(indexPop12, v);
+      }
+      indexPop12 = v;
+      const countMissing = tempArrPop12.map(v => v === "M").length;
+      const newValue = tempArrPop12[0];
+      const newArr = new Array(countMissing).fill(newValue);
+      // console.log(i, arr, countMissing, newArr);
+
+      forecastValuesPop12Clean.push(...newArr);
+    });
+    // console.log(forecastValuesPop12Clean);
 
     // water amount -----------------------------------------------------
-    const pcpnForecast = forecastValuesQpf.map((p, i) => {
-      if (p !== "M") {
-        return p < 0.6 ? 0 : forecastValuesPop12[i];
-      } else {
-        return p;
-      }
+    const pcpnForecast = forecastValuesPop12Clean.map((p, i) => {
+      return p < 6 ? 0 : forecastValuesQpfClean[i];
     });
 
-    //
-    const lwForecast = forecastValuesRhum.map((rh, i) => {
+    // console.log(pcpnForecast);
+
+    const lwForecast = forecastValuesRhum.map(rh => {
       if (rh !== "M") {
         return rhAdjustment(rh) >= 90 ? 60 : 0;
       } else {
@@ -182,6 +219,6 @@ export default (acisData, params) => {
     dailyData
   };
 
-  // console.log(results);
+  console.log(results);
   return results;
 };

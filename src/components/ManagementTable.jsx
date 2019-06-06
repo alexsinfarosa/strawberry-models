@@ -419,6 +419,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
         </TableHead>
         <TableBody>
           {dataForTable.map(o => {
+            console.log(o);
             const isToday = isSameDay(new Date(dateOfInterest), o.date);
             const formattedDate = format(o.date, "YYYY-MM-DD");
             const formattedToday = format(new Date(), "YYYY-MM-DD");
@@ -453,7 +454,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {o.obj === null ? "-" : o.obj.pcpn.toFixed(1)}
+                  {o.pcpn.toFixed(1)}
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
