@@ -219,6 +219,6 @@ export default (acisData, params) => {
     dailyData
   };
 
-  console.log(results);
+  // console.log(results);
   return results;
 };

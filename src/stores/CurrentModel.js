@@ -128,6 +128,10 @@ export default class CurrentModel {
         p["obj"] = obj;
         p["botrytis"] = botrytis.toFixed(2);
         p["anthracnose"] = anthracnose.toFixed(2);
+        p["pcpnAvg"] = [...arr.map(o => o.pcpn)].reduce(
+          (acc, res) => acc + res,
+          0
+        );
       }
 
       // console.log(p, missingDays);

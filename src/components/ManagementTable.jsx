@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import { celciusToFahrenheit } from "../utils/utils";
 
 // material-ui
 import withRoot from "../withRoot";
@@ -408,9 +409,9 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
             <TableCell colSpan={2} className={classes.header}>
               Date (noon-to-noon)
             </TableCell>
-            <TableCell className={classes.header}>Rain (in)</TableCell>
+            <TableCell className={classes.header}>Total Rain (in)</TableCell>
             <TableCell className={classes.header}>
-              Temp during LW (avg °C)
+              Temp during LW (avg °F)
             </TableCell>
             <TableCell className={classes.header}>
               LW or RH ≥ 90% (hrs)
@@ -419,7 +420,9 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
         </TableHead>
         <TableBody>
           {dataForTable.map(o => {
-            console.log(o);
+            {
+              /* console.log(o); */
+            }
             const isToday = isSameDay(new Date(dateOfInterest), o.date);
             const formattedDate = format(o.date, "YYYY-MM-DD");
             const formattedToday = format(new Date(), "YYYY-MM-DD");
@@ -454,7 +457,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {o.pcpn.toFixed(1)}
+                  {o.pcpnAvg.toFixed(2)}
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
@@ -463,7 +466,7 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {o.obj === null ? "-" : o.obj.avgT.toFixed(1)}
+                  {o.obj === null ? "-" : celciusToFahrenheit(o.obj.avgT)}
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
