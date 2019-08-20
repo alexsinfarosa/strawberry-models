@@ -15,7 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Switch from "@material-ui/core/Switch";
 
 import isWithinInterval from "date-fns/isWithinInterval";
-import { format, isSameDay, differenceInDays } from "date-fns/esm";
+import { format, isSameDay, differenceInDays, isAfter } from "date-fns/esm";
 
 // styles
 const styles = theme => ({
@@ -466,7 +466,11 @@ const AnotherTable = ({ classes, dateOfInterest, dataForTable, timeColor }) => {
                     fontWeight: isToday ? 700 : null
                   }}
                 >
-                  {o.obj === null ? "-" : celciusToFahrenheit(o.obj.avgT)}
+                  {o.obj === null
+                    ? "-"
+                    : isAfter(new Date(o.date), new Date())
+                    ? o.obj.avgT.toFixed(1)
+                    : celciusToFahrenheit(o.obj.avgT, "M")}
                 </TableCell>
                 <TableCell
                   className={classes.tableCell}
