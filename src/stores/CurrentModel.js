@@ -26,7 +26,7 @@ export default class CurrentModel {
     let missingDays = [];
     return this.dailyData.map(obj => {
       const { date, temp, rhum, lwet, pcpn } = obj;
-      console.log(date, [...temp]);
+      // console.log(date, [...temp]);
       // For now I check the missing values only on the temp array. Maybe we should check it for every array
       const countMissingValues = temp.filter(t => t === "M").length;
 
